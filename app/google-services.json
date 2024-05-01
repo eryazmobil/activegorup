@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "642627698883",
+    "project_id": "active-group-9984b",
+    "storage_bucket": "active-group-9984b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:642627698883:android:7a17b0d4a63800d94c2276",
+        "android_client_info": {
+          "package_name": "eryaz.software.activegroup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8dRpp8DjeeVJ3iXLi3uNRmoLTXjKmXKU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
