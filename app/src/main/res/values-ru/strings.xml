@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Zeus</string>
+    <string name="app_name">Zeus - Panda Oto</string>
     <string name="there_is_empty_fields_or_check_internet_connection">Вы ввели одно из полей пустым, чтобы продолжить, пожалуйста, введите правильную информацию и проверьте ваше интернет-соединение</string>
     <string name="do_you_want_to_end_acceptance_collect_and_enter_password">Если вы хотите завершить операцию, пожалуйста, введите ваш пароль персонала.</string>
     <string name="barcode_or_quantitiy_empty">Вы ввели штрих-код или количество пустым, чтобы продолжить, пожалуйста, введите правильную информацию</string>

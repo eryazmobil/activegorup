@@ -53,7 +53,8 @@ class FirstCountingDetailFragment : BaseFragment() {
                     positiveButton = ButtonDto(text = R.string.yes, onClickListener = {
                         backToPage()
                     }),
-                    negativeButton = ButtonDto(text = R.string.no,
+                    negativeButton = ButtonDto(
+                        text = R.string.no,
                         onClickListener = { confirmationDialog.dismiss() })
                 )
             )
@@ -91,60 +92,32 @@ class FirstCountingDetailFragment : BaseFragment() {
             true
         }
 
-        binding.addProductBtn.setOnSingleClickListener {
-            binding.saveBtn.visibility = View.VISIBLE
-            when {
-                viewModel.checkProductHasControlled() -> {
-                    errorDialog.show(
-                        context, ErrorDialogDto(
-                            titleRes = R.string.attached_product,
-                            messageRes = R.string.msg_attached_before,
-                            positiveButton = ButtonDto(text = R.string.add_on, onClickListener = {
-                                viewModel.addProduct(true)
-                                errorDialog.dismiss()
-                            }),
-                            negativeButton = ButtonDto(text = R.string.save_last_entered_quantity,
-                                onClickListener = {
-                                    viewModel.addProduct(false)
-                                    errorDialog.dismiss()
-                                })
-                        )
-                    )
-                }
-
-                else -> viewModel.addProduct(false)
-            }
-        }
-
         binding.infoBtn.setOnSingleClickListener {
             findNavController().navigate(
-               FirstCountingDetailFragmentDirections.actionFirstCountingDetailFragmentToInfoFirstCountingFragment(
+                FirstCountingDetailFragmentDirections.actionFirstCountingDetailFragmentToInfoFirstCountingFragment(
                     viewModel.stHeaderId, viewModel.assignedShelfId
                 )
             )
-        }
-
-        binding.saveBtn.setOnSingleClickListener {
-            viewModel.saveBtn()
         }
     }
 
     override fun subscribeToObservables() {
 
-        viewModel.readShelfBarcode.observe(this) {
+        viewModel.readShelfBarcode.asLiveData().observe(this) {
             if (it) {
                 binding.searchProductEdt.requestFocus()
             }
         }
 
-        viewModel.hasNotProductBarcode.observe(this) {
+        viewModel.hasNotProductBarcode.asLiveData().observe(this) {
             if (it) {
                 errorDialog.show(
-                    context, ErrorDialogDto(titleRes = R.string.error,
+                    context, ErrorDialogDto(
+                        titleRes = R.string.error,
                         messageRes = R.string.msg_no_barcode_and_new_barcode,
                         positiveButton = ButtonDto(text = R.string.yes, onClickListener = {
                             findNavController().navigate(
-                           FirstCountingDetailFragmentDirections.actionFirstCountingDetailFragmentToCreateBarcodeDialog()
+                                FirstCountingDetailFragmentDirections.actionFirstCountingDetailFragmentToCreateBarcodeDialog()
                             )
                             errorDialog.dismiss()
                         }),
@@ -169,16 +142,39 @@ class FirstCountingDetailFragment : BaseFragment() {
             }
         }
 
-        viewModel.actionAddProduct.asLiveData().observe(viewLifecycleOwner) {
-            if (it) {
-                binding.searchProductEdt.requestFocus()
-                toast(getString(R.string.msg_process_success))
-            }
+        viewModel.actionAddProduct.asLiveData().observe(this) {
+            if (it) binding.searchProductEdt.requestFocus()
+            toast(getString(R.string.msg_process_success))
         }
 
-        viewModel.actionIsFinished.observe(this) {
-            if (it) {
+        viewModel.actionIsFinished.asLiveData().observe(this) {
+            if (it)
                 binding.shelfAddressEdt.requestFocus()
+        }
+
+        viewModel.actionProcess.asLiveData().observe(viewLifecycleOwner) {
+            binding.saveBtn.visibility = View.VISIBLE
+            when {
+                viewModel.checkProductHasControlled() -> {
+                    errorDialog.show(
+                        context, ErrorDialogDto(
+                            titleRes = R.string.attached_product,
+                            messageRes = R.string.msg_attached_before,
+                            positiveButton = ButtonDto(text = R.string.add_on, onClickListener = {
+                                viewModel.addProduct(true)
+                                errorDialog.dismiss()
+                            }),
+                            negativeButton = ButtonDto(
+                                text = R.string.save_last_entered_quantity,
+                                onClickListener = {
+                                    viewModel.addProduct(false)
+                                    errorDialog.dismiss()
+                                })
+                        )
+                    )
+                }
+
+                else -> viewModel.addProduct(false)
             }
         }
     }

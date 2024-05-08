@@ -182,7 +182,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/infoBtn"
                         app:layout_constraintTop_toBottomOf="@+id/editQuantityView"
-                        app:layout_goneMarginTop="@dimen/_10sdp" />
+                        app:layout_goneMarginTop="@dimen/_10sdp"
+                        app:onSingleClick="@{()->viewModel.getSTActionProcessListForShelf()}" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/saveBtn"
@@ -199,7 +200,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/addProductBtn"
-                        app:layout_goneMarginTop="@dimen/_10sdp" />
+                        app:layout_goneMarginTop="@dimen/_10sdp"
+                        app:onSingleClick="@{()-> viewModel.saveBtn()}" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -88,7 +88,7 @@ class DatPickingListVM(private val repo: WorkActivityRepo) : BaseViewModel() {
         ) {
             repo.getWorkActionForPda(
                 userId = SessionManager.userId,
-                workActivityId = TemporaryCashManager.getInstance().workAction?.workActionId.orZero(),
+                workActivityId = TemporaryCashManager.getInstance().workActivity?.workActivityId.orZero(),
                 actionTypeId = TemporaryCashManager.getInstance().workActionTypeList?.find { model -> model.code == "Picking" }?.id.orZero()
             ).onSuccess {
                 TemporaryCashManager.getInstance().workAction = it
