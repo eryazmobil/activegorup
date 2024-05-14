@@ -84,10 +84,10 @@
                         app:cardCornerRadius="@dimen/_10sdp"
                         app:cardElevation="8dp"
                         app:changeColor="@color/textColor"
-                        app:clientName="@{viewModel.productDetail.product.manufacturerCode}"
-                        app:creationTime="@{viewModel.productDetail.product.code}"
+                        app:clientName="@{viewModel.productDetail.manufacturerCode}"
+                        app:creationTime="@{viewModel.productDetail.code}"
                         app:detailTitle="@string/product_details"
-                        app:documentNo="@{viewModel.productDetail.product.definition}"
+                        app:documentNo="@{viewModel.productDetail.definition}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

@@ -1,5 +1,6 @@
 package eryaz.software.activegroup.ui.dashboard.query.queryStorage
 
+import androidx.lifecycle.viewModelScope
 import eryaz.software.activegroup.R
 import eryaz.software.activegroup.data.api.utils.onError
 import eryaz.software.activegroup.data.api.utils.onSuccess
@@ -13,13 +14,14 @@ import eryaz.software.activegroup.data.repositories.WorkActivityRepo
 import eryaz.software.activegroup.ui.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class QueryStorageFragmentVM(
     private val repo: WorkActivityRepo
 ) : BaseViewModel() {
     val searchProduct = MutableStateFlow("")
 
-    private val _productDetail = MutableStateFlow<BarcodeDto?>(null)
+    private val _productDetail = MutableStateFlow<ProductDto?>(null)
     val productDetail = _productDetail.asStateFlow()
 
     private val _showProductDetail = MutableStateFlow(false)
@@ -36,7 +38,7 @@ class QueryStorageFragmentVM(
             searchProduct.value.trim(),
             SessionManager.companyId
         ).onSuccess {
-            _productDetail.emit(it)
+            _productDetail.emit(it.product)
             getProductStorageQuantityList(it.product.id)
             getProductShelfQuantityList(it.product.id)
         }.onError { message, _ ->
@@ -79,6 +81,9 @@ class QueryStorageFragmentVM(
         }
 
     fun setExitStorage(it: ProductDto) {
+        viewModelScope.launch {
+            _productDetail.emit(it)
+        }
         getProductStorageQuantityList(it.id)
         getProductShelfQuantityList(it.id)
     }
