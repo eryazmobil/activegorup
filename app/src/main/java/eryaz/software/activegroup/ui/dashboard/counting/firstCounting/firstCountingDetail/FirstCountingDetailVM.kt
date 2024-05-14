@@ -1,6 +1,5 @@
 package eryaz.software.activegroup.ui.dashboard.counting.firstCounting.firstCountingDetail
 
-import android.util.Log
 import eryaz.software.activegroup.R
 import eryaz.software.activegroup.data.api.utils.onError
 import eryaz.software.activegroup.data.api.utils.onSuccess
@@ -14,7 +13,6 @@ import eryaz.software.activegroup.ui.base.BaseViewModel
 import eryaz.software.activegroup.util.extensions.orZero
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class FirstCountingDetailVM(
@@ -105,7 +103,6 @@ class FirstCountingDetailVM(
             ).onSuccess {
                 if (it.isNotEmpty()) {
                     stockTakingActionProcessList.emit(it)
-                    Log.d("TAG", "getSTActionProcessList:${stockTakingActionProcessList.value} ")
                     stDetailId = it[0].stockTakingDetail?.id.orZero()
                     actionProcess.emit(true)
                 }
@@ -178,8 +175,6 @@ class FirstCountingDetailVM(
             it.productDto?.id == productID
         }
 
-        Log.d("TAG", "list: ${stockTakingActionProcessList.value}")
-        Log.d("TAG", "oldQuantity: ${selectedProduct?.shelfCurrentQuantity ?: 0.0} ")
         oldQuantity = selectedProduct?.shelfCurrentQuantity ?: 0.0
         return selectedProduct != null
     }
