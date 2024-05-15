@@ -8,6 +8,7 @@ import eryaz.software.activegroup.data.models.dto.BarcodeDto
 import eryaz.software.activegroup.data.models.dto.ErrorDialogDto
 import eryaz.software.activegroup.data.models.dto.OrderDetailDto
 import eryaz.software.activegroup.data.models.dto.PackageDto
+import eryaz.software.activegroup.data.models.dto.ProductDto
 import eryaz.software.activegroup.data.persistence.SessionManager
 import eryaz.software.activegroup.data.repositories.OrderRepo
 import eryaz.software.activegroup.data.repositories.WorkActivityRepo
@@ -51,7 +52,7 @@ class ControlPointDetailVM(
     private val _productCode = MutableStateFlow("")
     val productCode = _productCode.asStateFlow()
 
-    private val _productDetail = MutableStateFlow<BarcodeDto?>(null)
+    private val _productDetail = MutableStateFlow<ProductDto?>(null)
     val productDetail = _productDetail.asStateFlow()
 
     private val _showProductDetail = MutableStateFlow(false)
@@ -107,7 +108,7 @@ class ControlPointDetailVM(
                     addQuantityForControl(1)
                 } else {
                     _showProductDetail.emit(true)
-                    _productDetail.emit(it)
+                    _productDetail.emit(it.product)
                 }
 
             }.onError { _, _ ->
@@ -183,4 +184,11 @@ class ControlPointDetailVM(
         }
     }
 
+    fun setEnteredProduct(dto: ProductDto) {
+        productID = dto.id
+        viewModelScope.launch {
+            _productDetail.emit(dto)
+            _showProductDetail.emit(true)
+        }
+    }
 }

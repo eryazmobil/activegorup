@@ -7,17 +7,22 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import eryaz.software.activegroup.R
+import eryaz.software.activegroup.data.models.dto.ProductDto
 import eryaz.software.activegroup.databinding.FragmentControlPointDetailBinding
 import eryaz.software.activegroup.ui.base.BaseFragment
+import eryaz.software.activegroup.ui.dashboard.outbound.orderPicking.orderPickingDetail.OrderPickingDetailFragmentDirections
+import eryaz.software.activegroup.ui.dashboard.recording.dialog.ProductListDialogFragment
 import eryaz.software.activegroup.util.adapter.outbound.ControlPointDetailListAdapter
 import eryaz.software.activegroup.util.adapter.outbound.ControlPointDetailListVH
 import eryaz.software.activegroup.util.bindingAdapter.setOnSingleClickListener
 import eryaz.software.activegroup.util.extensions.hideSoftKeyboard
 import eryaz.software.activegroup.util.extensions.observe
+import eryaz.software.activegroup.util.extensions.parcelable
 import eryaz.software.activegroup.util.extensions.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -47,6 +52,12 @@ class ControlPointDetailFragment : BaseFragment() {
     override fun setClicks() {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.searchProductTill.setEndIconOnClickListener {
+            findNavController().navigate(
+                OrderPickingDetailFragmentDirections.actionOrderPickingDetailFragmentToProductListDialogFragment()
+            )
         }
 
         binding.searchEdt.setOnEditorActionListener { _, actionId, _ ->
@@ -108,6 +119,14 @@ class ControlPointDetailFragment : BaseFragment() {
     }
 
     override fun subscribeToObservables() {
+
+        setFragmentResultListener(ProductListDialogFragment.REQUEST_KEY) { _, bundle ->
+            val dto = bundle.parcelable<ProductDto>(ProductListDialogFragment.ARG_PRODUCT_DTO)
+            dto?.let {
+                viewModel.setEnteredProduct(it)
+            }
+        }
+
         viewModel.serialCheckBox.observe(this) {
             if (binding.quantityEdt.hasFocus())
                 binding.quantityEdt.hideSoftKeyboard()

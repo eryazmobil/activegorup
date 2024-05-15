@@ -5,6 +5,11 @@
     android:id="@+id/nav_control_point"
     app:startDestination="@id/controlPointListFragment">
 
+    <dialog
+        android:id="@+id/productListDialogFragment"
+        android:name="eryaz.software.activegroup.ui.dashboard.recording.dialog.ProductListDialogFragment"
+        android:label="ProductListDialogFragment"
+        tools:layout="@layout/dialog_product_list" />
     <fragment
         android:id="@+id/controlPointListFragment"
         android:name="eryaz.software.activegroup.ui.dashboard.outbound.controlPoint.ControlPointListFragment"
@@ -58,6 +63,9 @@
         <action
             android:id="@+id/action_controlPointDetailFragment_to_updatePackageControlDialog"
             app:destination="@id/updatePackageControlDialog" />
+        <action
+            android:id="@+id/action_controlPointDetailFragment_to_productListDialogFragment"
+            app:destination="@id/productListDialogFragment" />
 
     </fragment>
     <dialog

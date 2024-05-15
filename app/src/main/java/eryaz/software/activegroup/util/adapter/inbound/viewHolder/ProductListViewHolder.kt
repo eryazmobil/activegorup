@@ -15,7 +15,8 @@ class ProductListViewHolder(val binding: ItemDiaglogBinding) :
         onItemClick: ((ProductDto) -> Unit)
     ) {
 
-        binding.itemText.text = dto.code
+        val text = dto.code + "\n" + dto.manufacturerCode
+        binding.itemText.text = text
 
         binding.root.setOnSingleClickListener {
             onItemClick(dto)

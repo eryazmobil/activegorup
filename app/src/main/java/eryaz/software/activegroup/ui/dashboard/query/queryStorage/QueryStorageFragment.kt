@@ -12,6 +12,7 @@ import eryaz.software.activegroup.data.models.dto.ProductDto
 import eryaz.software.activegroup.databinding.FragmentQueryStorageBinding
 import eryaz.software.activegroup.ui.base.BaseFragment
 import eryaz.software.activegroup.ui.dashboard.query.adapter.ShelfProductQuantityAdapter
+import eryaz.software.activegroup.ui.dashboard.query.adapter.ShelfQuantityAdapter
 import eryaz.software.activegroup.ui.dashboard.query.adapter.StorageProductQuantityAdapter
 import eryaz.software.activegroup.ui.dashboard.recording.dialog.ProductListDialogFragment
 import eryaz.software.activegroup.util.extensions.hideSoftKeyboard
@@ -84,7 +85,7 @@ class QueryStorageFragment : BaseFragment() {
     }
 
     private val shelfAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        ShelfProductQuantityAdapter().also {
+        ShelfQuantityAdapter().also {
             binding.recyclerViewForShelf.adapter = it
         }
     }
