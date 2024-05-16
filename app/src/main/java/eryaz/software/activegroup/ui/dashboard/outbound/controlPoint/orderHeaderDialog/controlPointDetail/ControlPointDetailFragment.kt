@@ -56,7 +56,7 @@ class ControlPointDetailFragment : BaseFragment() {
 
         binding.searchProductTill.setEndIconOnClickListener {
             findNavController().navigate(
-                OrderPickingDetailFragmentDirections.actionOrderPickingDetailFragmentToProductListDialogFragment()
+                ControlPointDetailFragmentDirections.actionControlPointDetailFragmentToProductListDialogFragment()
             )
         }
 

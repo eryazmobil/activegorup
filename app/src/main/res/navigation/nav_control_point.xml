@@ -57,6 +57,7 @@
         <argument
             android:name="orderHeaderId"
             app:argType="integer" />
+
         <action
             android:id="@+id/action_controlPointDetailFragment_to_packageListDialog"
             app:destination="@id/packageListDialog" />
@@ -76,10 +77,10 @@
 
         <argument
             android:name="packgeList"
-            app:argType="eryaz.software.activegroup.data.models.dto.PackageDto[]"/>
+            app:argType="eryaz.software.activegroup.data.models.dto.PackageDto[]" />
         <argument
             android:name="orderHeaderId"
-            app:argType="integer"/>
+            app:argType="integer" />
 
     </dialog>
     <dialog
@@ -89,10 +90,10 @@
         tools:layout="@layout/dialog_update_package_control">
         <argument
             android:name="packageDto"
-            app:argType="eryaz.software.activegroup.data.models.dto.PackageDto"/>
+            app:argType="eryaz.software.activegroup.data.models.dto.PackageDto" />
         <argument
             android:name="packageId"
-            app:argType="integer"/>
+            app:argType="integer" />
 
     </dialog>
 
