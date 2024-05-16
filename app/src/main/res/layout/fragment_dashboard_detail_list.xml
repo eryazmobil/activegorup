@@ -24,7 +24,7 @@
             app:title="Hoş Geldiniz"
             app:navigationIcon="@drawable/back_icon"
             app:layout_constraintTop_toTopOf="parent"
-            app:subTitle="Eryaz Bilgi Teknolojileri" />
+            app:subTitle="Active group" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

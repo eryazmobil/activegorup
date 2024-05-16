@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
@@ -81,7 +82,7 @@ class OrderPickingDetailFragment : BaseFragment() {
             }
         }
 
-        viewModel.parentView.observe(this) {
+        viewModel.notAvailableStock.asLiveData().observe(this) {
             if (it) {
                 binding.parentView.visibility = View.GONE
 
@@ -97,6 +98,19 @@ class OrderPickingDetailFragment : BaseFragment() {
             }
         }
 
+        viewModel.pickProductFinish.asLiveData().observe(this) {
+            if (it) {
+                binding.parentView.visibility = View.GONE
+
+                errorDialog.show(
+                    context, ErrorDialogDto(
+                        titleRes = R.string.warning,
+                        messageRes = R.string.order_was_picking
+                    )
+                )
+            }
+        }
+
         viewModel.createStockOut.observe(this) {
             if (it) {
                 toast(getString(R.string.success))
@@ -107,8 +121,6 @@ class OrderPickingDetailFragment : BaseFragment() {
             if (it) {
                 binding.shelfAddressEdt.requestFocus()
                 binding.stateView.setViewVisible(binding.productDetailParent, true)
-            } else {
-                binding.searchProductEdt.requestFocus()
             }
         }
 
@@ -152,6 +164,11 @@ class OrderPickingDetailFragment : BaseFragment() {
             if (it) {
                 findNavController().navigateUp()
             }
+        }
+
+        viewModel.productRequestFocus.asLiveData().observe(this) {
+            if (it)
+                binding.searchProductEdt.requestFocus()
         }
     }
 

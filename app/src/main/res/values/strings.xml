@@ -609,6 +609,7 @@
     <string name="stock_out_message_1"> kodlu ürünün </string>
     <string name="stock_out_message_2"> adresinde olmadığını bildiren kayıt oluşturulacak.</string>
     <string name="order_picking">Sipariş Toplama</string>
+    <string name="order_was_picking">Sipariş toplanmışdır</string>
     <string name="picking">Toplama</string>
     <string name="create_spotCheck">PDA ÜZERİNDEN\nRASSAL SAYIM İŞ EMRİ YARAT</string>
     <string name="settings">Settings</string>

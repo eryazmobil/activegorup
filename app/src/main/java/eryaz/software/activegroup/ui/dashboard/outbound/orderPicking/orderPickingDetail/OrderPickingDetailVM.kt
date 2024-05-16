@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 class OrderPickingDetailVM(
     private val orderRepo: OrderRepo,
@@ -38,7 +39,8 @@ class OrderPickingDetailVM(
     val enteredQuantity = MutableStateFlow("")
     val shelfAddress = MutableStateFlow("")
     private val fifoCode = MutableStateFlow(" ")
-    val parentView = MutableStateFlow(false)
+    val notAvailableStock = MutableSharedFlow<Boolean>()
+    val productRequestFocus = MutableSharedFlow<Boolean>()
     var productId: Int = 0
 
     private var orderPickingDto: OrderPickingDto? = null
@@ -93,12 +95,14 @@ class OrderPickingDetailVM(
     private val _shelfList = MutableStateFlow(listOf<ProductShelfQuantityDto>())
     val shelfList = _shelfList.asStateFlow()
 
-    init {
+    private val _pickProductFinish = MutableSharedFlow<Boolean>()
+    val pickProductFinish = _pickProductFinish.asSharedFlow()
 
-        getOrderDetailPickingList()
+    init {
+        getOrderDetailPickingList(true)
     }
 
-    fun getOrderDetailPickingList() = executeInBackground(_uiState) {
+    fun getOrderDetailPickingList(firstLoading: Boolean) = executeInBackground(_uiState) {
         orderRepo.getOrderDetailPickingList(
             workActivityId = TemporaryCashManager.getInstance().workActivity?.workActivityId.orZero(),
             userId = SessionManager.userId
@@ -106,10 +110,15 @@ class OrderPickingDetailVM(
             if (it.orderDetailList.isNotEmpty()) {
                 if (it.pickingSuggestionList.isNotEmpty()) {
                     orderPickingDto = it
-
+                    checkPickingFromOrder(firstLoading)
                     showNext()
+                    productRequestFocus.emit(true)
                 } else {
-                    parentView.emit(true)
+                    if (firstLoading) {
+                        notAvailableStock.emit(true)
+                    } else {
+                        _pickProductFinish.emit(true)
+                    }
                 }
             } else {
                 showError(
@@ -212,11 +221,11 @@ class OrderPickingDetailVM(
             ).onSuccess {
                 updateOrderQuantity()
                 checkFinishedOrderFromCardPosition()
-                checkPickingFromOrder()
-
+                getOrderDetailPickingList(false)
                 enteredQuantity.value = ""
                 shelfAddress.value = ""
                 _showProductDetail.emit(false)
+                productRequestFocus.emit(true)
             }
         }
     }
@@ -254,13 +263,13 @@ class OrderPickingDetailVM(
                             negativeButton = ButtonDto(
                                 text = R.string.i_leave_half,
                                 onClickListener = {
-                                    finishWorkAction()
+                                    finishWorkAction(true)
                                 }
                             )
                         )
                     )
                 } else {
-                    finishWorkAction()
+                    finishWorkAction(true)
                 }
             }
         }
@@ -271,16 +280,21 @@ class OrderPickingDetailVM(
             orderRepo.createCrossDockRequest(
                 workActionId = TemporaryCashManager.getInstance().workAction?.workActionId.orZero()
             ).onSuccess {
-                finishWorkAction()
+                finishWorkAction(true)
             }
         }
     }
 
-    fun finishWorkAction() {
+    fun finishWorkAction(firstLoading: Boolean) {
         executeInBackground(showProgressDialog = true) {
             workActivityRepo.finishWorkAction(actionId = TemporaryCashManager.getInstance().workAction?.workActionId.orZero())
                 .onSuccess {
                     _finishWorkAction.emit(true)
+                    if(!firstLoading){
+                        viewModelScope.launch {
+                            _pickProductFinish.emit(true)
+                        }
+                    }
                 }
         }
     }
@@ -324,18 +338,16 @@ class OrderPickingDetailVM(
         }
     }
 
-    private fun checkPickingFromOrder() {
+    private fun checkPickingFromOrder(firstLoading:Boolean) {
         val isQuantityCollectedLess = orderPickingDto?.orderDetailList?.any {
             it.quantityCollected < it.quantity
         } ?: false
-
         if (!isQuantityCollectedLess) {
-            finishWorkAction()
+            finishWorkAction(firstLoading)
         }
     }
 
     private fun checkProductOrder() {
-        Log.d("TAG", "checkProductOrder: ${orderPickingDto?.orderDetailList}")
         orderPickingDto?.orderDetailList?.find {
             it.quantityCollected < it.quantity && it.product.id == productId
         }?.let { orderDetail ->

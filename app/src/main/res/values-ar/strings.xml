@@ -608,6 +608,7 @@
     <string name="stock_out_message_1"> منتج مشفر </string>
     <string name="stock_out_message_2">سيتم إنشاء سجل يفيد بأن العنوان غير متوفر.</string>
     <string name="order_picking">استلام الطلبات</string>
+    <string name="order_was_picking">تم جمع الطلب</string>
     <string name="picking">الجمع</string>
     <string name="create_spotCheck">إنشاء أمر عمل جرد\nعشوائي عبر PDA</string>
     <string name="settings">اعدادات</string>

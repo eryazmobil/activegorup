@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/back_icon"
-            app:subTitle="Eryaz Bilgi Teknolojileri"
+            app:subTitle="Active group"
             app:title="Hoş Geldiniz" />
 
         <androidx.constraintlayout.motion.widget.MotionLayout

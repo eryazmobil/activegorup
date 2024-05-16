@@ -579,6 +579,7 @@
     <string name="stock_out_message_1"> coded product </string>
     <string name="stock_out_message_2"> a record will be created that indicates that it is not at the address</string>
     <string name="order_picking">Order Picking</string>
+    <string name="order_was_picking">Order has been collected</string>
     <string name="picking">Picking</string>
     <string name="create_spotCheck">CREATE RANDOM COUNTING WORK ACTIVITY VIA PDA</string>
     <string name="settings">Settings</string>

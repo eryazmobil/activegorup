@@ -95,7 +95,8 @@ class ControlPointDetailVM(
             showErrorDialog = false, showProgressDialog = true
         ) {
             workActivityRepo.getBarcodeByCode(
-                code = searchProduct.value.trim(), companyId = SessionManager.companyId
+                code = searchProduct.value.trim(),
+                companyId = SessionManager.companyId
             ).onSuccess {
                 productID = it.product.id
 
@@ -122,7 +123,9 @@ class ControlPointDetailVM(
     }
 
     fun addQuantityForControl(quantity: Int) {
-        executeInBackground(showProgressDialog = true, hasNextRequest = true) {
+        executeInBackground(
+            showProgressDialog = true,
+            hasNextRequest = true) {
             orderRepo.addQuantityForControl(
                 orderHeaderId = orderHeaderId,
                 productId = productID,
@@ -186,9 +189,13 @@ class ControlPointDetailVM(
 
     fun setEnteredProduct(dto: ProductDto) {
         productID = dto.id
-        viewModelScope.launch {
-            _productDetail.emit(dto)
-            _showProductDetail.emit(true)
+        if (serialCheckBox.value) {
+            addQuantityForControl(1)
+        } else {
+            viewModelScope.launch {
+                _showProductDetail.emit(true)
+                _productDetail.emit(dto)
+            }
         }
     }
 }

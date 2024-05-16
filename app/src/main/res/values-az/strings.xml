@@ -225,7 +225,7 @@
     <string name="menu_movement">HƏRƏKƏT</string>
     <string name="menu_recording">QEYD</string>
     <string name="menu_returning">QAYTARMA</string>
-    <string name="menu_counting">SAYMA</string>
+    <string name="menu_counting">SAYIM</string>
     <string name="menu_production">İSTEHSAL</string>
     <string name="menu_query">SORĞU</string>
     <string name="menu_setting">Parametrler</string>
@@ -234,8 +234,8 @@
     <string name="main_menu_item_3">HƏRƏKƏT</string>
     <string name="main_menu_item_4">QAYDA</string>
     <string name="main_menu_item_5">QAYTARMA</string>
-    <string name="main_menu_item_6">SAYMA</string>
-    <string name="main_menu_item_7">İSTİHSAL</string>
+    <string name="main_menu_item_6">SAYIM</string>
+    <string name="main_menu_item_7">İSTEHSAL</string>
     <string name="main_menu_item_8">SORĞU</string>
     <string name="main_menu_item_9">QURULUŞ</string>
     <string name="main_menu_item_10">ZEUS</string>
@@ -579,6 +579,7 @@
     <string name="stock_out_message_1"> kodlu məhsulun </string>
     <string name="stock_out_message_2"> ünvanında olmadığını bildirən qeyd yaradılacaq.</string>
     <string name="order_picking">Sifariş Toplanması</string>
+    <string name="order_was_picking">Sifariş toplama bitmişdir.</string>
     <string name="picking">Toplama</string>
     <string name="create_spotCheck">PDA ÜZƏRİNDƏN\nRASAL SAYIM İŞ TAPŞIRIĞI YARAT</string>
     <string name="settings">Ayarlar</string>

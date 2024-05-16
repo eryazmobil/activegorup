@@ -608,6 +608,7 @@
     <string name="stock_out_message_1"> продукт с кодом </string>
     <string name="stock_out_message_2"> не найден по адресу и будет создана запись.</string>
     <string name="order_picking">Сбор заказа</string>
+    <string name="order_was_picking">Заказ собран</string>
     <string name="picking">Сбор</string>
     <string name="create_spotCheck">СОЗДАТЬ ПРИКАЗ НА СЛУЧАЙНЫЙ ПОДСЧЁТ ЧЕРЕЗ PDA</string>
     <string name="settings">Настройки</string>
