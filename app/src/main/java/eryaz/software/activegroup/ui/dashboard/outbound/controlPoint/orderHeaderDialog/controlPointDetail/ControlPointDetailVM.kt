@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import eryaz.software.activegroup.R
 import eryaz.software.activegroup.data.api.utils.onError
 import eryaz.software.activegroup.data.api.utils.onSuccess
+import eryaz.software.activegroup.data.enums.UiState
 import eryaz.software.activegroup.data.models.dto.BarcodeDto
 import eryaz.software.activegroup.data.models.dto.ErrorDialogDto
 import eryaz.software.activegroup.data.models.dto.OrderDetailDto
@@ -61,6 +62,9 @@ class ControlPointDetailVM(
     private val _scrollToPosition = MutableSharedFlow<Int>()
     val scrollToPosition = _scrollToPosition.asSharedFlow()
 
+    private val _getBarcodeByCodeUi = MutableStateFlow(UiState.EMPTY)
+    val getBarcodeByCodeUi = _getBarcodeByCodeUi.asSharedFlow()
+
     init {
         getOrderListDetail()
         getPackageList()
@@ -91,8 +95,13 @@ class ControlPointDetailVM(
     }
 
     fun getBarcodeByCode() {
+        if (_getBarcodeByCodeUi.value == UiState.LOADING)
+            return
+
         executeInBackground(
-            showErrorDialog = false, showProgressDialog = true
+            uiState = _getBarcodeByCodeUi,
+            showErrorDialog = false,
+            showProgressDialog = true
         ) {
             workActivityRepo.getBarcodeByCode(
                 code = searchProduct.value.trim(),
