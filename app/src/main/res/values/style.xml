@@ -22,6 +22,20 @@
         <item name="endIconTint">@color/white</item>
     </style>
 
+    <style name="Widget.Zeus.TextInputLayoutNew" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxCollapsedPaddingTop">12dp</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxBackgroundColor">@color/transparent</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="endIconTint">@color/black</item>
+        <item name="prefixTextAppearance">@dimen/_14sdp</item>
+        <item name="android:textColorHint">?inputLayoutNormalHintColor</item>
+        <item name="prefixTextColor">?inputEditTextTextColor</item>
+        <item name="hintTextColor">?inputLayoutNormalHintColor</item>
+    </style>
+
     <style name="Widget.Zeus.TabLayout" parent="">
         <item name="tabTextAppearance">@style/TextAppearance.Zeus.Tab</item>
         <item name="tabBackground">@color/transparent</item>

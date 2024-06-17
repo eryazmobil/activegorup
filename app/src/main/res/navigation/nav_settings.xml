@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_languageFragment"
             app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_appLockFragment"
+            app:destination="@id/appLockFragment" />
     </fragment>
 
     <dialog
@@ -69,4 +72,9 @@
         android:label="@string/empty_label"
         tools:layout="@layout/fragment_language"
         />
+    <dialog
+        android:id="@+id/appLockFragment"
+        android:name="eryaz.software.activegroup.ui.dashboard.settings.appLock.AppLockFragment"
+        tools:layout="@layout/fragment_app_lock"
+        android:label="@string/empty_label" />
 </navigation>

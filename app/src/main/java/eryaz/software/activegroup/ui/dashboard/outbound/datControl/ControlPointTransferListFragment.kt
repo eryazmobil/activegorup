@@ -61,7 +61,7 @@ class ControlPointTransferListFragment : BaseFragment() {
                 findNavController().navigate(
                     ControlPointTransferListFragmentDirections.actionControlPointTransferListFragmentToTransferControlPointDetailFragment(
                         it.workActivityId,
-                        it.workActivityCode
+                        it.workActivityCode.orEmpty()
                     )
                 )
 

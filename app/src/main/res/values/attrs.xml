@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="inputLayoutNormalHintColor" format="color" />
+    <attr name="inputEditTextTextColor" format="color" />
+
     <!-- TextInputLayout -->
     <declare-styleable name="TextInputLayout">
         <attr name="errorText" format="string" />

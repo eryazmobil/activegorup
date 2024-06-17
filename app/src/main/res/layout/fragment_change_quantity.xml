@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="eryaz.software.activegroup.ui.dashboard.outbound.orderPicking.orderPickingDetail.changeQuantity.ChangeQuantityVM" />
+    </data>
+
+    <eryaz.software.activegroup.util.widgets.StateView
+        android:id="@+id/stateView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:sv_ignore_referenced_ids="toolbar">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/txtHeader"
+            android:layout_width="300dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="@string/enter_multiplier"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/product_multiplier"
+            style="@style/Widget.Zeus.TextInputLayoutNew"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:hint="@string/how_much_product"
+            app:layout_constraintTop_toBottomOf="@id/txtHeader">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/productMultiplierEdt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableStart="@drawable/ic_close_gray_rounded"
+                android:inputType="number"
+                android:text="@={viewModel.amount}"
+                android:textSize="@dimen/_30sdp"
+                tools:text="4" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/pickingQuantity"
+            android:layout_width="300dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="@string/result_product"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/product_multiplier" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/calculatedAmountTxt"
+            android:layout_width="300dp"
+            android:layout_height="@dimen/_140sdp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/dashboard_detail_bg"
+            android:gravity="center"
+            android:text="@{viewModel.calculatedAmount}"
+            android:textColor="@color/black"
+            android:textSize="70sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pickingQuantity"
+            tools:text="12" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/updateBtn"
+            style="@style/Widget.NewZeusDemo.Button_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:text="@string/update"
+            android:textSize="20sp"
+            app:fontFamily="@font/sogeoui"
+            app:layout_constraintTop_toBottomOf="@id/calculatedAmountTxt"
+            app:layout_goneMarginTop="@dimen/_10sdp"
+            app:onSingleClick="@{()-> viewModel.updateQuantity()}" />
+
+        <include layout="@layout/layout_loading" />
+
+        <include layout="@layout/layout_error" />
+
+    </eryaz.software.activegroup.util.widgets.StateView>
+
+</layout>

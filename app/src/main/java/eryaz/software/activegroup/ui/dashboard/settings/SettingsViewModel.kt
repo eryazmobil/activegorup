@@ -2,22 +2,29 @@ package eryaz.software.activegroup.ui.dashboard.settings
 
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import eryaz.software.activegroup.BuildConfig
+import eryaz.software.activegroup.R
 import eryaz.software.activegroup.data.api.utils.asUiState
 import eryaz.software.activegroup.data.api.utils.onSuccess
 import eryaz.software.activegroup.data.enums.LanguageType
 import eryaz.software.activegroup.data.enums.UiState
 import eryaz.software.activegroup.data.models.dto.CompanyDto
 import eryaz.software.activegroup.data.models.dto.CurrentUserDto
+import eryaz.software.activegroup.data.models.dto.PdaVersionDto
 import eryaz.software.activegroup.data.models.dto.WarehouseDto
 import eryaz.software.activegroup.data.persistence.SessionManager
 import eryaz.software.activegroup.data.repositories.UserRepo
 import eryaz.software.activegroup.ui.base.BaseViewModel
+import eryaz.software.activegroup.util.extensions.toIntOrZero
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.lang.StringBuilder
 
-class SettingsViewModel(private val repo: UserRepo) : BaseViewModel() {
+class SettingsViewModel(
+    private val repo: UserRepo
+) : BaseViewModel() {
 
     private val _currentUserDto = MutableStateFlow<CurrentUserDto?>(null)
     val currentUserDto = _currentUserDto.asStateFlow()
@@ -42,6 +49,16 @@ class SettingsViewModel(private val repo: UserRepo) : BaseViewModel() {
 
     private val _currentLanguage = MutableStateFlow("")
     val currentLanguage = _currentLanguage.asStateFlow()
+
+    private val _currentVersion = MutableStateFlow(BuildConfig.VERSION_NAME)
+    val currentVersion = _currentVersion.asStateFlow()
+
+    private val _pdaVersionModel = MutableStateFlow<PdaVersionDto?>(null)
+    val pdaVersionModel = _pdaVersionModel.asStateFlow()
+
+
+    val isUpToDate = MutableStateFlow("")
+    val updateClickable = MutableStateFlow(false)
 
     init {
         fetchData()
@@ -135,12 +152,13 @@ class SettingsViewModel(private val repo: UserRepo) : BaseViewModel() {
             _warehouseList.value.filter {
                 it.id == SessionManager.warehouseId
             }.map {
-                viewModelScope.launch{
+                viewModelScope.launch {
                     _warehouseName.emit(it.name)
                 }
             }
         }
     }
+
     private fun checkSelectedCompany() {
         if (SessionManager.companyId > 0) {
             val companyWithId = _companyList.value.find { it.id == SessionManager.companyId }
@@ -157,4 +175,27 @@ class SettingsViewModel(private val repo: UserRepo) : BaseViewModel() {
             _currentLanguage.emit(LanguageType.find(lang).fullName)
         }
     }
+
+    private suspend fun checkIsUpToDate(version: String?) {
+        version?.let { pdaVersion ->
+            val newVersion = versionToInt(pdaVersion)
+            val currentVersion = versionToInt(BuildConfig.VERSION_NAME)
+            if (newVersion > currentVersion) {
+                isUpToDate.emit(version + " " + stringProvider.invoke(R.string.app_get_update))
+                updateClickable.emit(true)
+            } else {
+                isUpToDate.emit(stringProvider.invoke(R.string.app_is_up_to_date))
+            }
+        }
+    }
+
+    private fun versionToInt(version: String): Int {
+        val list = version.split(".")
+        val sb = StringBuilder()
+        list.forEach {
+            sb.append(it)
+        }
+        return sb.toString().toIntOrZero()
+    }
+
 }

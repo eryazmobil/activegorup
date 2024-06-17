@@ -16,6 +16,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
 
+        buildConfigField "String", "ADMIN_PASS", ADMIN_PASS
         buildConfigField "String", "BASE_URL", BASE_URL
         buildConfigField "String", "BASE_OUT_URL", BASE_OUT_URL
     }
@@ -45,7 +46,7 @@ dependencies {
     def coroutines_adapter_version = "0.9.2"
     def interceptor_version = "4.9.0"
     def timber_version = "5.0.1"
-    def security_crypto_version = "1.1.0-alpha03"
+    def security_crypto_version = "1.1.0-alpha06"
     def gson_version = "2.9.0"
 
     //KTX

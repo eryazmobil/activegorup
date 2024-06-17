@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class WorkActionTypeResponse(
     @SerializedName("code")
-    val code: String,
+    val code: String?,
     @SerializedName("definition")
-    val definition: String,
+    val definition: String?,
     @SerializedName("id")
-    val id: Int,
+    val id: Int
 )

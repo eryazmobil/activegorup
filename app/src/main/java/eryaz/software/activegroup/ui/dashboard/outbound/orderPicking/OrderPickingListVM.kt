@@ -17,7 +17,9 @@ import eryaz.software.activegroup.util.extensions.orZero
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
-class OrderPickingListVM(private val repo: WorkActivityRepo) : BaseViewModel() {
+class OrderPickingListVM(
+    val repo: WorkActivityRepo
+) : BaseViewModel() {
 
     val search = MutableLiveData("")
 
@@ -59,11 +61,12 @@ class OrderPickingListVM(private val repo: WorkActivityRepo) : BaseViewModel() {
             }
         }
 
-      private fun getShippingWorkActivityList() {
+    private fun getShippingWorkActivityList() {
         executeInBackground(_uiState) {
             repo.getShippingWorkActivityList(
-                SessionManager.companyId,
-                SessionManager.warehouseId
+                companyId = SessionManager.companyId,
+                warehouseId = SessionManager.warehouseId,
+                userId = SessionManager.userId
             ).onSuccess {
                 if (it.isEmpty()) {
                     _orderPickingList.value = emptyList()
@@ -82,10 +85,8 @@ class OrderPickingListVM(private val repo: WorkActivityRepo) : BaseViewModel() {
     }
 
     fun getWorkActionForPda() {
-        executeInBackground(
-            showProgressDialog = true,
-            hasNextRequest = true
-        ) {
+        executeInBackground(showProgressDialog = true) {
+
             repo.getWorkActionForPda(
                 userId = SessionManager.userId,
                 workActivityId = TemporaryCashManager.getInstance().workActivity?.workActivityId.orZero(),
@@ -103,7 +104,7 @@ class OrderPickingListVM(private val repo: WorkActivityRepo) : BaseViewModel() {
         executeInBackground(showProgressDialog = true) {
             repo.createWorkAction(
                 activityId = TemporaryCashManager.getInstance().workActivity?.workActivityId ?: 0,
-                actionTypeCode = ActionType.CONTROL.type
+                actionTypeCode = WORK_ACTION_TYPE_PICKING
             ).onSuccess {
                 TemporaryCashManager.getInstance().workAction = it
                 _navigateToDetail.emit(true)

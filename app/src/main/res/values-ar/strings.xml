@@ -176,11 +176,13 @@
     <string name="app_check_update">تحقق</string>
     <string name="app_get_update">احصل على التحديث</string>
     <string name="change_password_">تغيير كلمة المرور</string>
+    <string name="app_lock_btn">Uygulama Kilitleme</string>
     <string name="signalR_info_title">إشعار</string>
     <string name="okay">حسنًا</string>
     <string name="no">لا </string>
     <string name="no_uppercase">لا</string>
     <string name="yes">نعم </string>
+    <string name="verify">Doğrula</string>
     <string name="yes_uppercase">‮نعم</string>
     <string name="add">اضف</string>
     <string name="quantity_without_dots">العدد</string>
@@ -193,6 +195,10 @@
     <string name="add_product">إضافة منتج</string>
     <string name="picked_qty">الكمية الاجمالية</string>
     <string name="product_pick">جمع العناصر</string>
+    <string name="change_quantity">Miktar Düzenle</string>
+    <string name="enter_multiplier">Pakette Ürün kaç adettir?</string>
+    <string name="how_much_product">Ürün Paket Miktarı</string>
+    <string name="result_product">Güncellenen Miktar</string>
     <string name="picked">تم التحصيل</string>
     <string name="picked_qty_1">الكمية التي تم جمعها</string>
     <string name="picked_qty_2">اجمالي القطع</string>
@@ -461,6 +467,8 @@
     <string name="username">اسم المستخدم</string>
     <string name="password">كلمة المرور</string>
     <string name="enter">تسجيل الدخول</string>
+    <string name="secret_password">Gizli şifreyi giriniz</string>
+    <string name="enter_secret_password_txt">Size atanan gizli şifreyi girin</string>
     <string name="settings_title">معلومات المستخدم</string>
     <string name="settings_name">الإسم: </string>
     <string name="settings_surname">النسبة: </string>
@@ -690,6 +698,8 @@
     <string name="menu_sub_counting_partial_sub">PARÇALI SAYIM</string>
     <string name="barcode_waybill">Barkod Tanımlama</string>
 
+    <string name="app_lock">Kilitle</string>
+    <string name="app_unlock">Kilitten çıkar</string>
     <string name="share">share</string>
 
 </resources>

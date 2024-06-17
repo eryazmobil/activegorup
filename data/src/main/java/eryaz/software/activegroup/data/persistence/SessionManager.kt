@@ -16,13 +16,14 @@ object SessionManager {
     private const val KEY_COMPANY_NAME = "companyName"
     private const val KEY_WAREHOUSE_NAME = "warehouseName"
     private const val KEY_WAREHOUSE_ID = "warehouseId"
+    private const val KEY_APP_IS_LOCK = "appLock"
 
     private lateinit var sharedPref: SharedPreferences
 
     fun init(context: Context) {
         sharedPref =
             EncryptedSharedPreferences.create(
-                context, "secret_shared_prefs",
+                context, "secret_shared_pref",
                 createMasterKey(context),
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
@@ -64,6 +65,12 @@ object SessionManager {
         get() = sharedPref.getInt(KEY_USER_ID, 0)
         set(value) {
             sharedPref.edit { putInt(KEY_USER_ID, value) }
+        }
+
+    var appIsLocked
+        get() = sharedPref.getBoolean(KEY_APP_IS_LOCK, true)
+        set(value) {
+            sharedPref.edit { putBoolean(KEY_APP_IS_LOCK, value) }
         }
 
     var language

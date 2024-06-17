@@ -1,6 +1,5 @@
 package eryaz.software.activegroup.ui.dashboard.outbound.orderPicking.orderPickingDetail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -28,7 +27,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 class OrderPickingDetailVM(
     private val orderRepo: OrderRepo,
@@ -44,7 +42,7 @@ class OrderPickingDetailVM(
     var productId: Int = 0
 
     private var orderPickingDto: OrderPickingDto? = null
-    private var selectedOrderDetailProduct: OrderDetailDto? = null
+    var selectedOrderDetailProduct: OrderDetailDto? = null
 
     private var selectedSuggestionIndex: Int = -1
     private var shelfId: Int = 0
@@ -123,14 +121,16 @@ class OrderPickingDetailVM(
             } else {
                 showError(
                     ErrorDialogDto(
-                        titleRes = R.string.error, messageRes = R.string.work_activity_error_2
+                        titleRes = R.string.error,
+                        messageRes = R.string.work_activity_error_2
                     )
                 )
             }
         }.onError { message, _ ->
             showError(
                 ErrorDialogDto(
-                    titleRes = R.string.error, message = message
+                    titleRes = R.string.error,
+                    message = message
                 )
             )
         }
@@ -290,7 +290,7 @@ class OrderPickingDetailVM(
             workActivityRepo.finishWorkAction(actionId = TemporaryCashManager.getInstance().workAction?.workActionId.orZero())
                 .onSuccess {
                     _finishWorkAction.emit(true)
-                    if(!firstLoading){
+                    if (!firstLoading) {
                         viewModelScope.launch {
                             _pickProductFinish.emit(true)
                         }
@@ -338,7 +338,7 @@ class OrderPickingDetailVM(
         }
     }
 
-    private fun checkPickingFromOrder(firstLoading:Boolean) {
+    private fun checkPickingFromOrder(firstLoading: Boolean) {
         val isQuantityCollectedLess = orderPickingDto?.orderDetailList?.any {
             it.quantityCollected < it.quantity
         } ?: false
@@ -423,7 +423,6 @@ class OrderPickingDetailVM(
                 "${orderPickingDto?.pickingSuggestionList?.getOrNull(selectedSuggestionIndex)?.quantityPicked} / " +
                         "${orderPickingDto?.pickingSuggestionList?.getOrNull(selectedSuggestionIndex)?.quantityWillBePicked}"
             )
-
         }
     }
 

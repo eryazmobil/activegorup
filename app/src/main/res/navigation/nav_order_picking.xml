@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_orderPickingDetailFragment_to_productListDialogFragment"
             app:destination="@id/productListDialogFragment" />
+        <action
+            android:id="@+id/action_orderPickingDetailFragment_to_changeQuantityFragment"
+            app:destination="@id/changeQuantityFragment" />
     </fragment>
 
     <dialog
@@ -51,6 +54,19 @@
             android:name="productId"
             app:argType="integer" />
 
+    </dialog>
+    <dialog
+        android:id="@+id/changeQuantityFragment"
+        android:name="eryaz.software.activegroup.ui.dashboard.outbound.orderPicking.orderPickingDetail.changeQuantity.ChangeQuantityFragment"
+        android:label="@string/empty_label"
+        tools:layout="@layout/fragment_change_quantity">
+
+        <argument
+            android:name="orderDetailId"
+            app:argType="integer" />
+        <argument
+            android:name="quantityWillBePicked"
+            app:argType="integer" />
     </dialog>
 
 </navigation>

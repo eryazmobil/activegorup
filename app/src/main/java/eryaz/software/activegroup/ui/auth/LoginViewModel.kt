@@ -22,6 +22,7 @@ class LoginViewModel(
     private val authRepo: AuthRepo,
     private val userRepo: UserRepo
 ) : BaseViewModel() {
+
     val email = MutableStateFlow("")
     val password = MutableStateFlow("")
 

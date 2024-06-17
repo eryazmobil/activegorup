@@ -56,5 +56,5 @@ fun String?.changeDate(
     calendar[Calendar.MONTH] = month + addMonth
     calendar[Calendar.DAY_OF_MONTH] = day + addDay
 
-    return calendarToDate(calendar, newFormat)
+    return DateUtils.calendarToDate(calendar, newFormat)
 }

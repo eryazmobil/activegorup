@@ -70,9 +70,10 @@ class OrderPickingListFragment : BaseFragment() {
                         messageRes = R.string.locked_work_activity
                     )
                 )
+            } else {
+                TemporaryCashManager.getInstance().workActivity = it
+                viewModel.getWorkActionForPda()
             }
-            TemporaryCashManager.getInstance().workActivity = it
-            viewModel.getWorkActionForPda()
         }
     }
 

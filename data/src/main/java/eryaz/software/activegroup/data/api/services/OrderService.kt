@@ -145,4 +145,11 @@ interface OrderService {
     suspend fun getOrderDetailForRoute(
         @Query("orderHeaderId") orderHeaderId: Int
     ): ResultModel<List<PackageOrderDetailResponse>>
+
+    @PUT("api/services/app/Order/UpdateOrderDetailQuantityForPda")
+    suspend fun updateOrderDetailQuantityForPda(
+        @Query("orderdetailId") orderDetailId: Int,
+        @Query("quantity") quantity: Int
+    ): BaseResponse
+
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Zeus - Panda Oto</string>
+    <string name="app_name">Zeus - Active Group</string>
     <string name="app_version">1.0.0</string>
     <string name="sharedPreference">com.eryaz.zeus.activegroup</string>
     <string name="barcode_definition">Barkod Tanımlama</string>
@@ -167,11 +167,13 @@
     <string name="app_check_update">YENİLƏMƏYİ YOXLA</string>
     <string name="app_get_update">YENİLƏMƏYİ AL</string>
     <string name="change_password_">Şifrəni Dəyişdir</string>
+    <string name="app_lock_btn">Tətbiqi kilitləmək</string>
     <string name="signalR_info_title">Bildiriş</string>
     <string name="okay">Tamam</string>
     <string name="no">Xeyr</string>
     <string name="no_uppercase">XEYR</string>
     <string name="yes">Bəli</string>
+    <string name="verify">Doğrula</string>
     <string name="yes_uppercase">BƏLİ</string>
     <string name="add">Əlavə et</string>
     <string name="quantity_without_dots">Say</string>
@@ -182,6 +184,10 @@
     <string name="add_product">Məhsul əlavə et</string>
     <string name="picked_qty">Cəmi miqdar</string>
     <string name="product_pick">Məhsul topla</string>
+    <string name="change_quantity">Miktar Düzenle</string>
+    <string name="enter_multiplier">Pakette Ürün kaç adettir?</string>
+    <string name="how_much_product">Ürün Paket Miktarı</string>
+    <string name="result_product">Güncellenen Miktar</string>
     <string name="picked">Toplanan</string>
     <string name="picked_qty_1">Toplanan miqdar</string>
     <string name="picked_qty_2">Cəmi miqdar</string>
@@ -656,6 +662,8 @@
     <string name="not_made">Miqdar dəyişimi uğursuz!</string>
     <string name="not_found_work_activity">İş əmri tapılmadı</string>
     <string name="enter">Daxil ol</string>
+    <string name="secret_password">Gizli şifrəni girin</string>
+    <string name="enter_secret_password_txt">Sizə təyin olunmuş gizli şifrəni daxil edin</string>
     <string name="select_storage">⦿  Anbar Seçiniz</string>
 
     <string name="crossdock_empty_list">CrossDock listi boş</string>
@@ -702,6 +710,8 @@
     <string name="collected_pack">Yüklənmiş</string>
     <string name="can_not_placement">Kontrol ədədindən çox məhsul yerləşdirə bilməzsiniz</string>
 
-    <string name="share">share</string>
+    <string name="app_lock">Kilitlə</string>
+    <string name="app_unlock">Kilitdən aç</string>
+    <string name="share">paylaş</string>
 
 </resources>

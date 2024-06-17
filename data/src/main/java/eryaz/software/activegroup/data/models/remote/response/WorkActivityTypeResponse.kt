@@ -5,10 +5,8 @@ import com.google.gson.annotations.SerializedName
 data class WorkActivityTypeResponse(
     @SerializedName("id")
     val id: Int,
-
     @SerializedName("code")
-    val code: String,
-
+    val code: String?,
     @SerializedName("definition")
-    val definition: String,
+    val definition: String?,
 )

@@ -6,22 +6,16 @@ import eryaz.software.activegroup.data.models.dto.CurrentUserDto
 data class WorkActionResponse(
     @SerializedName("id")
     val id: Int,
-
     @SerializedName("workActivity")
-    val workActivity: WorkActivityResponse,
-
+    val workActivity: WorkActivityResponse?,
     @SerializedName("workActionType")
-    val workActionType: WorkActivityTypeResponse,
-
+    val workActionType: WorkActivityTypeResponse?,
     @SerializedName("startDate")
-    val startDate: String,
-
+    val startDate: String?,
     @SerializedName("processUser")
-    val processUser: CurrentUserDto,
-
+    val processUser: CurrentUserResponse?,
     @SerializedName("finishDate")
-    val finishDate: String,
-
+    val finishDate: String?,
     @SerializedName("isFinished")
     val isFinished: Boolean
     )

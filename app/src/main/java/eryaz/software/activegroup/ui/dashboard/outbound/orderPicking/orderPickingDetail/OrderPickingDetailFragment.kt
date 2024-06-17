@@ -16,11 +16,13 @@ import eryaz.software.activegroup.data.models.dto.ErrorDialogDto
 import eryaz.software.activegroup.data.models.dto.ProductDto
 import eryaz.software.activegroup.databinding.FragmentOrderPickingDetailBinding
 import eryaz.software.activegroup.ui.base.BaseFragment
+import eryaz.software.activegroup.ui.dashboard.outbound.orderPicking.orderPickingDetail.changeQuantity.ChangeQuantityFragment
 import eryaz.software.activegroup.ui.dashboard.recording.dialog.ProductListDialogFragment
 import eryaz.software.activegroup.util.bindingAdapter.setOnSingleClickListener
 import eryaz.software.activegroup.util.extensions.hideSoftKeyboard
 import eryaz.software.activegroup.util.extensions.observe
 import eryaz.software.activegroup.util.extensions.onBackPressedCallback
+import eryaz.software.activegroup.util.extensions.orZero
 import eryaz.software.activegroup.util.extensions.parcelable
 import eryaz.software.activegroup.util.extensions.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -48,6 +50,15 @@ class OrderPickingDetailFragment : BaseFragment() {
 
         binding.toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
+        }
+
+        binding.changeProductQuantity.setOnSingleClickListener {
+            findNavController().navigate(
+                OrderPickingDetailFragmentDirections.actionOrderPickingDetailFragmentToChangeQuantityFragment(
+                    viewModel.selectedOrderDetailProduct?.id.orZero(),
+                    viewModel.selectedSuggestion.value?.quantityWillBePicked.orZero()
+                )
+            )
         }
 
         binding.toolbar.setMenuOnClickListener {
@@ -82,6 +93,14 @@ class OrderPickingDetailFragment : BaseFragment() {
             }
         }
 
+        setFragmentResultListener(ChangeQuantityFragment.ChangeQuantityFragmentRequest) { _, bundle ->
+            bundle.getBoolean(ChangeQuantityFragment.ChangeQuantityFragmentKey).let {
+                if (it) {
+                    viewModel.getOrderDetailPickingList(true)
+                }
+            }
+        }
+
         viewModel.notAvailableStock.asLiveData().observe(this) {
             if (it) {
                 binding.parentView.visibility = View.GONE
@@ -103,9 +122,22 @@ class OrderPickingDetailFragment : BaseFragment() {
                 binding.parentView.visibility = View.GONE
 
                 errorDialog.show(
-                    context, ErrorDialogDto(
+                    context,
+                    ErrorDialogDto(
                         titleRes = R.string.warning,
-                        messageRes = R.string.order_was_picking
+                        messageRes = R.string.order_was_picking,
+                        positiveButton = ButtonDto(text = R.string.close, onClickListener = {
+                            errorDialog.dismiss()
+                            findNavController().navigateUp()
+                        }
+                        ),
+                        negativeButton = ButtonDto(
+                            text = R.string.exit,
+                            onClickListener = {
+                                errorDialog.dismiss()
+                                findNavController().navigateUp()
+                            }
+                        )
                     )
                 )
             }

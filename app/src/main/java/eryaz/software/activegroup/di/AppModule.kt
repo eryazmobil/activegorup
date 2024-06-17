@@ -53,6 +53,7 @@ import eryaz.software.activegroup.ui.dashboard.outbound.datPicking.datPickingDet
 import eryaz.software.activegroup.ui.dashboard.outbound.datPicking.datPickingDetail.dialog.TransferDetailListDialogVM
 import eryaz.software.activegroup.ui.dashboard.outbound.orderPicking.OrderPickingListVM
 import eryaz.software.activegroup.ui.dashboard.outbound.orderPicking.orderPickingDetail.OrderPickingDetailVM
+import eryaz.software.activegroup.ui.dashboard.outbound.orderPicking.orderPickingDetail.changeQuantity.ChangeQuantityVM
 import eryaz.software.activegroup.ui.dashboard.outbound.orderPicking.orderPickingDetail.dialog.OrderDetailListDialogVM
 import eryaz.software.activegroup.ui.dashboard.outbound.orderPicking.orderPickingDetail.dialog.ShelfListDialogVM
 import eryaz.software.activegroup.ui.dashboard.query.queryShelf.QueryShelfFragmentVM
@@ -61,6 +62,7 @@ import eryaz.software.activegroup.ui.dashboard.recording.createVerifyShelf.Varie
 import eryaz.software.activegroup.ui.dashboard.recording.dialog.ProductListDialogVM
 import eryaz.software.activegroup.ui.dashboard.recording.recordBarcode.RecordBarcodeVM
 import eryaz.software.activegroup.ui.dashboard.settings.SettingsViewModel
+import eryaz.software.activegroup.ui.dashboard.settings.appLock.AppLockVM
 import eryaz.software.activegroup.ui.dashboard.settings.changeLanguage.LanguageVM
 import eryaz.software.activegroup.ui.dashboard.settings.changePassword.ChangePasswordVM
 import eryaz.software.activegroup.ui.dashboard.settings.companies.CompanyListVM
@@ -307,4 +309,14 @@ val appModule = module {
     }
 
     viewModel { LanguageVM() }
+
+    viewModel { (orderDetailId: Int, orderQuantity: Int) ->
+        ChangeQuantityVM(
+            orderRepo = get(),
+            orderDetailId = orderDetailId,
+            orderQuantity = orderQuantity
+        )
+    }
+
+    viewModel { AppLockVM() }
 }

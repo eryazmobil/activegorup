@@ -223,7 +223,8 @@ interface WorkActivityService {
     @GET("api/services/app/Work/GetShippingWorkActivityListForPdaPicking")
     suspend fun getShippingWorkActivityList(
         @Query("companyId") companyId: Int,
-        @Query("warehouseId") warehouseId: Int
+        @Query("warehouseId") warehouseId: Int,
+        @Query("userId") userId:Int
     ): ResultModel<List<WorkActivityResponse>>
 
     @GET("api/services/app/Work/GetTransferWarehouseWorkActivityListForPdaPicking")

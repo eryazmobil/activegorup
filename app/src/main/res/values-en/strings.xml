@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Zeus - Panda Oto</string>
+    <string name="app_name">Zeus - Active Group</string>
     <string name="sharedPreference">com.eryaz.zeus.activegroup</string>
     <string name="barcode_definition">Barcode Definition</string>
     <string name="there_is_empty_fields_or_check_internet_connection">You entered one of the fields blank. Please enter the correct information to proceed and check your internet connection.</string>
@@ -169,12 +169,14 @@
     <string name="app_check_update">CHECK IT</string>
     <string name="app_get_update">RECEIVE UPDATE</string>
     <string name="change_password_">Change password</string>
+    <string name="app_lock_btn">App Lock</string>
     <string name="signalR_info_title">Notification</string>
     <string name="okay">OK</string>
 
     <string name="no">No</string>
     <string name="no_uppercase">NO</string>
     <string name="yes">Yes</string>
+    <string name="verify">Doğrula</string>
     <string name="yes_uppercase">YES</string>
     <string name="add">Add</string>
     <string name="quantity_without_dots">Quantity</string>
@@ -185,6 +187,10 @@
     <string name="add_product">ADD PRODUCT</string>
     <string name="picked_qty">Picked amount</string>
     <string name="product_pick">Pick Products</string>
+    <string name="change_quantity">Change \n Quantity</string>
+    <string name="enter_multiplier">Pakette Ürün kaç adettir?</string>
+    <string name="how_much_product">Ürün Paket Miktarı</string>
+    <string name="result_product">Güncellenen Miktar</string>
     <string name="picked">Picked</string>
     <string name="picked_qty_1">PICKED AMOUNT</string>
     <string name="picked_qty_2">PICKED AMOUNT</string>
@@ -646,6 +652,8 @@
     <string name="not_made">No amount change has been made!</string>
     <string name="not_found_work_activity">Work order not found</string>
     <string name="enter">Login</string>
+    <string name="secret_password">Enter the secret password</string>
+    <string name="enter_secret_password_txt">Enter the secret password assigned to you</string>
     <string name="select_storage">⦿ Select Warehouse</string>
     <string name="crossdock_empty_list">CrossDock list is empty</string>
     <string name="crossdock_list">CrossDock List</string>
@@ -688,6 +696,8 @@
     <string name="collected_pack">Loaded</string>
     <string name="can_not_placement">You cannot place more products than the control quantity.</string>
 
+    <string name="app_lock">App Lock</string>
+    <string name="app_unlock">App Unlock</string>
     <string name="wms">Zeus Warehouse Management \nSystem</string>
     <string name="app_language_choose">Select Language</string>
     <string name="barcode_waybill">Barcode identification</string>

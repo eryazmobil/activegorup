@@ -60,9 +60,9 @@ class AcceptanceProcessVM(
         TemporaryCashManager.getInstance().workActivity?.let {
 
             viewModelScope.launch {
-                _clientName.emit(it.client!!.name)
-                _orderDate.emit(it.creationTime)
-                _productCode.emit(it.workActivityCode)
+                _clientName.emit(it.client?.name.orEmpty())
+                _orderDate.emit(it.creationTime.orEmpty())
+                _productCode.emit(it.workActivityCode.orEmpty())
             }
         }
 
@@ -71,7 +71,8 @@ class AcceptanceProcessVM(
 
     private fun getWaybillListDetail() {
         executeInBackground(_uiState) {
-            val workActivityID = TemporaryCashManager.getInstance().workActivity?.workActivityId ?: 0
+            val workActivityID =
+                TemporaryCashManager.getInstance().workActivity?.workActivityId ?: 0
             repo.getWaybillListDetail(
                 workActivityId = workActivityID
             )
@@ -164,7 +165,7 @@ class AcceptanceProcessVM(
                                 )
                             )
                         )
-                    }else {
+                    } else {
                         showError(
                             ErrorDialogDto(
                                 title = stringProvider.invoke(R.string.error),
@@ -176,6 +177,7 @@ class AcceptanceProcessVM(
             }
         }
     }
+
     fun finishWorkAction() {
         TemporaryCashManager.getInstance().workAction?.let {
             executeInBackground {

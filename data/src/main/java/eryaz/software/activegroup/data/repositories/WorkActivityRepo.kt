@@ -335,10 +335,12 @@ class WorkActivityRepo(private val api: WorkActivityService) : BaseRepo() {
     suspend fun getShippingWorkActivityList(
         companyId: Int,
         warehouseId: Int,
+        userId: Int
     ) = callApi {
         val response = api.getShippingWorkActivityList(
             companyId = companyId,
-            warehouseId = warehouseId
+            warehouseId = warehouseId,
+            userId = userId
         )
         ResponseHandler.handleSuccess(response, response.result.map { it.toDto() })
     }

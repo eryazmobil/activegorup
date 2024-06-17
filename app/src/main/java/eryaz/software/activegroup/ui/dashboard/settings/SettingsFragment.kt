@@ -17,6 +17,7 @@ import eryaz.software.activegroup.ui.dashboard.settings.warehouses.WarehouseList
 import eryaz.software.activegroup.util.bindingAdapter.setOnSingleClickListener
 import eryaz.software.activegroup.util.extensions.observe
 import eryaz.software.activegroup.util.extensions.parcelable
+import eryaz.software.activegroup.util.updateApk.ApkDownloadService
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : BaseFragment() {
@@ -38,9 +39,11 @@ class SettingsFragment : BaseFragment() {
     }
 
     override fun setClicks() {
+
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+
         viewModel.companyList.observe(this) { companyList ->
             binding.companyItem.setOnSingleClickListener {
                 viewModel.checkCompany.observe(this) {
@@ -73,9 +76,26 @@ class SettingsFragment : BaseFragment() {
             }
         }
 
+        binding.appVersionUpdate.setOnSingleClickListener {
+
+            viewModel.pdaVersionModel.value?.let {
+                ApkDownloadService.startService(
+                    requireContext(),
+                    it.downloadLink,
+                    it.apkZipName,
+                    it.apkFileName
+                )
+            }
+        }
         binding.changePassword.setOnSingleClickListener {
             findNavController().navigate(
                 SettingsFragmentDirections.actionSettingFragmentToPasswordDialog()
+            )
+        }
+
+        binding.lockBtn.setOnClickListener {
+            findNavController().navigate(
+                SettingsFragmentDirections.actionSettingsFragmentToAppLockFragment()
             )
         }
     }

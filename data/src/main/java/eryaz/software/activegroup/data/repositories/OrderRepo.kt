@@ -172,7 +172,7 @@ class OrderRepo(private val api: OrderService) : BaseRepo() {
             routeType = routeType
         )
 
-        ResponseHandler.handleSuccess(response,response.success)
+        ResponseHandler.handleSuccess(response, response.success)
     }
 
     suspend fun updateOrderHeaderRoute(
@@ -186,7 +186,7 @@ class OrderRepo(private val api: OrderService) : BaseRepo() {
             shippingRouteId = shippingRouteId,
         )
 
-        ResponseHandler.handleSuccess(response,response.success)
+        ResponseHandler.handleSuccess(response, response.success)
     }
 
     suspend fun getOrderHeaderRouteList(
@@ -199,21 +199,35 @@ class OrderRepo(private val api: OrderService) : BaseRepo() {
 
     suspend fun getOrderHeaderRouteDetailList(
         shippingRouteId: Int,
-        orderHeaderId :Int
+        orderHeaderId: Int
     ) = callApi {
         val response = api.getOrderHeaderRouteDetailList(
             shippingRouteId = shippingRouteId,
-            orderHeaderId = orderHeaderId)
+            orderHeaderId = orderHeaderId
+        )
 
         ResponseHandler.handleSuccess(response, response.result.map { it.toDto() })
     }
 
     suspend fun getOrderDetailForRoute(
-        orderHeaderId :Int
+        orderHeaderId: Int
     ) = callApi {
         val response = api.getOrderDetailForRoute(
-            orderHeaderId = orderHeaderId)
+            orderHeaderId = orderHeaderId
+        )
 
         ResponseHandler.handleSuccess(response, response.result.map { it.toDto() })
+    }
+
+    suspend fun updateOrderDetailQuantityForPda(
+        orderDetailId: Int,
+        quantity: Int
+    ) = callApi {
+        val response = api.updateOrderDetailQuantityForPda(
+            orderDetailId = orderDetailId,
+            quantity = quantity
+        )
+
+        ResponseHandler.handleSuccess(response, response)
     }
 }

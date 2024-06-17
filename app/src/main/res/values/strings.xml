@@ -178,11 +178,13 @@
     <string name="app_check_update">KONTROL ET</string>
     <string name="app_get_update">GÜNCELLEMEYİ AL</string>
     <string name="change_password_">Şifre Değiştirme</string>
+    <string name="app_lock_btn">Uygulama Kilitleme</string>
     <string name="signalR_info_title">Bildirim</string>
     <string name="okay">Tamam</string>
     <string name="no">Hayır</string>
     <string name="no_uppercase">HAYIR</string>
     <string name="yes">Evet</string>
+    <string name="verify">Doğrula</string>
     <string name="yes_uppercase">EVET</string>
     <string name="add">Ekle</string>
     <string name="quantity_without_dots">Adet</string>
@@ -195,6 +197,10 @@
     <string name="add_product">ÜRÜN EKLE</string>
     <string name="picked_qty">T. MİKTAR</string>
     <string name="product_pick">Ürün Topla</string>
+    <string name="change_quantity">Miktar Düzenle</string>
+    <string name="enter_multiplier">Pakette Ürün kaç adettir?</string>
+    <string name="how_much_product">Ürün Paket Miktarı</string>
+    <string name="result_product">Güncellenen Miktar</string>
     <string name="picked">Toplanan</string>
     <string name="picked_qty_1">TOPLANAN ADET</string>
     <string name="picked_qty_2">T. ADET</string>
@@ -464,6 +470,8 @@
     <string name="username">Kullanıcı Adı</string>
     <string name="password">Şifre</string>
     <string name="enter">Giriş Yap</string>
+    <string name="secret_password">Gizli şifreyi giriniz</string>
+    <string name="enter_secret_password_txt">Size atanan gizli şifreyi girin</string>
     <string name="settings_title">KULLANICI BİLGİLERİ</string>
     <string name="settings_name">Ad: </string>
     <string name="settings_surname">Soyad: </string>
@@ -691,5 +699,7 @@
     <string name="collected_pack">Yüklenmiş</string>
     <string name="can_not_placement">Kontrol adetinden fazla ürün yerleştiremezsiniz</string>
     <string name="share">share</string>
+    <string name="app_lock">Kilitle</string>
+    <string name="app_unlock">Kilitten çıkar</string>
 
 </resources>

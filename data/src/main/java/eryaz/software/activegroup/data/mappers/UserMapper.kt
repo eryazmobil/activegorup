@@ -16,9 +16,9 @@ fun CurrentUserResponse.toDto() = CurrentUserDto(
 
 fun WorkActionResponse.toDto() = WorkActionDto(
     workActionId = id,
-    workActivity = workActivity.toDto(),
-    workActionType = workActionType,
-    processUser = processUser,
+    workActivity = workActivity?.toDto(),
+    workActionType = workActionType?.toDto(),
+    processUser = processUser?.toDto(),
     isFinished = isFinished
 )
 

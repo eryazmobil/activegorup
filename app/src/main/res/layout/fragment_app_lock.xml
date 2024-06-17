@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="eryaz.software.activegroup.ui.dashboard.settings.appLock.AppLockVM" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00243A"
+        android:paddingVertical="24dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/headerTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/enter_secret_password_txt"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.2" />
+
+        <eryaz.software.activegroup.util.widgets.TextInputLayout
+            android:id="@+id/passwordTil"
+            style="@style/Widget.Zeus.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="42dp"
+            android:hint="@string/secret_password"
+            app:boxBackgroundColor="#003B4D"
+            app:boxStrokeColor="#0083C4"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/lockBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerTxt">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:text="@={viewModel.password}"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:fontFamily="@font/roboto_medium" />
+        </eryaz.software.activegroup.util.widgets.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/lockBtn"
+            style="@style/Widget.NewZeusDemo.Button_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="24dp"
+            android:text="@{viewModel.buttonText}"
+            android:textAllCaps="false"
+            android:enabled="@{viewModel.verifyEnable}"
+            app:onSingleClick="@{()-> viewModel.verify()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordTil" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

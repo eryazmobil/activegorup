@@ -16,7 +16,7 @@ import eryaz.software.activegroup.data.utils.getFormattedDate
 
 fun WorkActivityResponse.toDto() = WorkActivityDto(
     workActivityId = id,
-    workActivityCode = code,
+    workActivityCode = code.orEmpty(),
     workActivityType = workActivityTypeResponse?.toDto(),
     client = client?.toDto(),
     creationTime = creationTime.getFormattedDate("dd.MM.yyyy HH:mm"),
@@ -30,8 +30,8 @@ fun WorkActivityResponse.toDto() = WorkActivityDto(
 
 fun WorkActivityTypeResponse.toDto() = WorkActivityTypeDto(
     id = id,
-    code = code,
-    definition = definition
+    code = code.orEmpty(),
+    definition = definition.orEmpty()
 )
 
 fun StockShelfQuantityResponse.toDto() = StockShelfQuantityDto(
