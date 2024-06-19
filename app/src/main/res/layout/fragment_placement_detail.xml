@@ -97,10 +97,9 @@
                         android:layout_marginTop="@dimen/_16sdp"
                         app:cardCornerRadius="@dimen/_10sdp"
                         app:cardElevation="8dp"
-                        app:clientName="@{placementViewModel.productDetail.manufacturerCode}"
-                        app:creationTime="@{placementViewModel.productDetail.code}"
+                        app:clientName="@{placementViewModel.productDetail.code}"
+                        app:creationTime="@{placementViewModel.productDetail.definition}"
                         app:detailTitle="@string/product_details"
-                        app:documentNo="@{placementViewModel.productDetail.definition}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

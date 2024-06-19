@@ -8,7 +8,7 @@
     <dialog
         android:id="@+id/productListDialogFragment"
         android:name="eryaz.software.activegroup.ui.dashboard.recording.dialog.ProductListDialogFragment"
-        android:label="ProductListDialogFragment"
+        android:label="@string/empty_label"
         tools:layout="@layout/dialog_product_list" />
     <fragment
         android:id="@+id/acceptanceListFragment"

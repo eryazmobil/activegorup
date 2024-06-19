@@ -100,7 +100,7 @@ interface CountingService {
         @Query("stHeaderId") stHeaderId: Int,
     ): ResultModel<List<ProductShelfQuantityResponse>>
 
-    @POST("api/services/app/StockTaking/FinishFastStocktakingDetail")
+    @POST("api/services/app/StockTaking/FinishCheckStocktakingDetail")
     suspend fun finishFastStocktakingDetail(
         @Body fastCountingProcessRequest: FastCountingProcessRequestModel
     ): BaseResponse
@@ -134,5 +134,11 @@ interface CountingService {
         @Query("ProductId") productId:Int,
         @Query("newShelfCurrentQuantity") newShelfCurrentQuantity:Int,
     ) : BaseResponse
+
+    @GET("api/services/app/StockTaking/GetAllAssignedShelvesToUserForPda")
+    suspend fun getAllAssignedShelvesToUserForPda(
+        @Query("stHeaderId") stHeaderId: Int,
+        @Query("ProcessUserId") userId: Int
+    ): ResultModel<List<StockTakingDetailResponse>>
 
 }

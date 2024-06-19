@@ -678,6 +678,7 @@
     <string name="menu_sub_counting">WAREHOUSE COUNT</string>
     <string name="menu_sub_counting_fasting">FAST COUNT</string>
     <string name="menu_sub_counting_partial_sub">PARTIAL COUNTING</string>
+    <string name="menu_sub_counting_control_sub">KONTROL SAYIM</string>
 
     <string name="delete_product">Delete Product</string>
     <string name="route_list">Select route</string>

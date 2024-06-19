@@ -9,4 +9,10 @@ data class StockTakingDetailResponse(
     val stockTakingHeader: StockTakingHeaderResponse?,
     @SerializedName("stockTakingType")
     val stockTakingType: WorkActivityTypeResponse?,
+    @SerializedName("assignedShelf")
+    val shelfResponse: ShelfResponse,
+    @SerializedName("isStarted")
+    val isStarted: Boolean,
+    @SerializedName("isFinished")
+    val isFinished: Boolean
 )

@@ -31,7 +31,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="eryaz.software.activegroup.ui.auth.LoginFragment"
-        android:label="LoginFragment"
+        android:label="@string/empty_label"
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_mainFragment"

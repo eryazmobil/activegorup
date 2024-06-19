@@ -9,6 +9,7 @@ import androidx.navigation.fragment.navArgs
 import eryaz.software.activegroup.databinding.OrderShelfListDialogBinding
 import eryaz.software.activegroup.ui.base.BaseDialogFragment
 import eryaz.software.activegroup.ui.dashboard.query.adapter.ShelfProductQuantityAdapter
+import eryaz.software.activegroup.ui.dashboard.query.adapter.ShelfQuantityAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -53,7 +54,7 @@ class ShelfListDialog : BaseDialogFragment() {
     }
 
     private val adapter by lazy {
-        ShelfProductQuantityAdapter().also {
+        ShelfQuantityAdapter().also {
             binding.recyclerView.adapter = it
         }
     }

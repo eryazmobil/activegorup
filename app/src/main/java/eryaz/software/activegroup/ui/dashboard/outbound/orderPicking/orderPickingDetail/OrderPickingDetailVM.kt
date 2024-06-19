@@ -96,6 +96,9 @@ class OrderPickingDetailVM(
     private val _pickProductFinish = MutableSharedFlow<Boolean>()
     val pickProductFinish = _pickProductFinish.asSharedFlow()
 
+    private val _pickProductSuccess = MutableSharedFlow<Boolean>()
+    val pickProductSuccess = _pickProductSuccess.asSharedFlow()
+
     init {
         getOrderDetailPickingList(true)
     }
@@ -226,6 +229,7 @@ class OrderPickingDetailVM(
                 shelfAddress.value = ""
                 _showProductDetail.emit(false)
                 productRequestFocus.emit(true)
+                _pickProductSuccess.emit(true)
             }
         }
     }

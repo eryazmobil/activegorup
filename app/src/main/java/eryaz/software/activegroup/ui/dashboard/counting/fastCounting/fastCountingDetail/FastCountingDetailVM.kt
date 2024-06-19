@@ -1,5 +1,6 @@
 package eryaz.software.activegroup.ui.dashboard.counting.fastCounting.fastCountingDetail
 
+import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
 import eryaz.software.activegroup.R
@@ -9,6 +10,7 @@ import eryaz.software.activegroup.data.models.dto.BarcodeDto
 import eryaz.software.activegroup.data.models.dto.ButtonDto
 import eryaz.software.activegroup.data.models.dto.CountingComparisonDto
 import eryaz.software.activegroup.data.models.dto.ErrorDialogDto
+import eryaz.software.activegroup.data.models.dto.ProductDto
 import eryaz.software.activegroup.data.models.dto.ProductShelfQuantityDto
 import eryaz.software.activegroup.data.models.remote.request.FastCountingProcessRequestModel
 import eryaz.software.activegroup.data.models.remote.response.ProductQuantityResponse
@@ -17,7 +19,9 @@ import eryaz.software.activegroup.data.repositories.CountingRepo
 import eryaz.software.activegroup.data.repositories.WorkActivityRepo
 import eryaz.software.activegroup.ui.base.BaseViewModel
 import eryaz.software.activegroup.util.extensions.toIntOrZero
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
@@ -44,7 +48,7 @@ class FastCountingDetailVM(
     private val _actionAddProduct = MutableStateFlow(false)
     val actionAddProduct = _actionAddProduct.asStateFlow()
 
-    private val _productDetail = MutableStateFlow<BarcodeDto?>(null)
+    private val _productDetail = MutableStateFlow<ProductDto?>(null)
     val productDetail = _productDetail.asStateFlow()
 
     private val _actionIsFinished = MutableStateFlow(true)
@@ -52,6 +56,9 @@ class FastCountingDetailVM(
 
     private val _showProductDetail = MutableStateFlow(false)
     val showProductDetail = _showProductDetail.asStateFlow()
+
+    private val _barcodeSuccess = MutableSharedFlow<Boolean>()
+    val barcodeSuccess = _barcodeSuccess.asSharedFlow()
 
     fun getBarcodeByCode() =
         executeInBackground(showProgressDialog = true, showErrorDialog = false) {
@@ -62,8 +69,8 @@ class FastCountingDetailVM(
 
                 willCountedProductList.find { listItem ->
                     listItem.productDto.id == productID
-                }?.let {
-                    if (it.newQuantity.get().toIntOrZero() != 0) {
+                }?.let { dto ->
+                    if (dto.newQuantity.get().toIntOrZero() != 0) {
                         showError(
                             ErrorDialogDto(
                                 titleRes = R.string.warning,
@@ -74,7 +81,7 @@ class FastCountingDetailVM(
                     }
                 }
 
-                _productDetail.emit(it)
+                _productDetail.emit(it.product)
                 _showProductDetail.emit(true)
             }.onError { _, _ ->
                 hasNotProductBarcode.emit(true)
@@ -88,10 +95,15 @@ class FastCountingDetailVM(
             }
         }
 
-    fun getShelfByCode() = executeInBackground(showProgressDialog = true, showErrorDialog = true) {
-        workActivityRepo.getShelfByCode(
+    fun getShelfByCode() = executeInBackground(
+        showProgressDialog = true,
+        showErrorDialog = true,
+        hasNextRequest = true
+    ) {
+        workActivityRepo.getShelfByCodeForStocktaking(
             code = searchShelf.value.trim(),
             warehouseId = SessionManager.warehouseId,
+            companyId = SessionManager.companyId,
             storageId = 0
         ).onSuccess {
             assignedShelfId = it.shelfId
@@ -107,7 +119,10 @@ class FastCountingDetailVM(
         }
     }
 
-    private fun isSuitableShelf() = executeInBackground(showProgressDialog = true) {
+    private fun isSuitableShelf() = executeInBackground(
+        showProgressDialog = true,
+        hasNextRequest = true
+    ) {
         countingRepo.isSuitableShelf(
             stHeaderId = stHeaderId,
             shelfId = assignedShelfId
@@ -126,7 +141,10 @@ class FastCountingDetailVM(
     }
 
     private fun getAllAssignedDetailsToUser() {
-        executeInBackground(showProgressDialog = true) {
+        executeInBackground(
+            showProgressDialog = true,
+            hasNextRequest = true
+        ) {
             countingRepo.getAllAssignedDetailsToUser(
                 stHeaderId = stHeaderId,
                 shelfId = assignedShelfId,
@@ -168,6 +186,7 @@ class FastCountingDetailVM(
                             newQuantity = ObservableField("")
                         )
                     }
+                    _barcodeSuccess.emit(true)
                 } else {
                     showError(
                         ErrorDialogDto(
@@ -208,6 +227,8 @@ class FastCountingDetailVM(
 
     fun isValidFinish(): Boolean {
         return willCountedProductList.any {
+            Log.d("TAG", "oldQuantity: ${it.oldQuantity.toIntOrZero()}")
+            Log.d("TAG", "newQuantity: ${it.newQuantity.get().toIntOrZero()}")
             it.oldQuantity.toIntOrZero() != it.newQuantity.get().toIntOrZero()
         }
     }
@@ -224,7 +245,7 @@ class FastCountingDetailVM(
 
                 _productDetail.value?.let {
                     val countingComparisonDto = CountingComparisonDto(
-                        productDto = it.product,
+                        productDto = it,
                         oldQuantity = "0",
                         newQuantity = ObservableField(quantityEdt.value)
                     )
@@ -242,7 +263,7 @@ class FastCountingDetailVM(
         }
     }
 
-     fun isValidFields(): Boolean {
+    fun isValidFields(): Boolean {
         when {
             assignedShelfId == 0 -> {
                 showError(
@@ -272,6 +293,14 @@ class FastCountingDetailVM(
             }
 
             else -> return true
+        }
+    }
+
+    fun setEnteredProduct(dto: ProductDto) {
+        productID = dto.id
+        viewModelScope.launch {
+            _productDetail.emit(dto)
+            _showProductDetail.emit(true)
         }
     }
 }

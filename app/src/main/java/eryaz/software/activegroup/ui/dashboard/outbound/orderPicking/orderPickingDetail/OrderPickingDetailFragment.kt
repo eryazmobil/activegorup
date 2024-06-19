@@ -11,6 +11,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import eryaz.software.activegroup.R
+import eryaz.software.activegroup.data.enums.SoundEnum
 import eryaz.software.activegroup.data.models.dto.ButtonDto
 import eryaz.software.activegroup.data.models.dto.ErrorDialogDto
 import eryaz.software.activegroup.data.models.dto.ProductDto
@@ -44,12 +45,9 @@ class OrderPickingDetailFragment : BaseFragment() {
     }
 
     override fun setClicks() {
-        onBackPressedCallback {
-            viewModel.checkCrossDockNeedByActionId()
-        }
 
         binding.toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
+            viewModel.checkCrossDockNeedByActionId()
         }
 
         binding.changeProductQuantity.setOnSingleClickListener {
@@ -85,6 +83,12 @@ class OrderPickingDetailFragment : BaseFragment() {
     }
 
     override fun subscribeToObservables() {
+
+        viewModel.pickProductSuccess
+            .asLiveData()
+            .observe(viewLifecycleOwner) {
+                playSound(SoundEnum.Success)
+            }
 
         setFragmentResultListener(ProductListDialogFragment.REQUEST_KEY) { _, bundle ->
             val dto = bundle.parcelable<ProductDto>(ProductListDialogFragment.ARG_PRODUCT_DTO)

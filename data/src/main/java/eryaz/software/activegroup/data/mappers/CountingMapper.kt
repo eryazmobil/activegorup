@@ -25,5 +25,8 @@ fun StockTackingProcessResponse.toDto() = StockTackingProcessDto(
 fun StockTakingDetailResponse.toDto() = StockTakingDetailDto(
     id = id,
     stockTakingHeader = stockTakingHeader?.toDto(),
-    stockTakingType = stockTakingType?.toDto()
+    stockTakingType = stockTakingType?.toDto(),
+    shelfDto = shelfResponse.toDto(),
+    isStarted = isStarted,
+    isFinished = isFinished
 )

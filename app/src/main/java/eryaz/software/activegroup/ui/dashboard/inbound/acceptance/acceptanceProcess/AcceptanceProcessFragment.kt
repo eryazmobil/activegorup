@@ -11,6 +11,7 @@ import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import eryaz.software.activegroup.R
 import eryaz.software.activegroup.data.enums.IconType
+import eryaz.software.activegroup.data.enums.SoundEnum
 import eryaz.software.activegroup.data.models.dto.ButtonDto
 import eryaz.software.activegroup.data.models.dto.ConfirmationDialogDto
 import eryaz.software.activegroup.data.models.dto.ErrorDialogDto
@@ -46,6 +47,7 @@ class AcceptanceProcessFragment : BaseFragment() {
     }
 
     override fun subscribeToObservables() {
+
         setFragmentResultListener(ProductListDialogFragment.REQUEST_KEY) { _, bundle ->
             val dto = bundle.parcelable<ProductDto>(ProductListDialogFragment.ARG_PRODUCT_DTO)
             dto?.let {
@@ -62,6 +64,7 @@ class AcceptanceProcessFragment : BaseFragment() {
         viewModel.controlSuccess
             .asLiveData()
             .observe(viewLifecycleOwner) {
+                playSound(SoundEnum.Success)
                 if (viewModel.checkIfAllFinished()) {
                     showFinishDialog()
                 }
@@ -74,21 +77,21 @@ class AcceptanceProcessFragment : BaseFragment() {
         viewModel.showCreateBarcode
             .asLiveData()
             .observe(this) {
-                if(it)
-                QuestionDialog(
-                    onPositiveClickListener = {
-                        findNavController().navigate(
-                            AcceptanceProcessFragmentDirections
-                                .actionGlobalCreateBarcodeDialog()
-                        )
-                    },
-                    textHeader = resources.getString(R.string.attention),
-                    textMessage = resources.getString(R.string.msg_no_barcode_and_new_barcode),
-                    positiveBtnText = resources.getString(R.string.yes),
-                    negativeBtnText = resources.getString(R.string.no),
-                    negativeBtnViewVisible = true,
-                    icType = IconType.Warning.ordinal
-                ).show(parentFragmentManager, "dialog")
+                if (it)
+                    QuestionDialog(
+                        onPositiveClickListener = {
+                            findNavController().navigate(
+                                AcceptanceProcessFragmentDirections
+                                    .actionGlobalCreateBarcodeDialog()
+                            )
+                        },
+                        textHeader = resources.getString(R.string.attention),
+                        textMessage = resources.getString(R.string.msg_no_barcode_and_new_barcode),
+                        positiveBtnText = resources.getString(R.string.yes),
+                        negativeBtnText = resources.getString(R.string.no),
+                        negativeBtnViewVisible = true,
+                        icType = IconType.Warning.ordinal
+                    ).show(parentFragmentManager, "dialog")
             }
     }
 

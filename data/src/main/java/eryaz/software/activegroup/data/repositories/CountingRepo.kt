@@ -150,45 +150,54 @@ class CountingRepo(private val api: CountingService) : BaseRepo() {
             companyId,
             warehouseId
         )
-        ResponseHandler.handleSuccess(response,response.result.id)
+        ResponseHandler.handleSuccess(response, response.result.id)
     }
 
     suspend fun createSTDetailWithUserAndShelvesPartial(
-        stHeaderId : Int,
+        stHeaderId: Int,
         assignedUserId: Int,
-        shelfId : Int
+        shelfId: Int
     ) = callApi {
         val response = api.createSTDetailWithUserAndShelvesPartial(
             stHeaderId,
             assignedUserId,
             shelfId
         )
-        ResponseHandler.handleSuccess(response,response.result.id)
+        ResponseHandler.handleSuccess(response, response.result.id)
     }
 
     suspend fun finishPartialStockTacking(
         stHeaderId: Int
     ) = callApi {
         val response = api.finishPartialStockTacking(stHeaderId)
-        ResponseHandler.handleSuccess(response,response.success)
+        ResponseHandler.handleSuccess(response, response.success)
+    }
+
+    suspend fun getAllAssignedShelvesToUserForPda(
+        stHeaderId: Int,
+        userId: Int
+    ) = callApi {
+        val response =
+            api.getAllAssignedShelvesToUserForPda(stHeaderId = stHeaderId, userId = userId)
+        ResponseHandler.handleSuccess(response, response.result.map { it.toDto() })
     }
 
     suspend fun nextPartialStockTackingDetail(
         stDetailId: Int
     ) = callApi {
         val response = api.nextPartialStockTackingDetail(stDetailId)
-        ResponseHandler.handleSuccess(response,response.success)
+        ResponseHandler.handleSuccess(response, response.success)
     }
 
     suspend fun createSTActionProcessFromPartialStockTaking(
         stHeaderId: Int,
         stDetailId: Int,
         productId: Int,
-        newShelfCurrentQuantity:Int
-    )= callApi {
-       val response = api.createSTActionProcessFromPartialStockTaking(
+        newShelfCurrentQuantity: Int
+    ) = callApi {
+        val response = api.createSTActionProcessFromPartialStockTaking(
             stHeaderId, stDetailId, productId, newShelfCurrentQuantity
         )
-        ResponseHandler.handleSuccess(response,response.success)
+        ResponseHandler.handleSuccess(response, response.success)
     }
 }

@@ -1,5 +1,6 @@
 package eryaz.software.activegroup.ui.dashboard.counting.fastCounting
 
+import android.util.Log
 import eryaz.software.activegroup.R
 import eryaz.software.activegroup.data.api.utils.onError
 import eryaz.software.activegroup.data.api.utils.onSuccess
@@ -40,7 +41,11 @@ class FastCountingListVM(private val repo: CountingRepo) : BaseViewModel() {
                         )
                     )
                 } else {
-                    _countingWorkActivityList.emit(it)
+                    val controlList = it.filter { dto ->
+                        dto.stockTakingType?.id == CONTROL_COUNTING_TYPE
+                    }
+                    Log.d("TAG", "fetchCountingWorkActivityList: $controlList")
+                    _countingWorkActivityList.emit(controlList)
                 }
             }.onError { _, _ ->
                 _countingWorkActivityList.emit(emptyList())
@@ -61,7 +66,7 @@ class FastCountingListVM(private val repo: CountingRepo) : BaseViewModel() {
                             messageRes = R.string.no_assigned_work
                         )
                     )
-                }else {
+                } else {
                     stockTackingDetailId = it[0].id
                     assignedUser.emit(true)
                 }
@@ -70,6 +75,6 @@ class FastCountingListVM(private val repo: CountingRepo) : BaseViewModel() {
     }
 
     companion object {
-        const val FAST_COUNTING_WAREHOUSE = 16
+        const val CONTROL_COUNTING_TYPE = 33
     }
 }

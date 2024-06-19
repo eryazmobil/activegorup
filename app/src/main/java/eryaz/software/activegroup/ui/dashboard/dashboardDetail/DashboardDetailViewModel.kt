@@ -185,14 +185,14 @@ class DashboardDetailViewModel(
                     ),
                     DashboardDetailItemDto(
                         iconRes = 0,
-                        titleRes = R.string.menu_sub_counting_fasting,
+                        titleRes = R.string.menu_sub_counting_control_sub,
                         type = DashboardDetailPermissionType.FASTWAREHOUSECOUNTING,
                         hasPermission = ObservableField(true)
                     ),
                     DashboardDetailItemDto(
                         iconRes = 0,
                         titleRes = R.string.menu_sub_counting_partial_sub,
-                            type = DashboardDetailPermissionType.PARTIALWAREHOUSECOUNTING,
+                        type = DashboardDetailPermissionType.PARTIALWAREHOUSECOUNTING,
                         hasPermission = ObservableField(true)
                     ),
                 )

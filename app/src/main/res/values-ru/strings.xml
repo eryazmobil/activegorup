@@ -693,6 +693,7 @@
     <string name="collected_pack">Загружено</string>
     <string name="can_not_placement">Вы не можете разместить больше товаров, чем указано в контрольном количестве</string>
     <string name="menu_sub_counting_partial_sub">PARÇALI SAYIM</string>
+    <string name="menu_sub_counting_control_sub">KONTROL SAYIM</string>
     <string name="share">share</string>
 
     <string name="app_lock">Kilitle</string>

@@ -36,10 +36,7 @@ class FastCountingListFragment : BaseFragment() {
     override fun subscribeToObservables() {
 
         viewModel.countingWorkActivityList.asLiveData().observe(viewLifecycleOwner) {
-            val firstCountingList = it.filter { data ->
-                data.stockTakingType?.id == FAST_COUNTING_WAREHOUSE
-            }
-            adapter.submitList(firstCountingList)
+            adapter.submitList(it)
         }
 
         viewModel.assignedUser.asLiveData()

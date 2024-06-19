@@ -148,6 +148,7 @@ class AcceptanceProcessVM(
                 ).onSuccess {
                     _showProductDetailView.emit(false)
                     controlSuccess.emit(true)
+
                 }.onError { message, _ ->
                     if (message?.startsWith("QTY-EXC") == true) {
                         val messageBody = stringProvider.invoke(R.string.msg_over_quantity_str) +

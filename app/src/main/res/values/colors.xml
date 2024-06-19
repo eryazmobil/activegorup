@@ -46,6 +46,7 @@
     <color name="colorAccent50Percent">#80909295</color>
     <color name="white">#FFFFFF</color>
     <color name="bgColor">#F2F2F2</color>
+    <color name="finish_color">#47B902</color>
     <color name="colorWhite50Percent">#80FFFFFF</color>
     <color name="colorBackground">#E0E0CE</color>
     <color name="black">#000000</color>

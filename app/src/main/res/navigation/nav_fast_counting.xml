@@ -5,6 +5,11 @@
     android:id="@+id/nav_fast_counting"
     app:startDestination="@id/fastCountingListFragment">
 
+    <dialog
+        android:id="@+id/productListDialogFragment"
+        android:name="eryaz.software.activegroup.ui.dashboard.recording.dialog.ProductListDialogFragment"
+        android:label="ProductListDialogFragment"
+        tools:layout="@layout/dialog_product_list" />
     <fragment
         android:id="@+id/fastCountingListFragment"
         android:name="eryaz.software.activegroup.ui.dashboard.counting.fastCounting.FastCountingListFragment"
@@ -27,6 +32,12 @@
         <action
             android:id="@+id/action_fastCountingDetailFragment_to_fastWillCountedListFragment"
             app:destination="@id/fastWillCountedListFragment" />
+        <action
+            android:id="@+id/action_fastCountingDetailFragment_to_assignedShelfFragment"
+            app:destination="@id/assignedShelfFragment" />
+        <action
+            android:id="@+id/action_fastCountingDetailFragment_to_productListDialogFragment"
+            app:destination="@id/productListDialogFragment" />
     </fragment>
 
     <fragment
@@ -53,6 +64,17 @@
             app:argType="integer" />
         <argument
             android:name="productId"
+            app:argType="integer" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/assignedShelfFragment"
+        android:name="eryaz.software.activegroup.ui.dashboard.counting.fastCounting.fastCountingDetail.assignedShelf.AssignedShelfFragment"
+        android:label="@string/empty_label"
+        tools:layout="@layout/fragment_assigned_shelf">
+
+        <argument
+            android:name="headerId"
             app:argType="integer" />
     </dialog>
 

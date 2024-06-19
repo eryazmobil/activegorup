@@ -34,7 +34,7 @@ class ControlPointDetailVM(
     var selectedPackageId: Int = 0
     var selectedPackageDto: PackageDto? = null
 
-    val serialCheckBox = MutableStateFlow(false)
+    val serialCheckBox = MutableStateFlow(true)
     var quantityCollected = MutableStateFlow("")
     var quantityShipped = MutableStateFlow("")
     var quantityOrder = MutableStateFlow("")
@@ -65,6 +65,9 @@ class ControlPointDetailVM(
     private val _getBarcodeByCodeUi = MutableStateFlow(UiState.EMPTY)
     val getBarcodeByCodeUi = _getBarcodeByCodeUi.asSharedFlow()
 
+    private val _controlSuccess = MutableSharedFlow<Boolean>()
+    val controlSuccess = _controlSuccess.asSharedFlow()
+
     init {
         getOrderListDetail()
         getPackageList()
@@ -75,7 +78,7 @@ class ControlPointDetailVM(
             orderRepo.getOrderDetailList(headerId = orderHeaderId).onSuccess {
                 if (it.isNotEmpty()) {
                     _orderDetailList.emit(it)
-
+                    _controlSuccess.emit(true)
                     calculateDatQuantity()
                 } else {
                     showError(
@@ -107,6 +110,7 @@ class ControlPointDetailVM(
                 code = searchProduct.value.trim(),
                 companyId = SessionManager.companyId
             ).onSuccess {
+                searchProduct.emit("")
                 productID = it.product.id
 
                 orderDetailList.value.indexOfFirst { dto -> dto.product.id == productID }
@@ -122,6 +126,8 @@ class ControlPointDetailVM(
                 }
 
             }.onError { _, _ ->
+                searchProduct.emit("")
+
                 showError(
                     ErrorDialogDto(
                         titleRes = R.string.error, messageRes = R.string.msg_no_barcode
@@ -134,7 +140,8 @@ class ControlPointDetailVM(
     fun addQuantityForControl(quantity: Int) {
         executeInBackground(
             showProgressDialog = true,
-            hasNextRequest = true) {
+            hasNextRequest = true
+        ) {
             orderRepo.addQuantityForControl(
                 orderHeaderId = orderHeaderId,
                 productId = productID,

@@ -13,6 +13,7 @@ import eryaz.software.activegroup.ui.dashboard.DashboardViewModel
 import eryaz.software.activegroup.ui.dashboard.counting.fastCounting.FastCountingListVM
 import eryaz.software.activegroup.ui.dashboard.counting.fastCounting.dialog.EditQuantityVM
 import eryaz.software.activegroup.ui.dashboard.counting.fastCounting.fastCountingDetail.FastCountingDetailVM
+import eryaz.software.activegroup.ui.dashboard.counting.fastCounting.fastCountingDetail.assignedShelf.AssignedShelfVM
 import eryaz.software.activegroup.ui.dashboard.counting.fastCounting.fastCountingDetail.willCounted.FastWillCountedListVM
 import eryaz.software.activegroup.ui.dashboard.counting.firstCounting.FirstCountingListVM
 import eryaz.software.activegroup.ui.dashboard.counting.firstCounting.firstCountingDetail.FirstCountingDetailVM
@@ -170,6 +171,12 @@ val appModule = module {
 
     //FirstCounting
     viewModel { FirstCountingListVM(repo = get()) }
+
+    viewModel { (headerId: Int) ->
+        AssignedShelfVM(
+            repo = get(), stHeaderId = headerId
+        )
+    }
 
     //FirstCountingDetail
     viewModel { (stHeaderId: Int) ->

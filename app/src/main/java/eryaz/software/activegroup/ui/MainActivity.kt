@@ -42,7 +42,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        navController.popBackStack()
+        //navController.popBackStack()
     }
 
     override fun getContentView() = binding.root

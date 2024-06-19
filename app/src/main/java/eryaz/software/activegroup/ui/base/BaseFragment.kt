@@ -131,15 +131,15 @@ open class BaseFragment : Fragment() {
     open fun setClicks() {}
 
     open fun subscribeToObservables() {}
-//
-//    open fun playSound(type: SoundEnum) {
-//        val rowResId = when (type) {
-//            SoundEnum.Success -> eryaz.software.activegroup.data.R.raw.success_sound
-//            SoundEnum.Failure -> eryaz.software.activegroup.data.R.raw.fail_sound
-//        }
-//        MediaPlayer.create(context, rowResId)
-//            .start()
-//    }
+
+    open fun playSound(type: SoundEnum) {
+        val rowResId = when (type) {
+            SoundEnum.Success -> eryaz.software.activegorup.data.R.raw.success_sound_changable
+            SoundEnum.Failure -> eryaz.software.activegorup.data.R.raw.fail_sound
+        }
+        MediaPlayer.create(context, rowResId)
+            .start()
+    }
 
     open fun getStatusBarColor(): Int {
         return context.getColorInt(R.color.colorPrimaryBoldBlue)

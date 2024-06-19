@@ -199,7 +199,6 @@ class PlacementDetailVM(
                 ).onSuccess {
                     _hasCrossDock.emit(true)
                 }.onError { _, _ ->
-                    getShelfListForPlacement()
                 }
             }
         }
@@ -285,6 +284,7 @@ class PlacementDetailVM(
                             val multipleSign = "x ${productMultiplier.value} / $it"
                             placementProductValue.emit(multipleSign)
                             checkCrossDock()
+                            getShelfListForPlacement()
                         }
                     }
                 }.onError { message, _ ->

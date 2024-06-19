@@ -12,6 +12,7 @@ import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import eryaz.software.activegroup.R
 import eryaz.software.activegroup.data.enums.IconType
+import eryaz.software.activegroup.data.enums.SoundEnum
 import eryaz.software.activegroup.data.models.dto.ButtonDto
 import eryaz.software.activegroup.data.models.dto.ConfirmationDialogDto
 import eryaz.software.activegroup.data.models.dto.ErrorDialogDto
@@ -25,6 +26,7 @@ import eryaz.software.activegroup.util.bindingAdapter.setOnSingleClickListener
 import eryaz.software.activegroup.util.dialogs.QuestionDialog
 import eryaz.software.activegroup.util.extensions.copyToClipboard
 import eryaz.software.activegroup.util.extensions.hideSoftKeyboard
+import eryaz.software.activegroup.util.extensions.observe
 import eryaz.software.activegroup.util.extensions.onBackPressedCallback
 import eryaz.software.activegroup.util.extensions.parcelable
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -133,6 +135,12 @@ class PlacementDetailFragment : BaseFragment() {
     }
 
     override fun subscribeToObservables() {
+
+        viewModel.controlSuccess
+            .asLiveData()
+            .observe(viewLifecycleOwner) {
+                playSound(SoundEnum.Success)
+        }
 
         setFragmentResultListener(ProductListDialogFragment.REQUEST_KEY) { _, bundle ->
             val dto = bundle.parcelable<ProductDto>(ProductListDialogFragment.ARG_PRODUCT_DTO)

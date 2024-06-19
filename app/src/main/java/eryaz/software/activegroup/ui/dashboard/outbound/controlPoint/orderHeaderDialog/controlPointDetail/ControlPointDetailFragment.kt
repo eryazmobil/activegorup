@@ -12,6 +12,7 @@ import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import eryaz.software.activegroup.R
+import eryaz.software.activegroup.data.enums.SoundEnum
 import eryaz.software.activegroup.data.models.dto.ProductDto
 import eryaz.software.activegroup.databinding.FragmentControlPointDetailBinding
 import eryaz.software.activegroup.ui.base.BaseFragment
@@ -119,6 +120,12 @@ class ControlPointDetailFragment : BaseFragment() {
     }
 
     override fun subscribeToObservables() {
+
+        viewModel.controlSuccess
+            .asLiveData()
+            .observe(viewLifecycleOwner) {
+                playSound(SoundEnum.Success)
+            }
 
         setFragmentResultListener(ProductListDialogFragment.REQUEST_KEY) { _, bundle ->
             val dto = bundle.parcelable<ProductDto>(ProductListDialogFragment.ARG_PRODUCT_DTO)
