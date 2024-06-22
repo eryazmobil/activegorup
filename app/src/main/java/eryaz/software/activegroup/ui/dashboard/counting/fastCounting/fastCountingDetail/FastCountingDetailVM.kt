@@ -225,7 +225,7 @@ class FastCountingDetailVM(
         }
     }
 
-    fun isValidFinish(): Boolean {
+    fun hasOtherValue(): Boolean {
         return willCountedProductList.any {
             Log.d("TAG", "oldQuantity: ${it.oldQuantity.toIntOrZero()}")
             Log.d("TAG", "newQuantity: ${it.newQuantity.get().toIntOrZero()}")

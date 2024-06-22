@@ -122,39 +122,54 @@ class FastCountingDetailFragment : BaseFragment() {
         }
 
         binding.saveBtn.setOnSingleClickListener {
-            Log.d("TAG", "setClicks: ${viewModel.isValidFinish()}")
-            if (!viewModel.isValidFinish())
-                return@setOnSingleClickListener
-
-            errorDialog.show(context,
-                ErrorDialogDto(
-                    titleRes = R.string.different_value_enter,
-                    messageRes = R.string.different_value_enter_sure,
-                    positiveButton = ButtonDto(
-                        text = R.string.yes,
-                        onClickListener = {
-                            errorDialog.show(
-                                context, ErrorDialogDto(
-                                    titleRes = R.string.sure,
-                                    messageRes = R.string.sure_no_undo,
-                                    positiveButton = ButtonDto(
-                                        text = R.string.yes,
-                                        onClickListener = {
-                                            viewModel.saveBtn()
-                                        }
-                                    ),
-                                    negativeButton = ButtonDto(
-                                        text = R.string.no
-                                    )
-                                )
-                            )
-                        }
-                    ),
-                    negativeButton = ButtonDto(
-                        text = R.string.no
+            if (!viewModel.hasOtherValue()) {
+                errorDialog.show(
+                    context, ErrorDialogDto(
+                        titleRes = R.string.sure,
+                        messageRes = R.string.sure_no_undo,
+                        positiveButton = ButtonDto(
+                            text = R.string.yes,
+                            onClickListener = {
+                                viewModel.saveBtn()
+                            }
+                        ),
+                        negativeButton = ButtonDto(
+                            text = R.string.no
+                        )
                     )
                 )
-            )
+            } else {
+
+                errorDialog.show(context,
+                    ErrorDialogDto(
+                        titleRes = R.string.different_value_enter,
+                        messageRes = R.string.different_value_enter_sure,
+                        positiveButton = ButtonDto(
+                            text = R.string.yes,
+                            onClickListener = {
+                                errorDialog.show(
+                                    context, ErrorDialogDto(
+                                        titleRes = R.string.sure,
+                                        messageRes = R.string.sure_no_undo,
+                                        positiveButton = ButtonDto(
+                                            text = R.string.yes,
+                                            onClickListener = {
+                                                viewModel.saveBtn()
+                                            }
+                                        ),
+                                        negativeButton = ButtonDto(
+                                            text = R.string.no
+                                        )
+                                    )
+                                )
+                            }
+                        ),
+                        negativeButton = ButtonDto(
+                            text = R.string.no
+                        )
+                    )
+                )
+            }
         }
     }
 
