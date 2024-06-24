@@ -150,6 +150,7 @@ class ControlPointDetailVM(
                 isPackage = isPackage,
                 packageId = selectedPackageId
             ).onSuccess {
+                this.quantity.emit("")
                 if (it.isNotEmpty()) {
                     getOrderListDetail()
                 }

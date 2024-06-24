@@ -27,7 +27,21 @@ class ControlPointDetailListVH(val binding: ItemControlPointDetailBinding) :
 
     private fun setStatus(dto: OrderDetailDto) {
         if (dto.quantityCollected.toInt() == dto.quantityShipped.toInt() && dto.quantityShipped.toInt() != 0) {
-            binding.itemParent.setBackgroundColor(Color.parseColor("#6CC654"))
+            binding.itemParent.setBackgroundColor(Color.parseColor("#009900"))
+            binding.apply {
+                productName.setTextColor(Color.WHITE)
+                orderQuantityTxt.setTextColor(Color.WHITE)
+                collectedQuantityTxt.setTextColor(Color.WHITE)
+                controlledTxt.setTextColor(Color.WHITE)
+            }
+        } else if (dto.quantity.toInt() != dto.quantityCollected.toInt()) {
+            binding.itemParent.setBackgroundColor(Color.parseColor("#EA2600"))
+            binding.apply {
+                productName.setTextColor(Color.WHITE)
+                orderQuantityTxt.setTextColor(Color.WHITE)
+                collectedQuantityTxt.setTextColor(Color.WHITE)
+                controlledTxt.setTextColor(Color.WHITE)
+            }
         }
     }
 
