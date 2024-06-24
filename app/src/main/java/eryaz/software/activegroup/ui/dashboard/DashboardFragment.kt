@@ -9,8 +9,10 @@ import eryaz.software.activegroup.R
 import eryaz.software.activegroup.databinding.FragmentDashboardBinding
 import eryaz.software.activegroup.data.enums.DashboardPermissionType.RETURNING
 import eryaz.software.activegroup.data.enums.IconType
+import eryaz.software.activegroup.data.persistence.SessionManager
 import eryaz.software.activegroup.data.persistence.SessionManager.clearData
 import eryaz.software.activegroup.ui.base.BaseFragment
+import eryaz.software.activegroup.ui.dashboard.settings.SettingsFragmentDirections
 import eryaz.software.activegroup.util.adapter.dashboard.adapters.DashboardAdapter
 import eryaz.software.activegroup.util.bindingAdapter.setOnSingleClickListener
 import eryaz.software.activegroup.util.dialogs.QuestionDialog
@@ -68,6 +70,24 @@ class DashboardFragment : BaseFragment() {
                     )
                 }
             }
+        }
+
+        binding.toolbar.setMenuOnClickListener {
+            QuestionDialog(
+                onNegativeClickListener = {
+                },
+                onPositiveClickListener = {
+                    clearData()
+                    findNavController().navigateUp()
+                },
+                textHeader = resources.getString(R.string.exit),
+                textMessage = resources.getString(R.string.are_you_sure),
+                positiveBtnText = resources.getString(R.string.yes),
+                negativeBtnText = resources.getString(R.string.no),
+                singleBtnText = "",
+                negativeBtnViewVisible = true,
+                icType = IconType.Success.ordinal
+            ).show(parentFragmentManager, "dialog")
         }
 
         binding.settingsBtn.setOnSingleClickListener {

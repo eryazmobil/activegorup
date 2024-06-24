@@ -702,5 +702,6 @@
     <string name="app_lock">Kilitle</string>
     <string name="app_unlock">Kilitten çıkar</string>
     <string name="share">share</string>
+    <string name="log_out">Çıkış Yap</string>
 
 </resources>

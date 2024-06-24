@@ -24,7 +24,7 @@
         </action>
         <action
             android:id="@+id/action_settingsFragment_to_warehouseListDialog"
-            app:destination="@id/warehouseListDialog" >
+            app:destination="@id/warehouseListDialog">
 
             <argument
                 android:name="warehouseList"
@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_appLockFragment"
             app:destination="@id/appLockFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_loginFragment2"
+            app:destination="@id/loginFragment2" />
     </fragment>
 
     <dialog
@@ -59,7 +62,7 @@
         android:id="@+id/warehouseListDialog"
         android:name="eryaz.software.activegroup.ui.dashboard.settings.warehouses.WarehouseListDialog"
         android:label="@string/empty_label"
-        tools:layout="@layout/dialog_warehouse_list" >
+        tools:layout="@layout/dialog_warehouse_list">
 
         <argument
             android:name="warehouseList"
@@ -70,11 +73,16 @@
         android:id="@+id/languageFragment"
         android:name="eryaz.software.activegroup.ui.dashboard.settings.changeLanguage.LanguageFragment"
         android:label="@string/empty_label"
-        tools:layout="@layout/fragment_language"
-        />
+        tools:layout="@layout/fragment_language" />
     <dialog
         android:id="@+id/appLockFragment"
         android:name="eryaz.software.activegroup.ui.dashboard.settings.appLock.AppLockFragment"
-        tools:layout="@layout/fragment_app_lock"
-        android:label="@string/empty_label" />
+        android:label="@string/empty_label"
+        tools:layout="@layout/fragment_app_lock" />
+
+    <fragment
+        android:id="@+id/loginFragment2"
+        android:name="eryaz.software.activegroup.ui.auth.LoginFragment"
+        android:label="@string/empty_label"
+        tools:layout="@layout/fragment_login" />
 </navigation>

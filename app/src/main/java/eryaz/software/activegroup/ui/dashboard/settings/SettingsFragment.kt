@@ -7,14 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
+import eryaz.software.activegroup.R
+import eryaz.software.activegroup.data.enums.IconType
 import eryaz.software.activegroup.data.models.dto.CompanyDto
 import eryaz.software.activegroup.data.models.dto.WarehouseDto
+import eryaz.software.activegroup.data.persistence.SessionManager
 import eryaz.software.activegroup.databinding.FragmentSettingsBinding
 import eryaz.software.activegroup.ui.base.BaseFragment
 import eryaz.software.activegroup.ui.dashboard.settings.changeLanguage.LanguageFragment
 import eryaz.software.activegroup.ui.dashboard.settings.companies.CompanyListDialog
 import eryaz.software.activegroup.ui.dashboard.settings.warehouses.WarehouseListDialog
 import eryaz.software.activegroup.util.bindingAdapter.setOnSingleClickListener
+import eryaz.software.activegroup.util.dialogs.QuestionDialog
 import eryaz.software.activegroup.util.extensions.observe
 import eryaz.software.activegroup.util.extensions.parcelable
 import eryaz.software.activegroup.util.updateApk.ApkDownloadService
@@ -118,7 +122,6 @@ class SettingsFragment : BaseFragment() {
 
         setFragmentResultListener(LanguageFragment.LANGUAGE_FRAGMENT_TAG) { _, bundle ->
             bundle.getString(LanguageFragment.LANGUAGE_FRAGMENT_KEY)?.let {
-                Log.d("TAG", "language: $it")
                 viewModel.setLanguage(it)
             }
         }

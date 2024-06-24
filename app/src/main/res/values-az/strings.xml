@@ -714,5 +714,6 @@
     <string name="app_lock">Kilitlə</string>
     <string name="app_unlock">Kilitdən aç</string>
     <string name="share">paylaş</string>
+    <string name="log_out">Çıxış Et</string>
 
 </resources>

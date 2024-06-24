@@ -45,6 +45,8 @@ class LoginViewModel(
 
         authRepo.login(request).onSuccess {
             SessionManager.token = it.accessToken
+            email.emit("")
+            password.emit("")
 
             fetchWorkActionTypeList()
         }.onError { message, _ ->

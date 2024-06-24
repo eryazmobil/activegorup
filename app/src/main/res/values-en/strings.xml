@@ -713,5 +713,6 @@
     <string name="empty_label"> </string>
     <string name="login_user_">Log In</string>
     <string name="order_note_name">Search note</string>
+    <string name="log_out">Çıkış Yap</string>
 
 </resources>
