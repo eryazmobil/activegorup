@@ -1,5 +1,6 @@
 package eryaz.software.activegroup.ui.dashboard.outbound.controlPoint.orderHeaderDialog.controlPointDetail
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import eryaz.software.activegroup.R
 import eryaz.software.activegroup.data.api.utils.onError
@@ -119,6 +120,7 @@ class ControlPointDetailVM(
                     }
 
                 if (serialCheckBox.value) {
+                    quantity.emit("")
                     addQuantityForControl(1)
                 } else {
                     _showProductDetail.emit(true)
@@ -205,11 +207,14 @@ class ControlPointDetailVM(
     }
 
     fun setEnteredProduct(dto: ProductDto) {
-        productID = dto.id
-        if (serialCheckBox.value) {
-            addQuantityForControl(1)
-        } else {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            if (serialCheckBox.value) {
+                quantity.emit("")
+            }
+            productID = dto.id
+            if (serialCheckBox.value) {
+                addQuantityForControl(1)
+            } else {
                 _showProductDetail.emit(true)
                 _productDetail.emit(dto)
             }
