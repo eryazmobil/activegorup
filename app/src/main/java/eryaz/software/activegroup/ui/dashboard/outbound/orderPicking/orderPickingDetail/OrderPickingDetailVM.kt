@@ -155,6 +155,11 @@ class OrderPickingDetailVM(
                 code = productBarcode.value, companyId = SessionManager.companyId
             ).onSuccess {
                 productId = it.product.id
+                quantityMultiplier = if (it.quantity == 0) {
+                    1
+                } else {
+                    it.quantity
+                }
                 _productQuantity.emit("x " + it.quantity.toString())
                 _productDetail.emit(it.product)
 
