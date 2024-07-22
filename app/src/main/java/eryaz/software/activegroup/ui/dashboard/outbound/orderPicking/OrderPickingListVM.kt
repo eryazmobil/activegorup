@@ -61,7 +61,7 @@ class OrderPickingListVM(
             }
         }
 
-    private fun getShippingWorkActivityList() {
+    fun getShippingWorkActivityList() {
         executeInBackground(_uiState) {
             repo.getShippingWorkActivityList(
                 companyId = SessionManager.companyId,

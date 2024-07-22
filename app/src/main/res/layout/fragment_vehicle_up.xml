@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
+        app:isSwipeRefresh="@{false}"
         app:onRetryClick="@{() -> viewModel.getOrderHeaderRouteList()}"
         app:sv_ignore_referenced_ids="toolbar">
 

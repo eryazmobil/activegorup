@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import eryaz.software.activegroup.R
@@ -12,6 +13,7 @@ import eryaz.software.activegroup.data.persistence.TemporaryCashManager
 import eryaz.software.activegroup.databinding.FragmentOrderPickingListBinding
 import eryaz.software.activegroup.ui.base.BaseFragment
 import eryaz.software.activegroup.ui.dashboard.outbound.orderPicking.adapter.OrderWorkActivityListAdapter
+import eryaz.software.activegroup.ui.dashboard.outbound.orderPicking.orderPickingDetail.OrderPickingDetailFragmentDirections
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OrderPickingListFragment : BaseFragment() {
@@ -56,9 +58,14 @@ class OrderPickingListFragment : BaseFragment() {
             }
     }
 
+
     override fun setClicks() {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.toolbar.setMenuOnClickListener {
+            popupMenu(it)
         }
 
         adapter.onItemClick = {
@@ -82,4 +89,23 @@ class OrderPickingListFragment : BaseFragment() {
             binding.recyclerView.adapter = it
         }
     }
+
+    private fun popupMenu(view: View) {
+        PopupMenu(requireContext(), view).apply {
+            inflate(R.menu.refresh_menu)
+
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.refresh -> {
+                        viewModel.getShippingWorkActivityList()
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+            show()
+        }
+    }
+
 }

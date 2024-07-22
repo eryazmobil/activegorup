@@ -15,7 +15,7 @@ import eryaz.software.activegroup.util.adapter.movement.packageList.VehiclePacka
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class VehicleUpFragment :BaseFragment() {
+class VehicleUpFragment : BaseFragment() {
 
     private val safeArgs by navArgs<VehicleUpFragmentArgs>()
 
@@ -37,14 +37,16 @@ class VehicleUpFragment :BaseFragment() {
     }
 
     override fun subscribeToObservables() {
-        viewModel.vehicleDownSuccess.asLiveData().observe(this) {
-            if (it) {
-                binding.searchEdt.requestFocus()
-                viewModel.getOrderHeaderRouteList()
-                Toast.makeText(context, getString(R.string.unload_package), Toast.LENGTH_SHORT)
-                    .show()
+        viewModel.vehicleDownSuccess
+            .asLiveData()
+            .observe(this) {
+                if (it) {
+                    binding.searchEdt.requestFocus()
+                    viewModel.getOrderHeaderRouteList()
+                    Toast.makeText(context, getString(R.string.unload_package), Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
-        }
 
         viewModel.packageList.asLiveData().observe(this) {
             adapter.submitList(it)

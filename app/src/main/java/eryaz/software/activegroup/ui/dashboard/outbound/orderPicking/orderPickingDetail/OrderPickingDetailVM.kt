@@ -47,6 +47,7 @@ class OrderPickingDetailVM(
     private var selectedSuggestionIndex: Int = -1
     private var shelfId: Int = 0
     private var quantityMultiplier: Int = 1
+    private var isShowNextCalled = false
 
     private val _selectedSuggestion = MutableStateFlow<PickingSuggestionDto?>(null)
     var selectedSuggestion = _selectedSuggestion.asStateFlow()
@@ -112,7 +113,7 @@ class OrderPickingDetailVM(
                 if (it.pickingSuggestionList.isNotEmpty()) {
                     orderPickingDto = it
                     checkPickingFromOrder(firstLoading)
-                    showNext()
+                    triggerShowNext()
                     productRequestFocus.emit(true)
                 } else {
                     if (firstLoading) {
@@ -318,9 +319,10 @@ class OrderPickingDetailVM(
             }
         }
         if (quantity > 0) {
-            if (selectedSuggestion.value?.quantityWillBePicked?.minus(selectedSuggestion.value?.quantityPicked.orZero())
-                    .orZero() >= quantity
-            ) {
+            if (selectedSuggestion.value?.quantityWillBePicked?.minus(
+                    selectedSuggestion.value?.quantityPicked.orZero()
+                ).orZero() >= quantity) {
+
                 selectedSuggestion.value?.let {
                     it.quantityPicked += quantity
                 }
@@ -336,13 +338,13 @@ class OrderPickingDetailVM(
             }
         }
         selectedSuggestionIndex--
-        showNext()
+        triggerShowNext()
     }
 
     private fun checkFinishedOrderFromCardPosition() {
         if (_selectedSuggestion.value?.quantityWillBePicked.orZero() - _selectedSuggestion.value?.quantityPicked.orZero() == 0) {
             viewModelScope.launch {
-                showNext()
+                triggerShowNext()
             }
         }
     }
@@ -463,4 +465,13 @@ class OrderPickingDetailVM(
             checkProductOrder()
         }
     }
+
+    private fun triggerShowNext() {
+        if (!isShowNextCalled) {
+            isShowNextCalled = true
+            showNext()
+            isShowNextCalled = false
+        }
+    }
+
 }
