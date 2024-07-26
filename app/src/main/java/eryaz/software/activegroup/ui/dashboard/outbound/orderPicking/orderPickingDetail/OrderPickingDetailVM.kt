@@ -1,5 +1,6 @@
 package eryaz.software.activegroup.ui.dashboard.outbound.orderPicking.orderPickingDetail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -47,7 +48,6 @@ class OrderPickingDetailVM(
     private var selectedSuggestionIndex: Int = -1
     private var shelfId: Int = 0
     private var quantityMultiplier: Int = 1
-    private var isShowNextCalled = false
 
     private val _selectedSuggestion = MutableStateFlow<PickingSuggestionDto?>(null)
     var selectedSuggestion = _selectedSuggestion.asStateFlow()
@@ -82,9 +82,6 @@ class OrderPickingDetailVM(
     private val _finishWorkAction = MutableStateFlow(false)
     val finishWorkAction = _finishWorkAction.asStateFlow()
 
-    private val _orderPickingList = MutableLiveData<List<WorkActivityDto?>>(emptyList())
-    val orderPickingList: LiveData<List<WorkActivityDto?>> = _orderPickingList
-
     private val _workActionDto = MutableSharedFlow<WorkActionDto>()
     val workActionDto = _workActionDto.asSharedFlow()
 
@@ -113,12 +110,13 @@ class OrderPickingDetailVM(
                 if (it.pickingSuggestionList.isNotEmpty()) {
                     orderPickingDto = it
                     checkPickingFromOrder(firstLoading)
-                    triggerShowNext()
                     productRequestFocus.emit(true)
+                    showNext()
                 } else {
                     if (firstLoading) {
                         notAvailableStock.emit(true)
                     } else {
+                        Log.d("TAG", "after triggerShowNext: ")
                         _pickProductFinish.emit(true)
                     }
                 }
@@ -230,13 +228,23 @@ class OrderPickingDetailVM(
             ).onSuccess {
                 updateOrderQuantity()
                 checkFinishedOrderFromCardPosition()
-                getOrderDetailPickingList(false)
+                checkPickingFromOrder()
                 enteredQuantity.value = ""
                 shelfAddress.value = ""
                 _showProductDetail.emit(false)
                 productRequestFocus.emit(true)
                 _pickProductSuccess.emit(true)
             }
+        }
+    }
+
+    private fun checkPickingFromOrder() {
+        val isQuantityCollectedLess = orderPickingDto?.orderDetailList?.any {
+            it.quantityCollected < it.quantity
+        } ?: false
+
+        if (!isQuantityCollectedLess) {
+            finishWorkAction(true)
         }
     }
 
@@ -318,10 +326,12 @@ class OrderPickingDetailVM(
                 collected += quantity
             }
         }
+
         if (quantity > 0) {
             if (selectedSuggestion.value?.quantityWillBePicked?.minus(
                     selectedSuggestion.value?.quantityPicked.orZero()
-                ).orZero() >= quantity) {
+                ).orZero() >= quantity
+            ) {
 
                 selectedSuggestion.value?.let {
                     it.quantityPicked += quantity
@@ -338,13 +348,42 @@ class OrderPickingDetailVM(
             }
         }
         selectedSuggestionIndex--
-        triggerShowNext()
+
+        Log.d("TAG", "updateOrderQuantity:$selectedSuggestionIndex ")
+        showNext()
     }
 
     private fun checkFinishedOrderFromCardPosition() {
-        if (_selectedSuggestion.value?.quantityWillBePicked.orZero() - _selectedSuggestion.value?.quantityPicked.orZero() == 0) {
-            viewModelScope.launch {
-                triggerShowNext()
+        viewModelScope.launch {
+            val currentList = orderPickingDto?.pickingSuggestionList
+            val indexToRemove = currentList?.indexOfFirst {
+                Log.d("TAG", "quantityWillBePicked:${it.quantityWillBePicked.orZero()} ")
+                Log.d("TAG", "quantityPicked:${it.quantityPicked.orZero()} ")
+                it.quantityWillBePicked.orZero() - it.quantityPicked.orZero() == 0
+            }
+
+            if (indexToRemove != -1) {
+
+                Log.d("TAG", "after indexToRemove: $indexToRemove")
+                val updatedList = currentList?.toMutableList()?.apply {
+                    if (indexToRemove != null) {
+                        removeAt(indexToRemove)
+                    }
+                }
+
+                Log.d("TAG", "updatedList:$updatedList ")
+                Log.d(
+                    "TAG",
+                    "after pickingSuggestionList:${orderPickingDto?.pickingSuggestionList?.size} "
+                )
+
+                orderPickingDto?.pickingSuggestionList = updatedList?.toList().orEmpty()
+                selectedSuggestionIndex--
+                showNext()
+                Log.d(
+                    "TAG",
+                    "before pickingSuggestionList:${orderPickingDto?.pickingSuggestionList?.size} "
+                )
             }
         }
     }
@@ -402,13 +441,18 @@ class OrderPickingDetailVM(
     }
 
     fun showNext() {
+        Log.d("TAG", "showNextBTN:")
+        Log.d("TAG", "selectedSuggestionIndex: $selectedSuggestionIndex")
         viewModelScope.launch {
             selectedSuggestionIndex++
 
             orderPickingDto?.pickingSuggestionList?.getOrNull(selectedSuggestionIndex)?.let {
                 _selectedSuggestion.emit(it)
                 productId = it.product.id
-            } ?: run { selectedSuggestionIndex-- }
+            } ?: run {
+                selectedSuggestionIndex--
+                Log.d("TAG", " -- selectedSuggestionIndex:$selectedSuggestionIndex")
+            }
 
             _orderQuantityTxt.emit(
                 "${orderPickingDto?.pickingSuggestionList?.getOrNull(selectedSuggestionIndex)?.quantityPicked} / " +
@@ -417,6 +461,7 @@ class OrderPickingDetailVM(
 
             _pageNum.emit("${selectedSuggestionIndex + 1} / ${orderPickingDto?.pickingSuggestionList?.size}")
         }
+        Log.d("TAG", "after selectedSuggestionIndex: $selectedSuggestionIndex")
     }
 
     fun showPrevious() {
@@ -465,13 +510,4 @@ class OrderPickingDetailVM(
             checkProductOrder()
         }
     }
-
-    private fun triggerShowNext() {
-        if (!isShowNextCalled) {
-            isShowNextCalled = true
-            showNext()
-            isShowNextCalled = false
-        }
-    }
-
 }

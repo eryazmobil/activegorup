@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
+import eryaz.software.activegroup.R
 import eryaz.software.activegroup.databinding.FragmentControlPointListBinding
 import eryaz.software.activegroup.ui.base.BaseFragment
 import eryaz.software.activegroup.util.adapter.outbound.ControlPointListAdapter
@@ -19,9 +21,7 @@ class ControlPointListFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -36,27 +36,28 @@ class ControlPointListFragment : BaseFragment() {
 
     override fun subscribeToObservables() {
 
-        viewModel.controlPointList.asLiveData()
-            .observe(viewLifecycleOwner) {
-                adapter.submitList(it)
-            }
-        
-        viewModel.orderHeaderList
-            .asLiveData()
-            .observe(viewLifecycleOwner) { list ->
-                if (list.isNotEmpty()) {
-                    findNavController().navigate(
-                        ControlPointListFragmentDirections.actionControlPointListFragmentToOrderHeaderListDialog(
-                            list.toTypedArray()
-                        )
+        viewModel.controlPointList.asLiveData().observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+
+        viewModel.orderHeaderList.asLiveData().observe(viewLifecycleOwner) { list ->
+            if (list.isNotEmpty()) {
+                findNavController().navigate(
+                    ControlPointListFragmentDirections.actionControlPointListFragmentToOrderHeaderListDialog(
+                        list.toTypedArray()
                     )
-                }
+                )
             }
+        }
     }
 
     override fun setClicks() {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.toolbar.setMenuOnClickListener {
+            popupMenu(it)
         }
 
         adapter.onItemClick = {
@@ -68,6 +69,24 @@ class ControlPointListFragment : BaseFragment() {
     private val adapter by lazy {
         ControlPointListAdapter().also {
             binding.recyclerView.adapter = it
+        }
+    }
+
+    private fun popupMenu(view: View) {
+        PopupMenu(requireContext(), view).apply {
+            inflate(R.menu.refresh_menu)
+
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.refresh -> {
+                        viewModel.fetchControlPointList()
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+            show()
         }
     }
 }

@@ -16,7 +16,10 @@ import androidx.core.content.FileProvider
 import eryaz.software.activegroup.R
 import eryaz.software.activegroup.util.extensions.toast
 import java.io.BufferedInputStream
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
@@ -28,7 +31,6 @@ class ApkDownloadService : Service() {
 
     private val downloadReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             if (id == downloadId) {
                 val zipFile = File(
@@ -41,7 +43,20 @@ class ApkDownloadService : Service() {
                 installAPK(apkFile)
             }
         }
+    }
 
+    private val packageInstallReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val packageName = intent?.data?.encodedSchemeSpecificPart
+            if (packageName != null) {
+                val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
+                if (launchIntent != null) {
+                    startActivity(launchIntent)
+                } else {
+                    toast("Uygulama başlatılamadı.")
+                }
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -51,7 +66,11 @@ class ApkDownloadService : Service() {
             downloadReceiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
             RECEIVER_NOT_EXPORTED
         )
-
+        registerReceiver(
+            packageInstallReceiver, IntentFilter(Intent.ACTION_PACKAGE_ADDED).apply {
+                addDataScheme("package")
+            }
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -74,9 +93,7 @@ class ApkDownloadService : Service() {
             setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, apkZipFileName)
         }
-
         downloadId = downloadManager.enqueue(request)
-
     }
 
     private fun unzip(zipFile: File, outputFile: File?) {
@@ -121,7 +138,6 @@ class ApkDownloadService : Service() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
         }
         startActivity(intent)
-
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -131,8 +147,8 @@ class ApkDownloadService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(downloadReceiver)
+        unregisterReceiver(packageInstallReceiver)
     }
-
 
     companion object {
         fun startService(context: Context, url: String?, zipName: String?, apkFileName: String?) {
@@ -143,5 +159,4 @@ class ApkDownloadService : Service() {
             context.startService(startIntent)
         }
     }
-
 }

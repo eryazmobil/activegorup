@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="eryaz.software.activegroup.ui.dashboard.outbound.controlPoint.ControlPointListVM" />
@@ -13,16 +14,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        app:sv_ignore_referenced_ids="toolbar"
-        app:sv_viewState="@{viewModel.uiState}"
+        app:isSwipeRefresh="@{false}"
         app:onRetryClick="@{() -> viewModel.fetchControlPointList()}"
-        >
+        app:sv_ignore_referenced_ids="toolbar"
+        app:sv_viewState="@{viewModel.uiState}">
 
         <eryaz.software.activegroup.util.widgets.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
+            app:endIconDrawable="@drawable/menu"
             app:navigationIcon="@drawable/back_icon"
             app:subTitle="@string/choose_work_activity"
             app:title="@string/control" />

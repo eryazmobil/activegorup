@@ -13,6 +13,7 @@ import eryaz.software.activegroup.data.models.dto.CurrentUserDto
 import eryaz.software.activegroup.data.models.dto.PdaVersionDto
 import eryaz.software.activegroup.data.models.dto.WarehouseDto
 import eryaz.software.activegroup.data.persistence.SessionManager
+import eryaz.software.activegroup.data.repositories.AuthRepo
 import eryaz.software.activegroup.data.repositories.UserRepo
 import eryaz.software.activegroup.ui.base.BaseViewModel
 import eryaz.software.activegroup.util.extensions.toIntOrZero
@@ -23,6 +24,7 @@ import kotlinx.coroutines.launch
 import java.lang.StringBuilder
 
 class SettingsViewModel(
+    private val authRepo:AuthRepo,
     private val repo: UserRepo
 ) : BaseViewModel() {
 
@@ -64,6 +66,7 @@ class SettingsViewModel(
         fetchData()
         fetchWarehouseList()
         fetchCompanyList()
+        getPdaVersion()
     }
 
     fun fetchData() {
@@ -186,6 +189,18 @@ class SettingsViewModel(
             } else {
                 isUpToDate.emit(stringProvider.invoke(R.string.app_is_up_to_date))
             }
+        }
+    }
+
+    private fun getPdaVersion() {
+        executeInBackground(
+            showProgressDialog = true
+        ) {
+            authRepo.getPdaVersion()
+                .onSuccess {
+                    _pdaVersionModel.emit(it)
+                    checkIsUpToDate(it.version)
+                }
         }
     }
 

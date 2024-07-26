@@ -9,6 +9,7 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import eryaz.software.activegroup.R
 import eryaz.software.activegroup.data.enums.SoundEnum
@@ -26,6 +27,7 @@ import eryaz.software.activegroup.util.extensions.onBackPressedCallback
 import eryaz.software.activegroup.util.extensions.orZero
 import eryaz.software.activegroup.util.extensions.parcelable
 import eryaz.software.activegroup.util.extensions.toast
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OrderPickingDetailFragment : BaseFragment() {

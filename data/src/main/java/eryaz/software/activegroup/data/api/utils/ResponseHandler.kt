@@ -42,6 +42,7 @@ object ResponseHandler {
                     )
                 }
         } catch (e: Exception) {
+
         }
 
         return Resource.Error(
