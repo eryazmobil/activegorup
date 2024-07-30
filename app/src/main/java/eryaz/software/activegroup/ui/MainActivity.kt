@@ -1,6 +1,11 @@
 package eryaz.software.activegroup.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import eryaz.software.activegroup.R
 import eryaz.software.activegroup.databinding.ActivityMainBinding
 import eryaz.software.activegroup.ui.base.BaseActivity
@@ -18,6 +23,7 @@ class MainActivity : BaseActivity() {
         StatusBarUtil.setTranslucent(this)
         setContentView(binding.root)
         keyboardListener()
+        requestPermissions()
     }
 
     private fun keyboardListener() {
@@ -30,6 +36,40 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
+    }
+
+    private fun requestPermissions() {
+        val permissionsToRequest = mutableListOf<String>()
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionsToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                this,
+                permissionsToRequest.toTypedArray(),
+                PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+    companion object {
+        private const val PERMISSION_REQUEST_CODE = 1
     }
 
     override fun getContentView() = binding.root
