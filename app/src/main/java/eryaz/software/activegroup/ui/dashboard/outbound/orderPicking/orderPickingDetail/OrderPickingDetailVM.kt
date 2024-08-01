@@ -40,6 +40,7 @@ class OrderPickingDetailVM(
     private val fifoCode = MutableStateFlow(" ")
     val notAvailableStock = MutableSharedFlow<Boolean>()
     val productRequestFocus = MutableSharedFlow<Boolean>()
+    val parentView = MutableStateFlow(false)
     var productId: Int = 0
 
     private var orderPickingDto: OrderPickingDto? = null
@@ -98,10 +99,10 @@ class OrderPickingDetailVM(
     val pickProductSuccess = _pickProductSuccess.asSharedFlow()
 
     init {
-        getOrderDetailPickingList(true)
+        getOrderDetailPickingList()
     }
 
-    fun getOrderDetailPickingList(firstLoading: Boolean) = executeInBackground(_uiState) {
+    fun getOrderDetailPickingList(forRefresh: Boolean = false) = executeInBackground(_uiState) {
         orderRepo.getOrderDetailPickingList(
             workActivityId = TemporaryCashManager.getInstance().workActivity?.workActivityId.orZero(),
             userId = SessionManager.userId
@@ -109,30 +110,21 @@ class OrderPickingDetailVM(
             if (it.orderDetailList.isNotEmpty()) {
                 if (it.pickingSuggestionList.isNotEmpty()) {
                     orderPickingDto = it
-                    checkPickingFromOrder(firstLoading)
-                    productRequestFocus.emit(true)
-                    showNext()
+                    if(!forRefresh) showNext()
                 } else {
-                    if (firstLoading) {
-                        notAvailableStock.emit(true)
-                    } else {
-                        Log.d("TAG", "after triggerShowNext: ")
-                        _pickProductFinish.emit(true)
-                    }
+                    parentView.emit(true)
                 }
             } else {
                 showError(
                     ErrorDialogDto(
-                        titleRes = R.string.error,
-                        messageRes = R.string.work_activity_error_2
+                        titleRes = R.string.error, messageRes = R.string.work_activity_error_2
                     )
                 )
             }
         }.onError { message, _ ->
             showError(
                 ErrorDialogDto(
-                    titleRes = R.string.error,
-                    message = message
+                    titleRes = R.string.error, message = message
                 )
             )
         }
@@ -154,11 +146,7 @@ class OrderPickingDetailVM(
                 code = productBarcode.value, companyId = SessionManager.companyId
             ).onSuccess {
                 productId = it.product.id
-                quantityMultiplier = if (it.quantity == 0) {
-                    1
-                } else {
-                    it.quantity
-                }
+                quantityMultiplier = if (it.quantity == 0) { 1 } else { it.quantity }
                 _productQuantity.emit("x " + it.quantity.toString())
                 _productDetail.emit(it.product)
 
@@ -228,7 +216,9 @@ class OrderPickingDetailVM(
             ).onSuccess {
                 updateOrderQuantity()
                 checkFinishedOrderFromCardPosition()
+                getOrderDetailPickingList(true)
                 checkPickingFromOrder()
+
                 enteredQuantity.value = ""
                 shelfAddress.value = ""
                 _showProductDetail.emit(false)
@@ -240,10 +230,14 @@ class OrderPickingDetailVM(
 
     private fun checkPickingFromOrder() {
         val isQuantityCollectedLess = orderPickingDto?.orderDetailList?.any {
+            Log.d("TAG", "it.quantityCollected: ${it.quantityCollected} \n  it.quantity ${ it.quantity} ")
+
             it.quantityCollected < it.quantity
         } ?: false
+        Log.d("TAG", " before isQuantityCollectedLess:$isQuantityCollectedLess ")
 
         if (!isQuantityCollectedLess) {
+            Log.d("TAG", " after isQuantityCollectedLess:$isQuantityCollectedLess ")
             finishWorkAction(true)
         }
     }
@@ -348,52 +342,14 @@ class OrderPickingDetailVM(
             }
         }
         selectedSuggestionIndex--
-
-        Log.d("TAG", "updateOrderQuantity:$selectedSuggestionIndex ")
         showNext()
     }
 
     private fun checkFinishedOrderFromCardPosition() {
-        viewModelScope.launch {
-            val currentList = orderPickingDto?.pickingSuggestionList
-            val indexToRemove = currentList?.indexOfFirst {
-                Log.d("TAG", "quantityWillBePicked:${it.quantityWillBePicked.orZero()} ")
-                Log.d("TAG", "quantityPicked:${it.quantityPicked.orZero()} ")
-                it.quantityWillBePicked.orZero() - it.quantityPicked.orZero() == 0
-            }
-
-            if (indexToRemove != -1) {
-
-                Log.d("TAG", "after indexToRemove: $indexToRemove")
-                val updatedList = currentList?.toMutableList()?.apply {
-                    if (indexToRemove != null) {
-                        removeAt(indexToRemove)
-                    }
-                }
-
-                Log.d("TAG", "updatedList:$updatedList ")
-                Log.d(
-                    "TAG",
-                    "after pickingSuggestionList:${orderPickingDto?.pickingSuggestionList?.size} "
-                )
-
-                orderPickingDto?.pickingSuggestionList = updatedList?.toList().orEmpty()
-                selectedSuggestionIndex--
+        if (_selectedSuggestion.value?.quantityWillBePicked.orZero() - _selectedSuggestion.value?.quantityPicked.orZero() == 0) {
+            viewModelScope.launch {
                 showNext()
-                Log.d(
-                    "TAG",
-                    "before pickingSuggestionList:${orderPickingDto?.pickingSuggestionList?.size} "
-                )
             }
-        }
-    }
-
-    private fun checkPickingFromOrder(firstLoading: Boolean) {
-        val isQuantityCollectedLess = orderPickingDto?.orderDetailList?.any {
-            it.quantityCollected < it.quantity
-        } ?: false
-        if (!isQuantityCollectedLess) {
-            finishWorkAction(firstLoading)
         }
     }
 
