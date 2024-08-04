@@ -86,9 +86,7 @@ class OrderPickingDetailFragment : BaseFragment() {
 
     override fun subscribeToObservables() {
 
-        viewModel.pickProductSuccess
-            .asLiveData()
-            .observe(viewLifecycleOwner) {
+        viewModel.pickProductSuccess.asLiveData().observe(viewLifecycleOwner) {
                 playSound(SoundEnum.Success)
             }
 
@@ -143,25 +141,16 @@ class OrderPickingDetailFragment : BaseFragment() {
             if (it) {
                 binding.parentView.visibility = View.GONE
 
-                errorDialog.show(
-                    context,
-                    ErrorDialogDto(
-                        titleRes = R.string.warning,
-                        messageRes = R.string.order_was_picking,
-                        positiveButton = ButtonDto(text = R.string.close, onClickListener = {
-                            errorDialog.dismiss()
-                            findNavController().navigateUp()
-                        }
-                        ),
-                        negativeButton = ButtonDto(
-                            text = R.string.exit,
-                            onClickListener = {
-                                errorDialog.dismiss()
-                                findNavController().navigateUp()
-                            }
-                        )
-                    )
-                )
+                errorDialog.show(context, ErrorDialogDto(titleRes = R.string.warning,
+                    messageRes = R.string.order_was_picking,
+                    positiveButton = ButtonDto(text = R.string.close, onClickListener = {
+                        errorDialog.dismiss()
+                        findNavController().navigateUp()
+                    }),
+                    negativeButton = ButtonDto(text = R.string.exit, onClickListener = {
+                        errorDialog.dismiss()
+                        findNavController().navigateUp()
+                    })))
             }
         }
 
@@ -221,8 +210,7 @@ class OrderPickingDetailFragment : BaseFragment() {
         }
 
         viewModel.productRequestFocus.asLiveData().observe(this) {
-            if (it)
-                binding.searchProductEdt.requestFocus()
+            if (it) binding.searchProductEdt.requestFocus()
         }
     }
 

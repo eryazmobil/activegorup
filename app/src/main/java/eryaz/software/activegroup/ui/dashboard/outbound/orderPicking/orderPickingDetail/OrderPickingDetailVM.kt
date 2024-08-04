@@ -215,8 +215,6 @@ class OrderPickingDetailVM(
                 fifoCode = fifoCode.value
             ).onSuccess {
                 updateOrderQuantity()
-                checkFinishedOrderFromCardPosition()
-                getOrderDetailPickingList(true)
                 checkPickingFromOrder()
 
                 enteredQuantity.value = ""
@@ -230,14 +228,10 @@ class OrderPickingDetailVM(
 
     private fun checkPickingFromOrder() {
         val isQuantityCollectedLess = orderPickingDto?.orderDetailList?.any {
-            Log.d("TAG", "it.quantityCollected: ${it.quantityCollected} \n  it.quantity ${ it.quantity} ")
-
             it.quantityCollected < it.quantity
         } ?: false
-        Log.d("TAG", " before isQuantityCollectedLess:$isQuantityCollectedLess ")
 
         if (!isQuantityCollectedLess) {
-            Log.d("TAG", " after isQuantityCollectedLess:$isQuantityCollectedLess ")
             finishWorkAction(true)
         }
     }
@@ -322,11 +316,9 @@ class OrderPickingDetailVM(
         }
 
         if (quantity > 0) {
-            if (selectedSuggestion.value?.quantityWillBePicked?.minus(
-                    selectedSuggestion.value?.quantityPicked.orZero()
-                ).orZero() >= quantity
+            if (selectedSuggestion.value?.quantityWillBePicked?.minus(selectedSuggestion.value?.quantityPicked.orZero())
+                    .orZero() >= quantity
             ) {
-
                 selectedSuggestion.value?.let {
                     it.quantityPicked += quantity
                 }
@@ -341,14 +333,29 @@ class OrderPickingDetailVM(
                 quantity -= otherQuantity.orZero()
             }
         }
-        selectedSuggestionIndex--
-        showNext()
-    }
 
-    private fun checkFinishedOrderFromCardPosition() {
-        if (_selectedSuggestion.value?.quantityWillBePicked.orZero() - _selectedSuggestion.value?.quantityPicked.orZero() == 0) {
-            viewModelScope.launch {
-                showNext()
+        selectedSuggestion.value?.let { dto ->
+            if (dto.quantityWillBePicked.orZero() == dto.quantityPicked.orZero()) {
+                orderPickingDto?.pickingSuggestionList?.toMutableList()?.apply {
+                    indexOfFirst {
+                        it.quantityWillBePicked.orZero() == it.quantityPicked.orZero()
+                    }.let { index ->
+                        if (index != -1) {
+                            removeAt(index)
+
+                            orderPickingDto?.pickingSuggestionList = this
+                            selectedSuggestionIndex = index - 1
+
+                            showNext()
+                        }
+                    }
+
+                    if (isEmpty()) {
+                        viewModelScope.launch {
+                            parentView.emit(true)
+                        }
+                    }
+                }
             }
         }
     }
