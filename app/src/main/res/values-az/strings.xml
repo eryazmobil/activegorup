@@ -580,7 +580,7 @@
     <string name="shelfList">Ünvan Siyahısı</string>
     <string name="select_work_activity">İş Əmri Seçimi</string>
     <string name="work_activity_content">İş Əmri Məzmunu</string>
-    <string name="work_activity_error_1">İş əmrində sifariş sətri var. Amma toplanabilecək məhsul yoxdur.</string>
+    <string name="work_activity_error_1">Toplana bilecək məhsul yoxdur.</string>
     <string name="work_activity_error_2">İş əmrində sifariş sətri tapılmadı. İş əmri ləğv edilməlidir.</string>
     <string name="stock_out_message_1"> kodlu məhsulun </string>
     <string name="stock_out_message_2"> ünvanında olmadığını bildirən qeyd yaradılacaq.</string>

@@ -612,7 +612,7 @@
     <string name="shelfList">Adres Listesi</string>
     <string name="select_work_activity">İş Emri Seçimi</string>
     <string name="work_activity_content">İş Emri İçeriği</string>
-    <string name="work_activity_error_1">İş Emri içinde sipariş satırı var. Ancak toplanabilecek ürün yok.</string>
+    <string name="work_activity_error_1">Toplanabilecek ürün yok.</string>
     <string name="work_activity_error_2">İş Emri içinde sipariş satırı tespit edilemedi. İş Emri iptal edilmeli.</string>
     <string name="stock_out_message_1"> kodlu ürünün </string>
     <string name="stock_out_message_2"> adresinde olmadığını bildiren kayıt oluşturulacak.</string>

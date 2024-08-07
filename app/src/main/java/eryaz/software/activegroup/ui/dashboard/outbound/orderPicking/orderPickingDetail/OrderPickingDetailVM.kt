@@ -110,7 +110,7 @@ class OrderPickingDetailVM(
             if (it.orderDetailList.isNotEmpty()) {
                 if (it.pickingSuggestionList.isNotEmpty()) {
                     orderPickingDto = it
-                    if(!forRefresh) showNext()
+                    if (!forRefresh) showNext()
                 } else {
                     parentView.emit(true)
                 }
@@ -146,10 +146,14 @@ class OrderPickingDetailVM(
                 code = productBarcode.value, companyId = SessionManager.companyId
             ).onSuccess {
                 productId = it.product.id
-                quantityMultiplier = if (it.quantity == 0) { 1 } else { it.quantity }
+                quantityMultiplier = if (it.quantity == 0) {
+                    1
+                } else {
+                    it.quantity
+                }
                 _productQuantity.emit("x " + it.quantity.toString())
                 _productDetail.emit(it.product)
-
+                Log.d("TAG", "productID: $productId")
                 checkProductOrder()
             }.onError { _, _ ->
                 _showProductDetail.emit(false)
@@ -203,6 +207,10 @@ class OrderPickingDetailVM(
     }
 
     fun updateOrderDetailCollectedAddQuantityForPda() {
+        Log.d(
+            "TAG",
+            "updateOrderDetailCollectedAddQuantityForPda: ${selectedOrderDetailProduct?.id.orZero()}"
+        )
         executeInBackground(showProgressDialog = true) {
             val quantity = enteredQuantity.value.toInt() * quantityMultiplier
             orderRepo.updateOrderDetailCollectedAddQuantityForPda(
@@ -217,6 +225,7 @@ class OrderPickingDetailVM(
                 updateOrderQuantity()
                 checkPickingFromOrder()
 
+                selectedOrderDetailProduct = null
                 enteredQuantity.value = ""
                 shelfAddress.value = ""
                 _showProductDetail.emit(false)
@@ -358,11 +367,18 @@ class OrderPickingDetailVM(
                 }
             }
         }
+
+        viewModelScope.launch {
+            _orderQuantityTxt.emit(
+                "${orderPickingDto?.pickingSuggestionList?.getOrNull(selectedSuggestionIndex)?.quantityPicked} / " +
+                        "${orderPickingDto?.pickingSuggestionList?.getOrNull(selectedSuggestionIndex)?.quantityWillBePicked}"
+            )
+        }
     }
 
     private fun checkProductOrder() {
         orderPickingDto?.orderDetailList?.find {
-            it.quantityCollected < it.quantity && it.product.id == productId
+            it.quantityCollected.toInt() < it.quantity.toInt() && it.product.id == productId
         }?.let { orderDetail ->
             selectedOrderDetailProduct = orderDetail
 
@@ -404,8 +420,6 @@ class OrderPickingDetailVM(
     }
 
     fun showNext() {
-        Log.d("TAG", "showNextBTN:")
-        Log.d("TAG", "selectedSuggestionIndex: $selectedSuggestionIndex")
         viewModelScope.launch {
             selectedSuggestionIndex++
 
@@ -414,7 +428,6 @@ class OrderPickingDetailVM(
                 productId = it.product.id
             } ?: run {
                 selectedSuggestionIndex--
-                Log.d("TAG", " -- selectedSuggestionIndex:$selectedSuggestionIndex")
             }
 
             _orderQuantityTxt.emit(
@@ -424,7 +437,6 @@ class OrderPickingDetailVM(
 
             _pageNum.emit("${selectedSuggestionIndex + 1} / ${orderPickingDto?.pickingSuggestionList?.size}")
         }
-        Log.d("TAG", "after selectedSuggestionIndex: $selectedSuggestionIndex")
     }
 
     fun showPrevious() {
@@ -466,9 +478,10 @@ class OrderPickingDetailVM(
 
     fun setEnteredProduct(dto: ProductDto) {
         productId = dto.id
+        Log.d("TAG", "productID: $productId")
+
         viewModelScope.launch {
             _productDetail.emit(dto)
-            _showProductDetail.emit(true)
             _productQuantity.emit("x " + 1)
             checkProductOrder()
         }
