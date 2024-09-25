@@ -35,18 +35,18 @@ class PackageDetailFragment : BaseFragment() {
     override fun subscribeToObservables() {
         viewModel.getOrderHeaderRouteDetailList()
 
-        viewModel.packageList
-            .asLiveData()
-            .observe(this) {
-                adapter.submitList(it)
-            }
+//        viewModel.packageList
+//            .asLiveData()
+//            .observe(this) {
+//                adapter.submitList(it)
+//            }
     }
-
-    private val adapter by lazy {
-        RouteAdapter().also {
-            binding.recyclerView.adapter = it
-        }
-    }
+//
+//    private val adapter by lazy {
+//        RouteAdapter().also {
+//            binding.recyclerView.adapter = it
+//        }
+//    }
 
     companion object {
         const val SHIPPING_ROUTE_ID = "SHIPPING_ROUTE_ID"

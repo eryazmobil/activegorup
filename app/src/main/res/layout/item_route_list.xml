@@ -7,7 +7,7 @@
 
         <variable
             name="dto"
-            type="eryaz.software.activegroup.data.models.dto.RouteDto" />
+            type="eryaz.software.activegroup.data.models.remote.response.DriverResponse" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

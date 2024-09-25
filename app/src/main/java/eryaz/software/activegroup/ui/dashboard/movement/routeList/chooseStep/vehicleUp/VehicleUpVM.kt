@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class VehicleUpVM(
     val repo: OrderRepo,
     val vehicleID: Int,
-    val routeID: Int
+    val driverId: Int
 ) : BaseViewModel() {
 
     private val _packageList = MutableStateFlow(listOf<VehiclePackageDto>())
@@ -22,39 +22,55 @@ class VehicleUpVM(
     val packageCode = MutableStateFlow("")
     val deliveredNameTxt = MutableStateFlow("")
     val vehicleDownSuccess = MutableStateFlow(false)
+    val finishProcess = MutableStateFlow(false)
+    val vehicleFinished = MutableStateFlow(false)
 
     init {
         getOrderHeaderRouteList()
     }
 
-    fun createOrderHeaderRoute() {
+    fun updateOrderHeaderRouteFinish() {
         executeInBackground {
-            repo.updateOrderHeaderRoute(
-                code = packageCode.value,
-                shippingRouteId = routeID,
-                deliveredPerson = deliveredNameTxt.value
-            ).onSuccess {
-                vehicleDownSuccess.emit(true)
-                getOrderHeaderRouteList()
-            }.onError { message, _ ->
-                ErrorDialogDto(
-                    title = stringProvider.invoke(R.string.error),
-                    message = message
-                )
-            }.also {
-                packageCode.emit("")
-                deliveredNameTxt.emit("")
-            }
+            repo.updateOrderHeaderRouteFinish(shippingRouteId = driverId)
+                .onSuccess {
+                    vehicleFinished.emit(true)
+                }.onError { message, _ ->
+                    ErrorDialogDto(
+                        title = stringProvider.invoke(R.string.error),
+                        message = message
+                    )
+                }.also {
+                    packageCode.emit("")
+                    deliveredNameTxt.emit("")
+                }
         }
     }
+
+    fun readOrderPackage() = executeInBackground {
+        repo.updateOrderHeaderRoute(
+            code = packageCode.value,
+            shippingRouteId = driverId,
+            routeType = 2
+        ).onSuccess {
+            getOrderHeaderRouteList()
+            packageCode.emit("")
+            vehicleDownSuccess.emit(true)
+        }.onError { _, _ ->
+            packageCode.emit("")
+        }
+    }
+
 
     fun getOrderHeaderRouteList() {
         executeInBackground(showProgressDialog = true) {
             repo.getOrderHeaderRouteList(
-                shippingRouteId = routeID
+                shippingRouteId = driverId,
+                routeType = 1
             ).onSuccess {
-                if (it.isNotEmpty()) {
-                    _packageList.emit(it)
+                _packageList.emit(it)
+
+                if (it.isEmpty()) {
+                    finishProcess.emit(true)
                 }
             }
         }

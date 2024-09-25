@@ -207,10 +207,6 @@ class OrderPickingDetailVM(
     }
 
     fun updateOrderDetailCollectedAddQuantityForPda() {
-        Log.d(
-            "TAG",
-            "updateOrderDetailCollectedAddQuantityForPda: ${selectedOrderDetailProduct?.id.orZero()}"
-        )
         executeInBackground(showProgressDialog = true) {
             val quantity = enteredQuantity.value.toInt() * quantityMultiplier
             orderRepo.updateOrderDetailCollectedAddQuantityForPda(

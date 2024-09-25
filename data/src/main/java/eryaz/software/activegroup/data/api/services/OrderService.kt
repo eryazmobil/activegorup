@@ -4,6 +4,7 @@ import eryaz.software.activegroup.data.models.remote.models.ResultModel
 import eryaz.software.activegroup.data.models.remote.response.BaseResponse
 import eryaz.software.activegroup.data.models.remote.response.ControlPointScreenResponse
 import eryaz.software.activegroup.data.models.remote.response.CrossDockResponse
+import eryaz.software.activegroup.data.models.remote.response.DriverResponse
 import eryaz.software.activegroup.data.models.remote.response.OrderDetailResponse
 import eryaz.software.activegroup.data.models.remote.response.OrderHeaderResponse
 import eryaz.software.activegroup.data.models.remote.response.OrderPickingResponse
@@ -116,6 +117,11 @@ interface OrderService {
         @Query("warehouseId") warehouseId: Int
     ): ResultModel<List<RouteResponse>>
 
+    @GET("/api/services/app/Order/GetShippingRouteList")
+    suspend fun getShippingRouteList(
+        @Query("warehouseId") warehouseId: Int
+    ): ResultModel<List<DriverResponse>>
+
     @POST("api/services/app/Order/CreateOrderHeaderRoute")
     suspend fun createOrderHeaderRoute(
         @Query("code") code: String,
@@ -127,12 +133,18 @@ interface OrderService {
     suspend fun updateOrderHeaderRoute(
         @Query("code") code: String,
         @Query("shippingRouteId") shippingRouteId: Int,
-        @Query("deliveredPerson") deliveredPerson: String
+        @Query("routeType") routeType: Int
+    ): BaseResponse
+
+    @PUT("api/services/app/Order/UpdateOrderHeaderRouteFinish")
+    suspend fun updateOrderHeaderRouteFinish(
+        @Query("shippingRouteId") shippingRouteId: Int
     ): BaseResponse
 
     @GET("api/services/app/Order/GetOrderHeaderRouteList")
     suspend fun getOrderHeaderRouteList(
-        @Query("shippingRouteId") shippingRouteId: Int
+        @Query("shippingRouteId") shippingRouteId: Int,
+        @Query("routeType") routeType: Int
     ): ResultModel<List<VehiclePackageResponse>>
 
     @GET("api/services/app/Order/GetOrderHeaderRouteDetailList")
@@ -150,6 +162,12 @@ interface OrderService {
     suspend fun updateOrderDetailQuantityForPda(
         @Query("orderdetailId") orderDetailId: Int,
         @Query("quantity") quantity: Int
+    ): BaseResponse
+
+    @PUT("api/services/app/Order/UpdateOrderHeaderRoadStatus")
+    suspend fun updateOrderHeaderRoadStatus(
+        @Query("carStatus") carStatus: Int,
+        @Query("shippingRouteId") shippingRouteId: Int
     ): BaseResponse
 
 }

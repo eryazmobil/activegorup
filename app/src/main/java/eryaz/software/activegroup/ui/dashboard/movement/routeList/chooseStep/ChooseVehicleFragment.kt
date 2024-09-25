@@ -17,7 +17,7 @@ class ChooseVehicleFragment : BaseFragment() {
     private val safeArgs by navArgs<ChooseVehicleFragmentArgs>()
 
     override val viewModel by viewModel<ChooseVehicleVM> {
-        parametersOf(safeArgs.routeId)
+        parametersOf(safeArgs.driverId)
     }
 
     private val binding by lazy(LazyThreadSafetyMode.NONE) {
@@ -38,7 +38,7 @@ class ChooseVehicleFragment : BaseFragment() {
         binding.downBtn.setOnSingleClickListener {
             findNavController().navigate(
                 ChooseVehicleFragmentDirections.actionChooseVehicleFragmentToVehicleDownFragment(
-                    1, viewModel.routeId
+                    1, viewModel.driverId
                 )
             )
         }
@@ -46,7 +46,7 @@ class ChooseVehicleFragment : BaseFragment() {
         binding.upBtn.setOnClickListener {
             findNavController().navigate(
                 ChooseVehicleFragmentDirections.actionChooseVehicleFragmentToVehicleUpFragment(
-                    2, viewModel.routeId
+                    2, viewModel.driverId
                 )
             )
         }

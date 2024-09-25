@@ -3,7 +3,7 @@ package eryaz.software.activegroup.util.adapter.movement.route
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import eryaz.software.activegroup.data.models.dto.RouteDto
+import eryaz.software.activegroup.data.models.remote.response.DriverResponse
 import eryaz.software.activegroup.databinding.ItemRouteListBinding
 import eryaz.software.activegroup.util.bindingAdapter.setOnSingleClickListener
 
@@ -11,8 +11,8 @@ class RouteViewHolder(val binding: ItemRouteListBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(
-        dto: RouteDto,
-        onItemClick: ((RouteDto) -> Unit)
+        dto: DriverResponse,
+        onItemClick: ((DriverResponse) -> Unit)
     ) {
         binding.dto = dto
 

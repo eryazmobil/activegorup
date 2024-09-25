@@ -13,28 +13,29 @@ import kotlinx.coroutines.flow.asStateFlow
 class VehicleDownVM(
     val repo: OrderRepo,
     val vehicleID: Int,
-    val routeID: Int
+    val driverId: Int
 ) : BaseViewModel() {
 
     private val _packageList = MutableStateFlow(listOf<VehiclePackageDto>())
     val packageList = _packageList.asStateFlow()
 
     val packageCode = MutableStateFlow("")
+
+    val finishProcess = MutableStateFlow(false)
     val vehicleDownSuccess = MutableStateFlow(false)
+    val vehicleOnTheRoad = MutableStateFlow(false)
 
     init {
         getOrderHeaderRouteList()
     }
 
-    fun createOrderHeaderRoute() {
+    fun updateOrderHeaderRoadStatus() {
         executeInBackground {
-            repo.createOrderHeaderRoute(
-                code = packageCode.value,
-                routeType = vehicleID,
-                shippingRouteId = routeID,
+            repo.updateOrderHeaderRoadStatus(
+                carStatus = 1,
+                shippingRouteId = driverId
             ).onSuccess {
-                vehicleDownSuccess.emit(true)
-                getOrderHeaderRouteList()
+                vehicleOnTheRoad.emit(true)
             }.onError { message, _ ->
                 ErrorDialogDto(
                     title = stringProvider.invoke(R.string.error),
@@ -46,13 +47,30 @@ class VehicleDownVM(
         }
     }
 
+    fun readOrderPackage() = executeInBackground {
+        repo.updateOrderHeaderRoute(
+            code = packageCode.value,
+            shippingRouteId = driverId,
+            routeType = 1
+        ).onSuccess {
+            getOrderHeaderRouteList()
+            packageCode.emit("")
+            vehicleDownSuccess.emit(true)
+        }.onError { _, _ ->
+            packageCode.emit("")
+        }
+    }
+
     fun getOrderHeaderRouteList() {
         executeInBackground(showProgressDialog = true) {
             repo.getOrderHeaderRouteList(
-                shippingRouteId = routeID
+                shippingRouteId = driverId,
+                routeType = 3
             ).onSuccess {
-                if (it.isNotEmpty()) {
-                    _packageList.emit(it)
+                _packageList.emit(it)
+
+                if (it.isEmpty()) {
+                    finishProcess.emit(true)
                 }
             }
         }

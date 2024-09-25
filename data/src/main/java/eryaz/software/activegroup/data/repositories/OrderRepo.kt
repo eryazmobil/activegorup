@@ -161,6 +161,14 @@ class OrderRepo(private val api: OrderService) : BaseRepo() {
         ResponseHandler.handleSuccess(response, response.result.map { it.toDto() })
     }
 
+    suspend fun getDriverList(
+        warehouseId: Int
+    ) = callApi {
+        val response = api.getShippingRouteList(warehouseId = warehouseId)
+
+        ResponseHandler.handleSuccess(response, response.result)
+    }
+
     suspend fun createOrderHeaderRoute(
         code: String,
         shippingRouteId: Int,
@@ -178,11 +186,21 @@ class OrderRepo(private val api: OrderService) : BaseRepo() {
     suspend fun updateOrderHeaderRoute(
         code: String,
         shippingRouteId: Int,
-        deliveredPerson: String,
+        routeType: Int,
     ) = callApi {
         val response = api.updateOrderHeaderRoute(
             code = code,
-            deliveredPerson = deliveredPerson,
+            routeType = routeType,
+            shippingRouteId = shippingRouteId,
+        )
+
+        ResponseHandler.handleSuccess(response, response.success)
+    }
+
+    suspend fun updateOrderHeaderRouteFinish(
+        shippingRouteId: Int,
+    ) = callApi {
+        val response = api.updateOrderHeaderRouteFinish(
             shippingRouteId = shippingRouteId,
         )
 
@@ -190,9 +208,12 @@ class OrderRepo(private val api: OrderService) : BaseRepo() {
     }
 
     suspend fun getOrderHeaderRouteList(
-        shippingRouteId: Int
+        shippingRouteId: Int,
+        routeType: Int
     ) = callApi {
-        val response = api.getOrderHeaderRouteList(shippingRouteId = shippingRouteId)
+        val response = api.getOrderHeaderRouteList(
+            shippingRouteId = shippingRouteId, routeType = routeType
+        )
 
         ResponseHandler.handleSuccess(response, response.result.map { it.toDto() })
     }
@@ -226,6 +247,18 @@ class OrderRepo(private val api: OrderService) : BaseRepo() {
         val response = api.updateOrderDetailQuantityForPda(
             orderDetailId = orderDetailId,
             quantity = quantity
+        )
+
+        ResponseHandler.handleSuccess(response, response)
+    }
+
+    suspend fun updateOrderHeaderRoadStatus(
+        carStatus: Int,
+        shippingRouteId: Int
+    ) = callApi {
+        val response = api.updateOrderHeaderRoadStatus(
+            carStatus = carStatus,
+            shippingRouteId = shippingRouteId
         )
 
         ResponseHandler.handleSuccess(response, response)

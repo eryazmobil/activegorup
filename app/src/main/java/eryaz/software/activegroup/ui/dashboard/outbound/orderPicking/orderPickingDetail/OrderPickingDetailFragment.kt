@@ -86,7 +86,9 @@ class OrderPickingDetailFragment : BaseFragment() {
 
     override fun subscribeToObservables() {
 
-        viewModel.pickProductSuccess.asLiveData().observe(viewLifecycleOwner) {
+        viewModel.pickProductSuccess
+            .asLiveData()
+            .observe(viewLifecycleOwner) {
                 playSound(SoundEnum.Success)
             }
 

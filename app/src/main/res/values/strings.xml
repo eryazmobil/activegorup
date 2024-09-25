@@ -691,8 +691,10 @@
     <string name="vehicle_up">Araçtan indirme</string>
     <string name="vehicle_up_btn">Araçtan indir</string>
     <string name="try_again">Tekrar deneyiniz</string>
-    <string name="installed_package">Yüklenen paketler</string>
+    <string name="installed_package">Yüklenecek paketler</string>
+    <string name="uninstalled_package">Indirelecek paketler</string>
     <string name="choose_route_list">Rota ismi aratınız</string>
+    <string name="choose_driver_list">Şöfer ismi aratınız</string>
     <string name="added_package">Paket Yüklendi</string>
     <string name="unload_package">Paket İndirildi</string>
     <string name="package_detail">Paket İçeriği</string>
@@ -704,4 +706,6 @@
     <string name="app_unlock">Kilitten çıkar</string>
     <string name="log_out">Çıkış Yap</string>
 
+    <string name="are_ready_to_road">Yola çıkmaya hazır mısınız?</string>
+    <string name="are_ready_to_road_success">İşlem onaylandı </string>
 </resources>

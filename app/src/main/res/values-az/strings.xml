@@ -702,8 +702,10 @@
     <string name="vehicle_up">Avtomobildən endirmə</string>
     <string name="vehicle_up_btn">Avtomobildən endir</string>
     <string name="try_again">Təkrar yoxlayın</string>
-    <string name="installed_package">Yüklənən paketlər</string>
+    <string name="installed_package">Yüklənəcək paketlər</string>
+    <string name="uninstalled_package">Endirələcək paketler</string>
     <string name="choose_route_list">Marşrut adı axtarınız</string>
+    <string name="choose_driver_list">Sürücü adı axtarın</string>
     <string name="added_package">Paket yükləndi</string>
     <string name="unload_package">Paket endirildi</string>
     <string name="package_detail">Paket detalı</string>
@@ -715,5 +717,7 @@
     <string name="app_unlock">Kilitdən aç</string>
     <string name="share">paylaş</string>
     <string name="log_out">Çıxış Et</string>
+    <string name="are_ready_to_road">Yola çıxmağa hazırsınız?</string>
+    <string name="are_ready_to_road_success">İşləm təsdiqləndi </string>
 
 </resources>

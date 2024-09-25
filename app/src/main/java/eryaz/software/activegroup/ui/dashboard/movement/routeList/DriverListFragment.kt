@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import eryaz.software.activegroup.databinding.FragmentRouteListBinding
 import eryaz.software.activegroup.ui.base.BaseFragment
+import eryaz.software.activegroup.ui.dashboard.movement.driverList.DriverListVM
 import eryaz.software.activegroup.util.adapter.movement.route.RouteAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class RouteListFragment : BaseFragment() {
-    override val viewModel by viewModel<RouteListVM>()
+class DriverListFragment : BaseFragment() {
+    override val viewModel by viewModel<DriverListVM>()
 
     private val binding by lazy(LazyThreadSafetyMode.NONE) {
         FragmentRouteListBinding.inflate(layoutInflater)
@@ -22,7 +23,7 @@ class RouteListFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding.routeListVM = viewModel
+        binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         binding.executePendingBindings()
         return binding.root
@@ -31,12 +32,12 @@ class RouteListFragment : BaseFragment() {
     override fun onStart() {
         super.onStart()
 
-        viewModel.fetchRouteList()
+        viewModel.fetchDriverList()
     }
 
     override fun subscribeToObservables() {
 
-        viewModel.routeList
+       viewModel.driverList
             .observe(viewLifecycleOwner) {
                 adapter.submitList(it)
             }
@@ -54,7 +55,7 @@ class RouteListFragment : BaseFragment() {
 
         adapter.onItemClick = {
             findNavController().navigate(
-                RouteListFragmentDirections.actionRouteListFragmentToChooseVehicleFragment(
+                DriverListFragmentDirections.actionRouteListFragmentToChooseVehicleFragment(
                     it.id
                 )
             )

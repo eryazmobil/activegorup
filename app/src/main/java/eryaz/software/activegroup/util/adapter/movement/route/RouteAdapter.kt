@@ -4,12 +4,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import eryaz.software.activegroup.data.models.dto.RouteDto
+import eryaz.software.activegroup.data.models.remote.response.DriverResponse
 
 class RouteAdapter :
-    ListAdapter<RouteDto, RecyclerView.ViewHolder>(WorkActivityDiffCallBackP) {
+    ListAdapter<DriverResponse, RecyclerView.ViewHolder>(WorkActivityDiffCallBackP) {
 
-    var onItemClick : ((RouteDto) -> Unit) = {}
+    var onItemClick : ((DriverResponse) -> Unit) = {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         RouteViewHolder.from(parent)
@@ -21,14 +21,14 @@ class RouteAdapter :
     }
 }
 
-object WorkActivityDiffCallBackP : DiffUtil.ItemCallback<RouteDto>() {
+object WorkActivityDiffCallBackP : DiffUtil.ItemCallback<DriverResponse>() {
     override fun areItemsTheSame(
-        oldItem: RouteDto,
-        newItem: RouteDto
+        oldItem: DriverResponse,
+        newItem: DriverResponse
     ) = oldItem.code == newItem.code
 
     override fun areContentsTheSame(
-        oldItem: RouteDto,
-        newItem: RouteDto
+        oldItem: DriverResponse,
+        newItem: DriverResponse
     ) = oldItem == newItem
 }

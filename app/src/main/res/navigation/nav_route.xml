@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/routeListFragment"
-        android:name="eryaz.software.activegroup.ui.dashboard.movement.routeList.RouteListFragment"
+        android:name="eryaz.software.activegroup.ui.dashboard.movement.routeList.DriverListFragment"
         android:label="RouteListFragment"
         tools:layout="@layout/item_route_list">
         <action
@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_choosen_vehicle">
 
         <argument
-            android:name="routeId"
+            android:name="driverId"
             app:argType="integer" />
         <action
             android:id="@+id/action_chooseVehicleFragment_to_vehicleDownFragment"
@@ -36,11 +36,12 @@
         android:name="eryaz.software.activegroup.ui.dashboard.movement.routeList.chooseStep.vehicleDown.VehicleDownFragment"
         android:label="VehicleDownFragment"
         tools:layout="@layout/fragment_vehicle_down">
+
         <argument
             android:name="vehicleID"
             app:argType="integer" />
         <argument
-            android:name="routeID"
+            android:name="driverId"
             app:argType="integer" />
         <action
             android:id="@+id/action_vehicleDownFragment_to_orderDetailViewPagerFragment"
@@ -57,7 +58,7 @@
             app:argType="integer" />
 
         <argument
-            android:name="routeID"
+            android:name="driverId"
             app:argType="integer" />
         <action
             android:id="@+id/action_vehicleUpFragment_to_orderDetailViewPagerFragment"
@@ -68,7 +69,7 @@
         android:id="@+id/orderDetailViewPagerFragment"
         android:name="eryaz.software.activegroup.ui.dashboard.movement.routeList.chooseStep.vehicleDown.orderDetailViewPager.OrderDetailViewPagerFragment"
         android:label="OrderDetailViewPagerFragment"
-        tools:layout="@layout/fragment_order_detail_viewPager">
+        tools:layout="@layout/fragment_order_detail_viewpager">
 
         <argument
             android:name="shippingRouteId"

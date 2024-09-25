@@ -689,7 +689,9 @@
     <string name="vehicle_up_btn">Download from vehicle</string>
     <string name="try_again">Try again</string>
     <string name="installed_package">Installed packages</string>
+    <string name="uninstalled_package">Indirelecek paketler</string>
     <string name="choose_route_list">Search for route name</string>
+    <string name="choose_driver_list">Search for driver name</string>
     <string name="added_package">Package Installed</string>
     <string name="unload_package">Package downloaded</string>
     <string name="package_detail">Package included</string>
@@ -713,6 +715,8 @@
     <string name="empty_label"> </string>
     <string name="login_user_">Log In</string>
     <string name="order_note_name">Search note</string>
-    <string name="log_out">Çıkış Yap</string>
+    <string name="log_out">Log Out</string>
+    <string name="are_ready_to_road">Are you ready to hit the road?</string>
+    <string name="are_ready_to_road_success">İşləm təsdiqləndi </string>
 
 </resources>

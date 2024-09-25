@@ -1,9 +1,11 @@
 package eryaz.software.activegroup.ui.dashboard.movement.routeList.chooseStep.vehicleDown
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
@@ -12,6 +14,8 @@ import eryaz.software.activegroup.R
 import eryaz.software.activegroup.databinding.FragmentVehicleDownBinding
 import eryaz.software.activegroup.ui.base.BaseFragment
 import eryaz.software.activegroup.util.adapter.movement.packageList.VehiclePackageAdapter
+import eryaz.software.activegroup.util.bindingAdapter.setOnSingleClickListener
+import eryaz.software.activegroup.util.extensions.hideSoftKeyboard
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -20,7 +24,7 @@ class VehicleDownFragment : BaseFragment() {
     private val safeArgs by navArgs<VehicleDownFragmentArgs>()
 
     override val viewModel by viewModel<VehicleDownVM> {
-        parametersOf(safeArgs.vehicleID, safeArgs.routeID)
+        parametersOf(safeArgs.vehicleID, safeArgs.driverId)
     }
 
     private val binding by lazy(LazyThreadSafetyMode.NONE) {
@@ -37,16 +41,46 @@ class VehicleDownFragment : BaseFragment() {
     }
 
     override fun subscribeToObservables() {
-        viewModel.vehicleDownSuccess.asLiveData().observe(this) {
+        binding.searchEdt.setOnEditorActionListener { _, actionId, _ ->
+
+            val isValidBarcode = viewModel.packageCode.value.trim().isNotEmpty()
+
+            if ((actionId == EditorInfo.IME_ACTION_UNSPECIFIED || actionId == EditorInfo.IME_ACTION_DONE) && isValidBarcode) {
+                viewModel.readOrderPackage()
+            }
+
+            hideSoftKeyboard()
+            true
+        }
+
+        viewModel.vehicleDownSuccess
+            .asLiveData()
+            .observe(this) {
                 if (it) {
-                    binding.searchEdt.requestFocus()
                     viewModel.getOrderHeaderRouteList()
+                    binding.searchEdt.requestFocus()
                     Toast.makeText(context, getString(R.string.added_package), Toast.LENGTH_SHORT)
                         .show()
                 }
             }
 
-        viewModel.packageList.asLiveData().observe(this) {
+        viewModel.vehicleOnTheRoad
+            .asLiveData()
+            .observe(this) {
+                if (it) {
+                    Toast.makeText(
+                        context,
+                        getString(R.string.are_ready_to_road_success),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    findNavController().navigateUp()
+
+                }
+            }
+
+        viewModel.packageList
+            .asLiveData()
+            .observe(this) {
                 adapter.submitList(it)
             }
     }
@@ -62,12 +96,28 @@ class VehicleDownFragment : BaseFragment() {
             findNavController().navigateUp()
         }
 
+        binding.vehicleDownBtn.setOnSingleClickListener {
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle(R.string.are_ready_to_road)
+
+            builder.setPositiveButton(R.string.yes) { _, _ ->
+                viewModel.updateOrderHeaderRoadStatus()
+            }
+
+            builder.setNegativeButton(R.string.no) { _, _ ->
+
+            }
+
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.show()
+        }
+
         adapter.onItemClick = {
-            findNavController().navigate(
-                VehicleDownFragmentDirections.actionVehicleDownFragmentToOrderDetailViewPagerFragment(
-                    viewModel.routeID, it.orderHeaderId
-                )
-            )
+//            findNavController().navigate(
+//                VehicleDownFragmentDirections.actionVehicleDownFragmentToOrderDetailViewPagerFragment(
+//                    viewModel.driverId, it.orderHeaderId
+//                )
+//            )
         }
     }
 

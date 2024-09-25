@@ -31,7 +31,7 @@ import eryaz.software.activegroup.ui.dashboard.inbound.dat.placement.DatPlacemen
 import eryaz.software.activegroup.ui.dashboard.inbound.dat.placement.placementDetail.DatPlacementDetailVM
 import eryaz.software.activegroup.ui.dashboard.inbound.placement.PlacementListVM
 import eryaz.software.activegroup.ui.dashboard.inbound.placement.placementDetail.PlacementDetailVM
-import eryaz.software.activegroup.ui.dashboard.movement.routeList.RouteListVM
+import eryaz.software.activegroup.ui.dashboard.movement.driverList.DriverListVM
 import eryaz.software.activegroup.ui.dashboard.movement.routeList.chooseStep.ChooseVehicleVM
 import eryaz.software.activegroup.ui.dashboard.movement.routeList.chooseStep.vehicleDown.VehicleDownVM
 import eryaz.software.activegroup.ui.dashboard.movement.routeList.chooseStep.vehicleDown.orderDetailViewPager.OrderDetailViewPagerVM
@@ -289,19 +289,19 @@ val appModule = module {
     }
 
     viewModel {
-        RouteListVM(get())
+        DriverListVM(get())
     }
 
     viewModel { (id: Int) ->
         ChooseVehicleVM(id)
     }
 
-    viewModel { (vehicleID: Int, routeID: Int) ->
-        VehicleDownVM(get(), vehicleID = vehicleID, routeID = routeID)
+    viewModel { (vehicleID: Int, driverId: Int) ->
+        VehicleDownVM(get(), vehicleID = vehicleID, driverId = driverId)
     }
 
-    viewModel { (vehicleID: Int, routeID: Int) ->
-        VehicleUpVM(get(), vehicleID = vehicleID, routeID = routeID)
+    viewModel { (vehicleID: Int, driverId: Int) ->
+        VehicleUpVM(get(), vehicleID = vehicleID, driverId = driverId)
     }
 
     viewModel { (shippingRouteId: Int, orderHeaderId: Int) ->

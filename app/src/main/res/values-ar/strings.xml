@@ -688,7 +688,9 @@
     <string name="vehicle_up_btn">تنزيل من المركبة</string>
     <string name="try_again">حاول مرة اخرى.</string>
     <string name="installed_package">تم تحميل الطرود</string>
+    <string name="uninstalled_package">Indirelecek paketler</string>
     <string name="choose_route_list">البحث عن اسم المسار</string>
+    <string name="choose_driver_list">Şöfer ismi aratınız</string>
     <string name="added_package">تم تحميل العبوة</string>
     <string name="unload_package">تم تنزيل العبوة</string>
     <string name="package_detail">محتويات العبوة</string>
@@ -703,5 +705,9 @@
     <string name="app_unlock">Kilitten çıkar</string>
     <string name="share">share</string>
     <string name="log_out">Çıkış Yap</string>
+
+
+    <string name="are_ready_to_road">Yola çıkmaya hazır mısınız?</string>
+    <string name="are_ready_to_road_success">İşlem onaylandı \nİyi yolculuklar </string>
 
 </resources>

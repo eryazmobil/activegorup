@@ -35,9 +35,6 @@ class MainActivity : BaseActivity() {
         )
     }
 
-    override fun onBackPressed() {
-    }
-
     private fun requestPermissions() {
         val permissionsToRequest = mutableListOf<String>()
 

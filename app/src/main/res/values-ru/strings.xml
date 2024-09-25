@@ -685,7 +685,9 @@
     <string name="vehicle_up_btn">Выгрузить из транспортного средства</string>
     <string name="try_again">Попробуйте снова</string>
     <string name="installed_package">Установленные пакеты</string>
+    <string name="uninstalled_package">Indirelecek paketler</string>
     <string name="choose_route_list">Искать по имени маршрута</string>
+    <string name="choose_driver_list">Поиск имени водителя</string>
     <string name="added_package">Пакет загружен</string>
     <string name="unload_package">Пакет выгружен</string>
     <string name="package_detail">Содержимое пакета</string>
@@ -699,4 +701,6 @@
     <string name="app_lock">Kilitle</string>
     <string name="app_unlock">Kilitten çıkar</string>
     <string name="log_out">Çıkış Yap</string>
+    <string name="are_ready_to_road">Вы готовы отправиться в путь??</string>
+    <string name="are_ready_to_road_success">İşləm təsdiqləndi </string>
 </resources>

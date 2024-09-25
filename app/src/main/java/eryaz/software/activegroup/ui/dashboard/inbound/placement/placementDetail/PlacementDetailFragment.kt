@@ -136,12 +136,6 @@ class PlacementDetailFragment : BaseFragment() {
 
     override fun subscribeToObservables() {
 
-        viewModel.controlSuccess
-            .asLiveData()
-            .observe(viewLifecycleOwner) {
-                playSound(SoundEnum.Success)
-        }
-
         setFragmentResultListener(ProductListDialogFragment.REQUEST_KEY) { _, bundle ->
             val dto = bundle.parcelable<ProductDto>(ProductListDialogFragment.ARG_PRODUCT_DTO)
             dto?.let {
@@ -154,6 +148,8 @@ class PlacementDetailFragment : BaseFragment() {
             binding.quantityEdt.setText("")
             binding.shelfAddressEdt.setText("")
             binding.searchEdt.requestFocus()
+
+            playSound(SoundEnum.Success)
         }
 
         viewModel.showProductDetailView.asLiveData().observe(viewLifecycleOwner) {
