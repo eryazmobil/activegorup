@@ -457,7 +457,8 @@ class OrderPickingDetailVM(
         showError(
             ErrorDialogDto(
                 titleRes = R.string.attention,
-                message = "${selectedSuggestion.value?.product?.code} ${stringProvider.invoke(R.string.stock_out_message_1)}" + "${selectedSuggestion.value?.shelfForPicking?.shelf?.shelfAddress} ${
+                message = "${selectedSuggestion.value?.product?.code} ${stringProvider.invoke(R.string.stock_out_message_1)}"
+                        + "${selectedSuggestion.value?.shelfForPicking?.shelf?.shelfAddress} ${
                     stringProvider.invoke(
                         R.string.stock_out_message_2
                     )
