@@ -6,6 +6,16 @@
     app:startDestination="@id/loginFragment">
 
     <dialog
+        android:id="@+id/storageListDialogFragment"
+        android:name="eryaz.software.activegroup.ui.dashboard.movement.transferStockCorrection.storageList.StorageListDialogFragment"
+        android:label="StorageListDialogFragment"
+        tools:layout="@layout/dialog_storage_list">
+
+        <argument
+            android:name="enterStorage"
+            app:argType="boolean" />
+    </dialog>
+    <dialog
         android:id="@+id/productListDialogFragment"
         android:name="eryaz.software.activegroup.ui.dashboard.recording.dialog.ProductListDialogFragment"
         android:label="ProductListDialogFragment"
@@ -135,10 +145,13 @@
         android:id="@+id/transferAddressFragment"
         android:name="eryaz.software.activegroup.ui.dashboard.movement.transferShelf.TransferShelfFragment"
         android:label="TransferAddressFragment"
-        tools:layout="@layout/fragment_transfer_address" >
+        tools:layout="@layout/fragment_transfer_address">
         <action
             android:id="@+id/action_transferAddressFragment_to_productListDialogFragment"
             app:destination="@id/productListDialogFragment" />
+        <action
+            android:id="@+id/action_transferAddressFragment_to_storageListDialogFragment"
+            app:destination="@id/storageListDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/transferAllShelfFragment"

@@ -24,6 +24,7 @@
         android:name="eryaz.software.activegroup.ui.dashboard.recording.dialog.ProductListDialogFragment"
         android:label="ProductListDialogFragment"
         tools:layout="@layout/dialog_product_list" />
+
     <dialog
         android:id="@+id/storageListDialogFragment"
         android:name="eryaz.software.activegroup.ui.dashboard.movement.transferStockCorrection.storageList.StorageListDialogFragment"

@@ -114,6 +114,7 @@ class TransferStorageFragment : BaseFragment() {
                 viewModel.setEnteredProduct(it)
             }
         }
+
         setFragmentResultListener(StorageListDialogFragment.REQUEST_KEY) { _, bundle ->
             val enterStorage = bundle.getBoolean(StorageListDialogFragment.ARG_ENTER_STORAGE)
             val dto = bundle.parcelable<StorageDto>(StorageListDialogFragment.ARG_STORAGE_DTO)

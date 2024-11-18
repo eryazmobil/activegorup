@@ -23,7 +23,7 @@ object SessionManager {
     fun init(context: Context) {
         sharedPref =
             EncryptedSharedPreferences.create(
-                context, "_secret_shared_pref",
+                context, "_secret_shared_pref_",
                 createMasterKey(context),
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM

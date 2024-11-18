@@ -10,8 +10,11 @@ import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import eryaz.software.activegroup.R
 import eryaz.software.activegroup.data.models.dto.ProductDto
+import eryaz.software.activegroup.data.models.dto.StorageDto
 import eryaz.software.activegroup.databinding.FragmentTransferAddressBinding
 import eryaz.software.activegroup.ui.base.BaseFragment
+import eryaz.software.activegroup.ui.dashboard.movement.transferStockCorrection.storageList.StorageListDialogFragment
+import eryaz.software.activegroup.ui.dashboard.movement.transferStorage.TransferStorageFragmentDirections
 import eryaz.software.activegroup.ui.dashboard.recording.dialog.ProductListDialogFragment
 import eryaz.software.activegroup.util.bindingAdapter.setOnSingleClickListener
 import eryaz.software.activegroup.util.extensions.hideSoftKeyboard
@@ -69,7 +72,7 @@ class TransferShelfFragment : BaseFragment() {
         binding.enterShelfAddressEdt.setOnEditorActionListener { _, actionId, _ ->
             val isValidAddress = viewModel.enterShelfValue.value.trim().isNotEmpty()
 
-            if ((actionId == EditorInfo.IME_ACTION_UNSPECIFIED || actionId == EditorInfo.IME_ACTION_DONE)  && isValidAddress) {
+            if ((actionId == EditorInfo.IME_ACTION_UNSPECIFIED || actionId == EditorInfo.IME_ACTION_DONE) && isValidAddress) {
 
                 viewModel.getShelfByCode(viewModel.enterShelfValue.value.trim(), true)
             }
@@ -87,6 +90,12 @@ class TransferShelfFragment : BaseFragment() {
                 TransferShelfFragmentDirections.actionTransferAddressFragmentToProductListDialogFragment()
             )
         }
+
+        binding.choiceStorage.setOnSingleClickListener {
+            findNavController().navigate(
+                TransferShelfFragmentDirections.actionTransferAddressFragmentToStorageListDialogFragment(false)
+            )
+        }
     }
 
     override fun subscribeToObservables() {
@@ -95,6 +104,14 @@ class TransferShelfFragment : BaseFragment() {
             val dto = bundle.parcelable<ProductDto>(ProductListDialogFragment.ARG_PRODUCT_DTO)
             dto?.let {
                 viewModel.setEnteredProduct(it)
+            }
+        }
+
+        setFragmentResultListener(StorageListDialogFragment.REQUEST_KEY) { _, bundle ->
+            val dto = bundle.parcelable<StorageDto>(StorageListDialogFragment.ARG_STORAGE_DTO)
+
+            dto?.let {
+                viewModel.setStorage(it)
             }
         }
 
@@ -110,8 +127,8 @@ class TransferShelfFragment : BaseFragment() {
                 binding.searchEdt.requestFocus()
             }
 
-        viewModel.showProductDetail.observe(this){
-            if(it){
+        viewModel.showProductDetail.observe(this) {
+            if (it) {
                 binding.exitShelfAddressEdt.requestFocus()
             }
         }

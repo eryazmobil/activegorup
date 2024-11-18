@@ -37,6 +37,26 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/choiceStorage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="14dp"
+                    android:layout_marginBottom="5dp"
+                    android:drawableStart="@drawable/ic_down"
+                    android:fontFamily="@font/sogeoui"
+                    android:gravity="center_vertical"
+                    android:includeFontPadding="false"
+                    android:minHeight="32dp"
+                    android:text="@{viewModel.storageName}"
+                    android:hint="@string/select_out_warehouse"
+                    android:textColor="@color/colorEditTextColor"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/productDescription" />
+
+
                 <eryaz.software.activegroup.util.widgets.TextInputLayout
                     android:id="@+id/search_product_barcode"
                     style="@style/Widget.Zeus.SearchInput"
@@ -49,7 +69,7 @@
                     app:endIconDrawable="@drawable/ic_blue_search"
                     app:endIconTint="@null"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toBottomOf="@id/choiceStorage">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/searchEdt"
