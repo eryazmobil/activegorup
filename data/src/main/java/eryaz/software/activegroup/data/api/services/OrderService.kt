@@ -12,6 +12,7 @@ import eryaz.software.activegroup.data.models.remote.response.PackageOrderDetail
 import eryaz.software.activegroup.data.models.remote.response.PackageResponse
 import eryaz.software.activegroup.data.models.remote.response.RouteResponse
 import eryaz.software.activegroup.data.models.remote.response.VehiclePackageResponse
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -168,6 +169,16 @@ interface OrderService {
     suspend fun updateOrderHeaderRoadStatus(
         @Query("carStatus") carStatus: Int,
         @Query("shippingRouteId") shippingRouteId: Int
+    ): BaseResponse
+
+    @DELETE("api/services/app/Order/DeleteOrderHeaderRouteByOrderHeaderId")
+    suspend fun deleteOrderHeaderRouteByOrderHeaderIdForDown(
+        @Query("orderHeaderId") orderHeaderId: Int
+    ): BaseResponse
+
+    @PUT("api/services/app/Order/UpdateReturnShipmentByOrderHeaderId")
+    suspend fun updateReturnShipmentByOrderHeaderIdForUp(
+        @Query("orderHeaderId") orderHeaderId: Int
     ): BaseResponse
 
 }

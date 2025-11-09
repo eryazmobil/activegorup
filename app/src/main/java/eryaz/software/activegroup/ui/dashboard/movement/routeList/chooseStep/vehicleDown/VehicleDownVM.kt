@@ -75,4 +75,12 @@ class VehicleDownVM(
             }
         }
     }
+
+    fun deleteOrderHeaderRouteByOrderHeaderIdForDown(orderHeaderId:Int) {
+        executeInBackground(showProgressDialog = true) {
+            repo.deleteOrderHeaderRouteByOrderHeaderIdForDown(orderHeaderId = orderHeaderId).onSuccess {
+                getOrderHeaderRouteList()
+            }
+        }
+    }
 }

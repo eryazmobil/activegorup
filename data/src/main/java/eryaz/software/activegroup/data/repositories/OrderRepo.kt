@@ -263,4 +263,22 @@ class OrderRepo(private val api: OrderService) : BaseRepo() {
 
         ResponseHandler.handleSuccess(response, response)
     }
+
+    suspend fun deleteOrderHeaderRouteByOrderHeaderIdForDown(
+        orderHeaderId: Int
+    ) = callApi {
+        val response = api.deleteOrderHeaderRouteByOrderHeaderIdForDown(
+            orderHeaderId = orderHeaderId
+        )
+
+        ResponseHandler.handleSuccess(response, response)
+    }
+
+    suspend fun updateReturnShipmentByOrderHeaderIdForUp(orderHeaderId: Int) = callApi {
+        val response = api.updateReturnShipmentByOrderHeaderIdForUp(
+            orderHeaderId = orderHeaderId
+        )
+
+        ResponseHandler.handleSuccess(response, response)
+    }
 }

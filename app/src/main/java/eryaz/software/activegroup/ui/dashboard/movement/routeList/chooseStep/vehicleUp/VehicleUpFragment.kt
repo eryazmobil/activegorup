@@ -57,13 +57,14 @@ class VehicleUpFragment : BaseFragment() {
             .observe(this) {
                 if (it) {
                     binding.searchEdt.requestFocus()
-                    Toast.makeText(context, getString(R.string.unload_package), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.unload_package), Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         viewModel.vehicleFinished
             .asLiveData()
-            .observe(this){
-                if(it) {
+            .observe(this) {
+                if (it) {
                     Toast.makeText(
                         context,
                         getString(R.string.finished_process),
@@ -108,11 +109,20 @@ class VehicleUpFragment : BaseFragment() {
         }
 
         adapter.onItemClick = {
-//            findNavController().navigate(
-//                VehicleUpFragmentDirections.actionVehicleUpFragmentToOrderDetailViewPagerFragment(
-//                    viewModel.driverId, it.orderHeaderId
-//                )
-//            )
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Məhsulun depoya geri qaytarılacağına əminsinizmi?")
+
+            builder.setPositiveButton(R.string.yes) { _, _ ->
+                viewModel.updateReturnShipmentByOrderHeaderIdForUp(it.orderHeaderId)
+            }
+
+            builder.setNegativeButton(R.string.no) { _, _ ->
+
+            }
+
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.show()
+
         }
     }
 

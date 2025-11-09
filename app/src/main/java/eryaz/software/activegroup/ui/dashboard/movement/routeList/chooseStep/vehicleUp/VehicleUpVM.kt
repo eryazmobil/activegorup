@@ -75,4 +75,12 @@ class VehicleUpVM(
             }
         }
     }
+
+    fun updateReturnShipmentByOrderHeaderIdForUp(orderHeaderId: Int) {
+        executeInBackground(showProgressDialog = true) {
+            repo.updateReturnShipmentByOrderHeaderIdForUp(orderHeaderId = orderHeaderId).onSuccess {
+                getOrderHeaderRouteList()
+            }
+        }
+    }
 }

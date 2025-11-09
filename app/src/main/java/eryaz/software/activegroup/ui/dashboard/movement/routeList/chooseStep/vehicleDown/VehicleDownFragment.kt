@@ -16,6 +16,7 @@ import eryaz.software.activegroup.ui.base.BaseFragment
 import eryaz.software.activegroup.util.adapter.movement.packageList.VehiclePackageAdapter
 import eryaz.software.activegroup.util.bindingAdapter.setOnSingleClickListener
 import eryaz.software.activegroup.util.extensions.hideSoftKeyboard
+import eryaz.software.activegroup.util.extensions.observe
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -78,9 +79,7 @@ class VehicleDownFragment : BaseFragment() {
                 }
             }
 
-        viewModel.packageList
-            .asLiveData()
-            .observe(this) {
+        viewModel.packageList.observe(this) {
                 adapter.submitList(it)
             }
     }
@@ -113,11 +112,19 @@ class VehicleDownFragment : BaseFragment() {
         }
 
         adapter.onItemClick = {
-//            findNavController().navigate(
-//                VehicleDownFragmentDirections.actionVehicleDownFragmentToOrderDetailViewPagerFragment(
-//                    viewModel.driverId, it.orderHeaderId
-//                )
-//            )
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle(R.string.are_you_sure_to_delete)
+
+            builder.setPositiveButton(R.string.yes) { _, _ ->
+                viewModel.deleteOrderHeaderRouteByOrderHeaderIdForDown(it.orderHeaderId)
+            }
+
+            builder.setNegativeButton(R.string.no) { _, _ ->
+
+            }
+
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.show()
         }
     }
 
