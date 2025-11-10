@@ -42,9 +42,7 @@ class VehicleUpFragment : BaseFragment() {
 
     override fun subscribeToObservables() {
         binding.searchEdt.setOnEditorActionListener { _, actionId, _ ->
-
             val isValidBarcode = viewModel.packageCode.value.trim().isNotEmpty()
-
             if ((actionId == EditorInfo.IME_ACTION_UNSPECIFIED || actionId == EditorInfo.IME_ACTION_DONE) && isValidBarcode) {
                 viewModel.readOrderPackage()
             }
@@ -52,6 +50,7 @@ class VehicleUpFragment : BaseFragment() {
             hideSoftKeyboard()
             true
         }
+
         viewModel.vehicleDownSuccess
             .asLiveData()
             .observe(this) {

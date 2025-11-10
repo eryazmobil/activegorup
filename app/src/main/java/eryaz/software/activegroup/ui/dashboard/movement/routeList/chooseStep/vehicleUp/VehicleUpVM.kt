@@ -15,6 +15,7 @@ class VehicleUpVM(
     val vehicleID: Int,
     val driverId: Int
 ) : BaseViewModel() {
+    private var isRequestInProgress = false
 
     private val _packageList = MutableStateFlow(listOf<VehiclePackageDto>())
     val packageList = _packageList.asStateFlow()
@@ -42,24 +43,32 @@ class VehicleUpVM(
                 }.also {
                     packageCode.emit("")
                     deliveredNameTxt.emit("")
-                }
+            }
         }
     }
 
-    fun readOrderPackage() = executeInBackground {
-        repo.updateOrderHeaderRoute(
-            code = packageCode.value,
-            shippingRouteId = driverId,
-            routeType = 2
-        ).onSuccess {
-            getOrderHeaderRouteList()
-            packageCode.emit("")
-            vehicleDownSuccess.emit(true)
-        }.onError { _, _ ->
-            packageCode.emit("")
+    fun readOrderPackage() {
+        if (isRequestInProgress) {
+            return
+        }
+        isRequestInProgress = true
+        executeInBackground {
+            repo.updateOrderHeaderRoute(
+                code = packageCode.value.trim(),
+                shippingRouteId = driverId,
+                routeType = 2
+            ).onSuccess {
+                getOrderHeaderRouteList()
+
+                packageCode.emit("")
+                vehicleDownSuccess.emit(true)
+            }.onError { _, _ ->
+                packageCode.emit("")
+            }.also {
+                isRequestInProgress = false
+            }
         }
     }
-
 
     fun getOrderHeaderRouteList() {
         executeInBackground(showProgressDialog = true) {
@@ -67,11 +76,13 @@ class VehicleUpVM(
                 shippingRouteId = driverId,
                 routeType = 1
             ).onSuccess {
-                _packageList.emit(it)
-
                 if (it.isEmpty()) {
                     finishProcess.emit(true)
                 }
+
+                _packageList.emit(it)
+            }.onError {_, _ ->
+                _packageList.emit(emptyList())
             }
         }
     }

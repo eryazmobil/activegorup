@@ -16,7 +16,7 @@ class VehicleDownVM(
     val driverId: Int
 ) : BaseViewModel() {
 
-    private val _packageList = MutableStateFlow(listOf<VehiclePackageDto>())
+    private val _packageList = MutableStateFlow<List<VehiclePackageDto>>(emptyList())
     val packageList = _packageList.asStateFlow()
 
     val packageCode = MutableStateFlow("")
@@ -49,13 +49,14 @@ class VehicleDownVM(
 
     fun readOrderPackage() = executeInBackground {
         repo.updateOrderHeaderRoute(
-            code = packageCode.value,
+            code = packageCode.value.trim(),
             shippingRouteId = driverId,
             routeType = 1
         ).onSuccess {
-            getOrderHeaderRouteList()
             packageCode.emit("")
             vehicleDownSuccess.emit(true)
+
+            getOrderHeaderRouteList()
         }.onError { _, _ ->
             packageCode.emit("")
         }
@@ -68,10 +69,9 @@ class VehicleDownVM(
                 routeType = 3
             ).onSuccess {
                 _packageList.emit(it)
-
-                if (it.isEmpty()) {
-                    finishProcess.emit(true)
-                }
+            }.onError {_, _ ->
+                _packageList.emit(emptyList())
+                finishProcess.emit(true)
             }
         }
     }
