@@ -13,11 +13,13 @@ import androidx.navigation.fragment.navArgs
 import eryaz.software.activegroup.R
 import eryaz.software.activegroup.databinding.FragmentVehicleUpBinding
 import eryaz.software.activegroup.ui.base.BaseFragment
+import eryaz.software.activegroup.ui.dashboard.movement.routeList.chooseStep.vehicleUp.adapter.VehicleUpPackageAdapter
 import eryaz.software.activegroup.util.adapter.movement.packageList.VehiclePackageAdapter
 import eryaz.software.activegroup.util.bindingAdapter.setOnSingleClickListener
 import eryaz.software.activegroup.util.extensions.hideSoftKeyboard
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import kotlin.getValue
 
 class VehicleUpFragment : BaseFragment() {
 
@@ -81,7 +83,7 @@ class VehicleUpFragment : BaseFragment() {
     }
 
     private val adapter by lazy {
-        VehiclePackageAdapter().also {
+        VehicleUpPackageAdapter().also {
             binding.recyclerView.adapter = it
         }
     }
