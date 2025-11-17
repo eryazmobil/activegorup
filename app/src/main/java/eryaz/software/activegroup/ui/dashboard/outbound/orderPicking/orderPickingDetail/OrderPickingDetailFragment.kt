@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import eryaz.software.activegroup.R
 import eryaz.software.activegroup.data.enums.SoundEnum
 import eryaz.software.activegroup.data.models.dto.ButtonDto
+import eryaz.software.activegroup.data.models.dto.ConfirmationDialogDto
 import eryaz.software.activegroup.data.models.dto.ErrorDialogDto
 import eryaz.software.activegroup.data.models.dto.ProductDto
 import eryaz.software.activegroup.databinding.FragmentOrderPickingDetailBinding
@@ -27,7 +26,6 @@ import eryaz.software.activegroup.util.extensions.onBackPressedCallback
 import eryaz.software.activegroup.util.extensions.orZero
 import eryaz.software.activegroup.util.extensions.parcelable
 import eryaz.software.activegroup.util.extensions.toast
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OrderPickingDetailFragment : BaseFragment() {
@@ -47,7 +45,6 @@ class OrderPickingDetailFragment : BaseFragment() {
     }
 
     override fun setClicks() {
-
         binding.toolbar.setNavigationOnClickListener {
             viewModel.checkCrossDockNeedByActionId()
         }
@@ -82,10 +79,24 @@ class OrderPickingDetailFragment : BaseFragment() {
         binding.pickProductBtn.setOnSingleClickListener {
             viewModel.updateOrderDetailCollectedAddQuantityForPda()
         }
+
+        onBackPressedCallback {
+            showConditionDialog(
+                ConfirmationDialogDto(
+                    title = getString(R.string.exit),
+                    message = getString(R.string.are_you_sure),
+                    positiveButton = ButtonDto(text = R.string.yes, onClickListener = {
+                        viewModel.checkCrossDockNeedByActionId()
+                    }),
+                    negativeButton = ButtonDto(
+                        text = R.string.no,
+                        onClickListener = { confirmationDialog.dismiss() })
+                )
+            )
+        }
     }
 
     override fun subscribeToObservables() {
-
         viewModel.pickProductSuccess
             .asLiveData()
             .observe(viewLifecycleOwner) {
@@ -143,16 +154,20 @@ class OrderPickingDetailFragment : BaseFragment() {
             if (it) {
                 binding.parentView.visibility = View.GONE
 
-                errorDialog.show(context, ErrorDialogDto(titleRes = R.string.warning,
-                    messageRes = R.string.order_was_picking,
-                    positiveButton = ButtonDto(text = R.string.close, onClickListener = {
-                        errorDialog.dismiss()
-                        findNavController().navigateUp()
-                    }),
-                    negativeButton = ButtonDto(text = R.string.exit, onClickListener = {
-                        errorDialog.dismiss()
-                        findNavController().navigateUp()
-                    })))
+                errorDialog.show(
+                    context, ErrorDialogDto(
+                        titleRes = R.string.warning,
+                        messageRes = R.string.order_was_picking,
+                        positiveButton = ButtonDto(text = R.string.close, onClickListener = {
+                            errorDialog.dismiss()
+                            findNavController().navigateUp()
+                        }),
+                        negativeButton = ButtonDto(text = R.string.exit, onClickListener = {
+                            errorDialog.dismiss()
+                            findNavController().navigateUp()
+                        })
+                    )
+                )
             }
         }
 
@@ -230,7 +245,7 @@ class OrderPickingDetailFragment : BaseFragment() {
                     }
 
                     R.id.menu_finish_action -> {
-                        activity?.onBackPressed()
+                        viewModel.finishWorkAction(true)
                         true
                     }
 

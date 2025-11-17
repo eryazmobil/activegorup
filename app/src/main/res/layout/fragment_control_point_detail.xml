@@ -28,6 +28,7 @@
             app:title="@string/control_point_content" />
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -157,7 +158,7 @@
                             style="@style/Widget.Zeus.SearchInput"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="text"
+                            android:inputType="number"
                             android:text="@={viewModel.quantity}"
                             android:textColorHint="@color/logoGray"
                             android:textSize="18sp"

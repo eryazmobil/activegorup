@@ -16,11 +16,13 @@ import eryaz.software.activegroup.data.repositories.OrderRepo
 import eryaz.software.activegroup.data.repositories.WorkActivityRepo
 import eryaz.software.activegroup.ui.base.BaseViewModel
 import eryaz.software.activegroup.util.extensions.orZero
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ControlPointDetailVM(
     private val orderRepo: OrderRepo,
@@ -114,11 +116,6 @@ class ControlPointDetailVM(
                 searchProduct.emit("")
                 productID = it.product.id
 
-                orderDetailList.value.indexOfFirst { dto -> dto.product.id == productID }
-                    .takeIf { index -> index >= 0 }?.apply {
-                        _scrollToPosition.emit(this)
-                    }
-
                 if (serialCheckBox.value) {
                     quantity.emit("")
                     addQuantityForControl(1)
@@ -127,6 +124,7 @@ class ControlPointDetailVM(
                     _productDetail.emit(it.product)
                 }
 
+                findItem()
             }.onError { _, _ ->
                 searchProduct.emit("")
 
@@ -136,6 +134,16 @@ class ControlPointDetailVM(
                     )
                 )
             }
+        }
+    }
+
+    fun findItem() {
+        viewModelScope.launch {
+            delay(1000)
+            orderDetailList.value.indexOfFirst { dto -> dto.product.id == productID }
+                .takeIf { index -> index >= 0 }?.apply {
+                    _scrollToPosition.emit(this)
+                }
         }
     }
 
@@ -152,6 +160,8 @@ class ControlPointDetailVM(
                 isPackage = isPackage,
                 packageId = selectedPackageId
             ).onSuccess {
+                findItem()
+
                 this.quantity.emit("")
                 if (it.isNotEmpty()) {
                     getOrderListDetail()
@@ -207,6 +217,8 @@ class ControlPointDetailVM(
     }
 
     fun setEnteredProduct(dto: ProductDto) {
+        findItem()
+
         viewModelScope.launch {
             if (serialCheckBox.value) {
                 quantity.emit("")
@@ -220,4 +232,5 @@ class ControlPointDetailVM(
             }
         }
     }
+
 }

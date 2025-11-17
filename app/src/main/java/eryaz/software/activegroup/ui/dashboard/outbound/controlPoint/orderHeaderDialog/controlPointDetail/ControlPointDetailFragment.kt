@@ -27,6 +27,7 @@ import eryaz.software.activegroup.util.extensions.parcelable
 import eryaz.software.activegroup.util.extensions.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 class ControlPointDetailFragment : BaseFragment() {
     private val safeArgs by navArgs<ControlPointDetailFragmentArgs>()
@@ -120,7 +121,6 @@ class ControlPointDetailFragment : BaseFragment() {
     }
 
     override fun subscribeToObservables() {
-
         viewModel.controlSuccess
             .asLiveData()
             .observe(viewLifecycleOwner) {
@@ -158,9 +158,18 @@ class ControlPointDetailFragment : BaseFragment() {
         viewModel.scrollToPosition
             .asLiveData()
             .observe(viewLifecycleOwner) {
-                binding.recyclerView.scrollToPosition(it)
+                toast(it)
+                binding.recyclerView.post {
+                    val view = binding.recyclerView.layoutManager?.findViewByPosition(it)
+                    view?.let {
+                        binding.nestedScrollView.smoothScrollTo(0, it.top)
+                    }
+                }
 
-                (binding.recyclerView.findViewHolderForAdapterPosition(it) as? ControlPointDetailListVH)?.animateBackground()
+                binding.recyclerView.postDelayed({
+                    val vh = binding.recyclerView.findViewHolderForAdapterPosition(it) as? ControlPointDetailListVH
+                    vh?.animateBackground()
+                }, 500)
             }
     }
 

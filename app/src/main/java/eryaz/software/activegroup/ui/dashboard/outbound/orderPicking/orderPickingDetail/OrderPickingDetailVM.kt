@@ -242,7 +242,7 @@ class OrderPickingDetailVM(
     }
 
     fun checkCrossDockNeedByActionId() {
-        executeInBackground {
+        executeInBackground(showProgressDialog = true) {
             orderRepo.checkCrossDockNeedByActionId(
                 workActionId = TemporaryCashManager.getInstance().workAction?.workActionId.orZero()
             ).onSuccess {

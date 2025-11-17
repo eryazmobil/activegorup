@@ -10,9 +10,10 @@ import eryaz.software.activegroup.databinding.ItemControlPointDetailBinding
 class ControlPointDetailListVH(val binding: ItemControlPointDetailBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(
-        dto: OrderDetailDto
-    ) {
+    private var currentDto: OrderDetailDto? = null
+
+    fun bind(dto: OrderDetailDto) {
+        currentDto = dto
         binding.dto = dto
         binding.executePendingBindings()
 
@@ -20,9 +21,29 @@ class ControlPointDetailListVH(val binding: ItemControlPointDetailBinding) :
     }
 
     fun animateBackground() {
-        binding.backgroundView.animate().alpha(1f).withEndAction {
-            binding.backgroundView.animate().alpha(0f)
+        binding.itemParent.setBackgroundColor(Color.YELLOW)
+        binding.apply {
+            productName.setTextColor(Color.BLACK)
+            orderQuantityTxt.setTextColor(Color.BLACK)
+            collectedQuantityTxt.setTextColor(Color.BLACK)
+            controlledTxt.setTextColor(Color.BLACK)
         }
+
+        binding.itemParent.animate()
+            .alpha(0.3f)
+            .setDuration(500)
+            .withEndAction {
+                binding.itemParent.animate()
+                    .alpha(1f)
+                    .setDuration(500)
+                    .withEndAction {
+                        currentDto?.let { dto ->
+                            setStatus(dto)
+                        }
+                    }
+                    .start()
+            }
+            .start()
     }
 
     private fun setStatus(dto: OrderDetailDto) {
@@ -41,6 +62,14 @@ class ControlPointDetailListVH(val binding: ItemControlPointDetailBinding) :
                 orderQuantityTxt.setTextColor(Color.WHITE)
                 collectedQuantityTxt.setTextColor(Color.WHITE)
                 controlledTxt.setTextColor(Color.WHITE)
+            }
+        } else {
+            binding.itemParent.setBackgroundColor(Color.TRANSPARENT)
+            binding.apply {
+                productName.setTextColor(Color.BLACK)
+                orderQuantityTxt.setTextColor(Color.BLACK)
+                collectedQuantityTxt.setTextColor(Color.BLACK)
+                controlledTxt.setTextColor(Color.BLACK)
             }
         }
     }

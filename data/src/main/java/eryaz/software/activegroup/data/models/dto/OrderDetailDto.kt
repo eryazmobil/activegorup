@@ -10,5 +10,6 @@ data class OrderDetailDto(
     val product: ProductDto,
     val quantity: String,
     val quantityShipped: String,
-    val quantityCollected: String
+    val quantityCollected: String,
+    val showAnimation: Boolean = false
 ) : Parcelable

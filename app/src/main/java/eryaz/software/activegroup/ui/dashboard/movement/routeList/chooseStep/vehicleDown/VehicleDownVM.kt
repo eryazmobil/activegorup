@@ -15,6 +15,7 @@ class VehicleDownVM(
     val vehicleID: Int,
     val driverId: Int
 ) : BaseViewModel() {
+    private var isRequestInProgress = false
 
     private val _packageList = MutableStateFlow<List<VehiclePackageDto>>(emptyList())
     val packageList = _packageList.asStateFlow()
@@ -47,18 +48,28 @@ class VehicleDownVM(
         }
     }
 
-    fun readOrderPackage() = executeInBackground {
-        repo.updateOrderHeaderRoute(
-            code = packageCode.value.trim(),
-            shippingRouteId = driverId,
-            routeType = 1
-        ).onSuccess {
-            packageCode.emit("")
-            vehicleDownSuccess.emit(true)
+    fun readOrderPackage() {
 
-            getOrderHeaderRouteList()
-        }.onError { _, _ ->
-            packageCode.emit("")
+        if (isRequestInProgress) {
+            return
+        }
+
+        isRequestInProgress = true
+        executeInBackground {
+            repo.updateOrderHeaderRoute(
+                code = packageCode.value.trim(),
+                shippingRouteId = driverId,
+                routeType = 1
+            ).onSuccess {
+                packageCode.emit("")
+                vehicleDownSuccess.emit(true)
+
+                getOrderHeaderRouteList()
+            }.onError { _, _ ->
+                packageCode.emit("")
+            }.also {
+                isRequestInProgress = false
+            }
         }
     }
 
