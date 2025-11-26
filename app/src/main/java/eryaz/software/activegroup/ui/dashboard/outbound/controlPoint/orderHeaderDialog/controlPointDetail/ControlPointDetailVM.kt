@@ -162,10 +162,12 @@ class ControlPointDetailVM(
             ).onSuccess {
                 findItem()
 
-                this.quantity.emit("")
                 if (it.isNotEmpty()) {
                     getOrderListDetail()
                 }
+
+                this.quantity.emit("")
+                _showProductDetail.emit(false)
             }
         }
     }

@@ -16,8 +16,8 @@ fun CompanyResponse.toDto() = CompanyDto(
 )
 
 fun WarehouseResponse.toDto() = WarehouseDto(
-    code = code,
-    name = name,
+    code = code.orEmpty(),
+    name = name.orEmpty(),
     id = id
 )
 

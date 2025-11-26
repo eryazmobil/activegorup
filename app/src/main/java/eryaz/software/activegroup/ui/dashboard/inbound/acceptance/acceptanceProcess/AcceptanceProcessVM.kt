@@ -14,6 +14,7 @@ import eryaz.software.activegroup.data.repositories.WorkActivityRepo
 import eryaz.software.activegroup.ui.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
@@ -30,7 +31,6 @@ class AcceptanceProcessVM(
 
     val searchProduct = MutableStateFlow("")
     val showCreateBarcode = MutableSharedFlow<Boolean>()
-    val actionIsFinished = MutableStateFlow(false)
     val controlSuccess = MutableSharedFlow<Boolean>()
     val quantity = MutableStateFlow("1")
     val multiplier = MutableStateFlow("")
@@ -55,6 +55,8 @@ class AcceptanceProcessVM(
     private val _hasSerial = MutableStateFlow(false)
     val hasSerial = _hasSerial.asStateFlow()
 
+    private val _actionIsFinished = MutableSharedFlow<Boolean>()
+    val actionIsFinished = _actionIsFinished.asSharedFlow()
 
     init {
         TemporaryCashManager.getInstance().workActivity?.let {
@@ -131,7 +133,7 @@ class AcceptanceProcessVM(
 
     fun checkIfAllFinished(): Boolean {
         return waybillDetailList.all { waybillDetail ->
-            waybillDetail.quantityControlled.toInt() >= waybillDetail.quantity
+            waybillDetail.quantityControlled >= waybillDetail.quantity
         }
     }
 
@@ -185,7 +187,7 @@ class AcceptanceProcessVM(
                 repo.finishWorkAction(
                     it.workActionId
                 ).onSuccess {
-                    actionIsFinished.emit(true)
+                    _actionIsFinished.emit(true)
                 }.onError { message, _ ->
                     ErrorDialogDto(
                         title = stringProvider.invoke(R.string.error),

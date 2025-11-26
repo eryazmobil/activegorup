@@ -1,8 +1,8 @@
 package eryaz.software.activegroup.util.adapter.inbound.viewHolder
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
 import eryaz.software.activegroup.data.models.dto.WaybillListDetailDto
 import eryaz.software.activegroup.databinding.WaybillDetailListTemBinding
@@ -19,24 +19,24 @@ class WaybillDetailDialogViewHolder(val binding: WaybillDetailListTemBinding) :
 
     private fun setControl(dto: WaybillListDetailDto) {
         val (statusName, statusColor) = when {
-            dto.quantityControlled.toInt() == dto.quantity -> "TAM" to "#4caf50"
-            dto.quantityControlled.toInt() < dto.quantity -> "EKSIK" to "#df0029"
+            dto.quantityControlled == dto.quantity -> "TAM" to "#4caf50"
+            dto.quantityControlled < dto.quantity -> "EKSIK" to "#df0029"
             else -> "FAZLA" to "#ffb822"
         }
 
         binding.controlValueTxt.apply {
             text = statusName
-            setBackgroundColor(Color.parseColor(statusColor))
+            setBackgroundColor(statusColor.toColorInt())
         }
     }
 
 
     private fun setStatus(dto: WaybillListDetailDto) {
         val (statusName, statusColor) = when {
-            dto.quantityControlled.toInt() == 0 -> "ÜRÜN YOK" to "#ffb822"
-            dto.quantityControlled.toInt() > 0 &&
+            dto.quantityControlled == 0 -> "ÜRÜN YOK" to "#ffb822"
+            dto.quantityControlled > 0 &&
                     dto.getQuantityForPlacementRemaining(
-                        dto.quantityControlled.toInt(),
+                        dto.quantityControlled,
                         dto.quantity,
                         dto.quantityPlaced
                     ) <= 0 -> "BİTTİ" to "#4caf50"
@@ -45,7 +45,7 @@ class WaybillDetailDialogViewHolder(val binding: WaybillDetailListTemBinding) :
 
         binding.statusValueTxt.apply {
             text = statusName
-            setBackgroundColor(Color.parseColor(statusColor))
+            setBackgroundColor(statusColor.toColorInt())
         }
     }
 

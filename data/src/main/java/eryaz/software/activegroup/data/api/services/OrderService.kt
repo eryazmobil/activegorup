@@ -181,4 +181,9 @@ interface OrderService {
         @Query("orderHeaderId") orderHeaderId: Int
     ): BaseResponse
 
+    @PUT("api/services/app/Order/UpdateOrderHeaderRouteFinishForToWarhouse")
+    suspend fun updateOrderHeaderRouteFinishForToWarehouse(
+        @Query("shippingRouteId") shippingRouteId: Int
+    ): BaseResponse
+
 }

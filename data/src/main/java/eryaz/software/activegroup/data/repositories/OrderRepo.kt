@@ -281,4 +281,12 @@ class OrderRepo(private val api: OrderService) : BaseRepo() {
 
         ResponseHandler.handleSuccess(response, response)
     }
+
+    suspend fun updateOrderHeaderRouteFinishForToWarehouse(shippingRouteId: Int) = callApi {
+        val response = api.updateOrderHeaderRouteFinishForToWarehouse(
+            shippingRouteId = shippingRouteId
+        )
+
+        ResponseHandler.handleSuccess(response, response)
+    }
 }

@@ -47,14 +47,6 @@ class AcceptanceProcessFragment : BaseFragment() {
     }
 
     override fun subscribeToObservables() {
-
-        setFragmentResultListener(ProductListDialogFragment.REQUEST_KEY) { _, bundle ->
-            val dto = bundle.parcelable<ProductDto>(ProductListDialogFragment.ARG_PRODUCT_DTO)
-            dto?.let {
-                viewModel.setEnteredProduct(it)
-            }
-        }
-
         viewModel.showProductDetailView
             .asLiveData()
             .observe(viewLifecycleOwner) {
@@ -70,7 +62,6 @@ class AcceptanceProcessFragment : BaseFragment() {
                 }
                 binding.quantityEdt.setText("")
                 binding.searchEdt.setText("")
-
                 binding.searchEdt.requestFocus()
             }
 
@@ -93,6 +84,21 @@ class AcceptanceProcessFragment : BaseFragment() {
                         icType = IconType.Warning.ordinal
                     ).show(parentFragmentManager, "dialog")
             }
+
+        viewModel.actionIsFinished
+            .asLiveData()
+            .observe(this) {
+                findNavController().navigateUp()
+                TemporaryCashManager.getInstance().workActivity = null
+                TemporaryCashManager.getInstance().workAction = null
+            }
+
+        setFragmentResultListener(ProductListDialogFragment.REQUEST_KEY) { _, bundle ->
+            val dto = bundle.parcelable<ProductDto>(ProductListDialogFragment.ARG_PRODUCT_DTO)
+            dto?.let {
+                viewModel.setEnteredProduct(it)
+            }
+        }
     }
 
     override fun setClicks() {
@@ -102,7 +108,7 @@ class AcceptanceProcessFragment : BaseFragment() {
                     title = getString(R.string.exit),
                     message = getString(R.string.are_you_sure),
                     positiveButton = ButtonDto(text = R.string.yes, onClickListener = {
-                        backToPage()
+                        viewModel.finishWorkAction()
                     }),
                     negativeButton = ButtonDto(
                         text = R.string.no,
@@ -116,7 +122,7 @@ class AcceptanceProcessFragment : BaseFragment() {
         }
 
         binding.toolbar.setNavigationOnClickListener {
-            backToPage()
+            viewModel.finishWorkAction()
         }
 
         binding.searchProductBarcodeAcceptance.setEndIconOnClickListener {
@@ -160,12 +166,13 @@ class AcceptanceProcessFragment : BaseFragment() {
             positiveButton = ButtonDto(
                 text = R.string.yes,
                 onClickListener = {
-                    backToPage()
+                    viewModel.finishWorkAction()
                 }
             ),
             negativeButton = ButtonDto(
                 text = R.string.no,
                 onClickListener = {
+                    confirmationDialog.dismiss()
                 }
             )
         ))
@@ -188,15 +195,12 @@ class AcceptanceProcessFragment : BaseFragment() {
                     }
 
                     R.id.menu_list_detail -> {
-                        findNavController().navigate(
-                            AcceptanceProcessFragmentDirections
-                                .actionAcceptanceProcessFragmentToWaybillDetailListDialog()
-                        )
+                        findNavController().navigate(AcceptanceProcessFragmentDirections.actionAcceptanceProcessFragmentToWaybillDetailListDialog())
                         true
                     }
 
                     R.id.menu_finish_action -> {
-                        backToPage()
+                        viewModel.finishWorkAction()
                         true
                     }
 
@@ -206,17 +210,6 @@ class AcceptanceProcessFragment : BaseFragment() {
 
             show()
         }
-    }
-
-    private fun backToPage() {
-        viewModel.finishWorkAction()
-        viewModel.actionIsFinished
-            .asLiveData()
-            .observe(viewLifecycleOwner) {
-                findNavController().navigateUp()
-                TemporaryCashManager.getInstance().workActivity = null
-                TemporaryCashManager.getInstance().workAction = null
-            }
     }
 
     override fun onResume() {

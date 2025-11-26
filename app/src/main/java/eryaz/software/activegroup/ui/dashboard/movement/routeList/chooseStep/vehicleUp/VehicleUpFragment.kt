@@ -95,10 +95,10 @@ class VehicleUpFragment : BaseFragment() {
 
         binding.vehicleDownBtn.setOnSingleClickListener {
             val builder = AlertDialog.Builder(context)
-            builder.setTitle("Endirilmənin bitməsinə əminsiniz mi?")
+            builder.setTitle("Digər depoya gedəcək məhsulları yüklədiyinizə əminsiniz?")
 
             builder.setPositiveButton(R.string.yes) { _, _ ->
-                viewModel.updateOrderHeaderRouteFinish()
+                viewModel.updateReturnShipmentByOrderHeaderIdForUp()
             }
 
             builder.setNegativeButton(R.string.no) { _, _ ->
@@ -108,23 +108,23 @@ class VehicleUpFragment : BaseFragment() {
             val alertDialog: AlertDialog = builder.create()
             alertDialog.show()
         }
-
-        adapter.onItemClick = {
-            val builder = AlertDialog.Builder(context)
-            builder.setTitle("Məhsulun depoya geri qaytarılacağına əminsinizmi?")
-
-            builder.setPositiveButton(R.string.yes) { _, _ ->
-                viewModel.updateReturnShipmentByOrderHeaderIdForUp(it.orderHeaderId)
-            }
-
-            builder.setNegativeButton(R.string.no) { _, _ ->
-
-            }
-
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.show()
-
-        }
+//
+//        adapter.onItemClick = {
+//            val builder = AlertDialog.Builder(context)
+//            builder.setTitle("Məhsulun depoya geri qaytarılacağına əminsinizmi?")
+//
+//            builder.setPositiveButton(R.string.yes) { _, _ ->
+//                viewModel.updateReturnShipmentByOrderHeaderIdForUp(it.orderHeaderId)
+//            }
+//
+//            builder.setNegativeButton(R.string.no) { _, _ ->
+//
+//            }
+//
+//            val alertDialog: AlertDialog = builder.create()
+//            alertDialog.show()
+//
+//        }
     }
 
     override fun onStart() {

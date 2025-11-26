@@ -74,7 +74,7 @@
                     android:id="@+id/quantityCountTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{dto.quantityControlled}"
+                    android:text="@{dto.quantityControlledParameter}"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     tools:text="123"
@@ -98,8 +98,7 @@
                     android:minWidth="@dimen/_12sdp"
                     app:layout_constraintEnd_toStartOf="@+id/controlValueTxt"
                     app:layout_constraintTop_toTopOf="@+id/controlValueTxt"
-                    app:layout_constraintBottom_toBottomOf="@+id/controlValueTxt"
-                     />
+                    app:layout_constraintBottom_toBottomOf="@+id/controlValueTxt" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/controlValueTxt"
@@ -130,8 +129,7 @@
                     android:textSize="8sp"
                     app:layout_constraintTop_toTopOf="@+id/statusValueTxt"
                     app:layout_constraintBottom_toBottomOf="@+id/statusValueTxt"
-                    app:layout_constraintEnd_toStartOf="@+id/statusValueTxt"
-                    />
+                    app:layout_constraintEnd_toStartOf="@+id/statusValueTxt" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/statusValueTxt"

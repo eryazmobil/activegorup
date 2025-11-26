@@ -1,7 +1,6 @@
 package eryaz.software.activegroup.data.models.dto
 
 data class VehiclePackageDto(
-
     val id: Int,
     val code: String,
     val clientName: String,
@@ -9,5 +8,6 @@ data class VehiclePackageDto(
     val quantityPackTotal: Int,
     val quantityLoadPack: Int,
     val quantityUnLoadPack: Int,
-    val shippingRoute: ShippingRouteDto
+    val shippingRoute: ShippingRouteDto,
+    val warehouse: WarehouseDto
 )

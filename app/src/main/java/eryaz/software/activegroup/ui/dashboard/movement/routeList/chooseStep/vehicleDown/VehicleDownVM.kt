@@ -21,7 +21,6 @@ class VehicleDownVM(
     val packageList = _packageList.asStateFlow()
 
     val packageCode = MutableStateFlow("")
-
     val finishProcess = MutableStateFlow(false)
     val vehicleDownSuccess = MutableStateFlow(false)
     val vehicleOnTheRoad = MutableStateFlow(false)

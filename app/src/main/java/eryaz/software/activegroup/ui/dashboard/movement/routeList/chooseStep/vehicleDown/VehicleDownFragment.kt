@@ -111,21 +111,21 @@ class VehicleDownFragment : BaseFragment() {
             alertDialog.show()
         }
 
-        adapter.onItemClick = {
-            val builder = AlertDialog.Builder(context)
-            builder.setTitle(R.string.are_you_sure_to_delete)
-
-            builder.setPositiveButton(R.string.yes) { _, _ ->
-                viewModel.deleteOrderHeaderRouteByOrderHeaderIdForDown(it.orderHeaderId)
-            }
-
-            builder.setNegativeButton(R.string.no) { _, _ ->
-
-            }
-
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.show()
-        }
+//        adapter.onItemClick = {
+//            val builder = AlertDialog.Builder(context)
+//            builder.setTitle(R.string.are_you_sure_to_delete)
+//
+//            builder.setPositiveButton(R.string.yes) { _, _ ->
+//                viewModel.deleteOrderHeaderRouteByOrderHeaderIdForDown(it.orderHeaderId)
+//            }
+//
+//            builder.setNegativeButton(R.string.no) { _, _ ->
+//
+//            }
+//
+//            val alertDialog: AlertDialog = builder.create()
+//            alertDialog.show()
+//        }
     }
 
     override fun onStart() {

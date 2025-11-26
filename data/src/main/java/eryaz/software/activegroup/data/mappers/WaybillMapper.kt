@@ -8,6 +8,7 @@ fun WaybillListDetailResponse.toDto() = WaybillListDetailDto(
     quantity = quantity,
     quantityOrder = quantityOrder,
     quantityPlaced = quantityPlaced,
-    quantityControlled = quantityControlled.toString(),
+    quantityControlled = quantityControlled,
+    quantityControlledParameter = quantityControlled.toString(),
     id = id
 )

@@ -84,7 +84,7 @@ fun PackageOrderDetailResponse.toDto() = PackageOrderDetailDto(
     id = id,
     product = product.toDto(),
     quantity = quantity,
-    quantityShipped =quantityShipped,
+    quantityShipped = quantityShipped,
     quantityCollected = quantityCollected
 )
 
@@ -100,7 +100,8 @@ fun VehiclePackageResponse.toDto() = VehiclePackageDto(
     quantityPackTotal = quantityPackTotal,
     quantityLoadPack = quantityLoadPack,
     quantityUnLoadPack = quantityUnLoadPack,
-    shippingRoute = shippingRoute.toDto()
+    shippingRoute = shippingRoute.toDto(),
+    warehouse = warehouse.toDto()
 )
 
 fun TransferRequestHeaderResponse.toDto() = TransferRequestHeaderDto(

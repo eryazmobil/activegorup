@@ -7,6 +7,7 @@ import eryaz.software.activegroup.data.models.dto.ErrorDialogDto
 import eryaz.software.activegroup.data.models.dto.VehiclePackageDto
 import eryaz.software.activegroup.data.repositories.OrderRepo
 import eryaz.software.activegroup.ui.base.BaseViewModel
+import eryaz.software.activegroup.util.CombinedStateFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -25,26 +26,14 @@ class VehicleUpVM(
     val vehicleDownSuccess = MutableStateFlow(false)
     val finishProcess = MutableStateFlow(false)
     val vehicleFinished = MutableStateFlow(false)
+    val checkWarehouse = MutableStateFlow(false)
+
+    val nextEnable = CombinedStateFlow(vehicleFinished, checkWarehouse) {
+        vehicleFinished.value && checkWarehouse.value
+    }
 
     init {
         getOrderHeaderRouteList()
-    }
-
-    fun updateOrderHeaderRouteFinish() {
-        executeInBackground {
-            repo.updateOrderHeaderRouteFinish(shippingRouteId = driverId)
-                .onSuccess {
-                    vehicleFinished.emit(true)
-                }.onError { message, _ ->
-                    ErrorDialogDto(
-                        title = stringProvider.invoke(R.string.error),
-                        message = message
-                    )
-                }.also {
-                    packageCode.emit("")
-                    deliveredNameTxt.emit("")
-            }
-        }
     }
 
     fun readOrderPackage() {
@@ -80,18 +69,49 @@ class VehicleUpVM(
                     finishProcess.emit(true)
                 }
 
+                if (it.any { item -> item.warehouse.code.isEmpty() }) {
+                    checkWarehouse.emit(true)
+                }
+
                 _packageList.emit(it)
-            }.onError {_, _ ->
+            }.onError { _, _ ->
                 _packageList.emit(emptyList())
             }
         }
     }
 
-    fun updateReturnShipmentByOrderHeaderIdForUp(orderHeaderId: Int) {
+    fun updateReturnShipmentByOrderHeaderIdForUp() {
         executeInBackground(showProgressDialog = true) {
-            repo.updateReturnShipmentByOrderHeaderIdForUp(orderHeaderId = orderHeaderId).onSuccess {
-                getOrderHeaderRouteList()
-            }
+            repo.updateOrderHeaderRouteFinishForToWarehouse(shippingRouteId = driverId)
+                .onSuccess {
+                    vehicleFinished.emit(true)
+                }.onError { message, _ ->
+                    ErrorDialogDto(
+                        title = stringProvider.invoke(R.string.error),
+                        message = message
+                    )
+                }.also {
+                    packageCode.emit("")
+                    deliveredNameTxt.emit("")
+                }
         }
     }
+
+    fun updateOrderHeaderRouteFinish() {
+        executeInBackground {
+            repo.updateOrderHeaderRouteFinish(shippingRouteId = driverId)
+                .onSuccess {
+                    vehicleFinished.emit(true)
+                }.onError { message, _ ->
+                    ErrorDialogDto(
+                        title = stringProvider.invoke(R.string.error),
+                        message = message
+                    )
+                }.also {
+                    packageCode.emit("")
+                    deliveredNameTxt.emit("")
+                }
+        }
+    }
+
 }
