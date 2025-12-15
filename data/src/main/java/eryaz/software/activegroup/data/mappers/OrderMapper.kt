@@ -100,8 +100,8 @@ fun VehiclePackageResponse.toDto() = VehiclePackageDto(
     quantityPackTotal = quantityPackTotal,
     quantityLoadPack = quantityLoadPack,
     quantityUnLoadPack = quantityUnLoadPack,
-    shippingRoute = shippingRoute.toDto(),
-    warehouse = warehouse.toDto()
+    shippingRoute = shippingRoute?.toDto(),
+    warehouse = warehouse?.toDto()
 )
 
 fun TransferRequestHeaderResponse.toDto() = TransferRequestHeaderDto(

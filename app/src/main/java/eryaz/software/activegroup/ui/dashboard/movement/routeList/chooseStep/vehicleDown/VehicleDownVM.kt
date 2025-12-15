@@ -79,18 +79,21 @@ class VehicleDownVM(
                 routeType = 3
             ).onSuccess {
                 _packageList.emit(it)
-            }.onError {_, _ ->
+                finishProcess.emit(it.isNotEmpty() && it.all { list -> list.warehouse != null })
+
+            }.onError { _, _ ->
                 _packageList.emit(emptyList())
                 finishProcess.emit(true)
             }
         }
     }
 
-    fun deleteOrderHeaderRouteByOrderHeaderIdForDown(orderHeaderId:Int) {
+    fun deleteOrderHeaderRouteByOrderHeaderIdForDown(orderHeaderId: Int) {
         executeInBackground(showProgressDialog = true) {
-            repo.deleteOrderHeaderRouteByOrderHeaderIdForDown(orderHeaderId = orderHeaderId).onSuccess {
-                getOrderHeaderRouteList()
-            }
+            repo.deleteOrderHeaderRouteByOrderHeaderIdForDown(orderHeaderId = orderHeaderId)
+                .onSuccess {
+                    getOrderHeaderRouteList()
+                }
         }
     }
 }

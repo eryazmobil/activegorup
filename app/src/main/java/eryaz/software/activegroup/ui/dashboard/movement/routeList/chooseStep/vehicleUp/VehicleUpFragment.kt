@@ -95,7 +95,7 @@ class VehicleUpFragment : BaseFragment() {
 
         binding.vehicleDownBtn.setOnSingleClickListener {
             val builder = AlertDialog.Builder(context)
-            builder.setTitle("Digər depoya gedəcək məhsulları yüklədiyinizə əminsiniz?")
+            builder.setTitle("Digər depoya gedəcək məhsulları endirdiyinizə əminsiniz?")
 
             builder.setPositiveButton(R.string.yes) { _, _ ->
                 viewModel.updateReturnShipmentByOrderHeaderIdForUp()

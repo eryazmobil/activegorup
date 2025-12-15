@@ -8,6 +8,6 @@ data class VehiclePackageDto(
     val quantityPackTotal: Int,
     val quantityLoadPack: Int,
     val quantityUnLoadPack: Int,
-    val shippingRoute: ShippingRouteDto,
-    val warehouse: WarehouseDto
+    val shippingRoute: ShippingRouteDto?,
+    val warehouse: WarehouseDto?
 )

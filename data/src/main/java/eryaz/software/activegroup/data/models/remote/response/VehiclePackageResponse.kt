@@ -18,7 +18,7 @@ data class VehiclePackageResponse(
     @SerializedName("quantityUnLoadPack")
     val quantityUnLoadPack: Int,
     @SerializedName("shippingRoute")
-    val shippingRoute: ShippingRouteResponse,
+    val shippingRoute: ShippingRouteResponse?,
     @SerializedName("warehouse")
-    val warehouse: WarehouseResponse
+    val warehouse: WarehouseResponse?
 )

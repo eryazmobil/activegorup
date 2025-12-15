@@ -19,7 +19,7 @@ class VehiclePackageViewHolder(val binding: ItemOnVehiclePackageBinding) :
     ) {
         binding.dto = dto
 
-        val strokeColor = if (dto.warehouse.code.isEmpty()) {
+        val strokeColor = if (dto.warehouse == null) {
             R.color.colorDangerRed
         } else {
             R.color.colorSuccessGreen

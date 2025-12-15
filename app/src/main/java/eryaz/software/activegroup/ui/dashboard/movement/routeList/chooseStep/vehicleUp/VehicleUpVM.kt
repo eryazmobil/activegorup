@@ -65,17 +65,12 @@ class VehicleUpVM(
                 shippingRouteId = driverId,
                 routeType = 1
             ).onSuccess {
-                if (it.isEmpty()) {
-                    finishProcess.emit(true)
-                }
-
-                if (it.any { item -> item.warehouse.code.isEmpty() }) {
-                    checkWarehouse.emit(true)
-                }
-
                 _packageList.emit(it)
+
+                finishProcess.emit(it.isNotEmpty() && it.all { list -> list.warehouse != null })
             }.onError { _, _ ->
                 _packageList.emit(emptyList())
+                finishProcess.emit(true)
             }
         }
     }
