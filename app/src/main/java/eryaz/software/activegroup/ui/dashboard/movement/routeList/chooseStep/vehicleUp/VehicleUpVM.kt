@@ -36,14 +36,14 @@ class VehicleUpVM(
         getOrderHeaderRouteList()
     }
 
-    fun readOrderPackage() {
+    fun readOrderPackage(code: String) {
         if (isRequestInProgress) {
             return
         }
         isRequestInProgress = true
         executeInBackground {
             repo.updateOrderHeaderRoute(
-                code = packageCode.value.trim(),
+                code = code,
                 shippingRouteId = driverId,
                 routeType = 2
             ).onSuccess {

@@ -4,9 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <import type="eryaz.software.activegroup.data.enums.DashboardPermissionType" />
-
         <variable
             name="viewModel"
             type="eryaz.software.activegroup.ui.dashboard.DashboardViewModel" />
@@ -30,12 +27,14 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:paddingBottom="24dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
@@ -43,24 +42,25 @@
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:padding="8dp"
+                    android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:layout_constraintBottom_toTopOf="@+id/settingsBtn"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:spanCount="2"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     tools:listitem="@layout/item_dashboard_list" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/settingsBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="10dp"
+                    android:layout_marginTop="20dp"
                     android:elevation="6dp"
                     android:scaleType="center"
                     app:backgroundTint="@android:color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recyclerView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/recyclerView"
                     app:srcCompat="@drawable/settings"
                     app:tint="@null" />
 

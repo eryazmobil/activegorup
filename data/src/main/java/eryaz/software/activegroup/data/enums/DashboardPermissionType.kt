@@ -10,5 +10,6 @@ enum class DashboardPermissionType(val permission: String){
     COUNTING("Pages.PDA.StockTaking"),
     PRODUCTION("Pages.PDA.Production"),
     QUERY("Pages.PDA.Query"),
+    D2D("Pages.PDA.Outbound.Delivery"),
     SETTING("")
 }

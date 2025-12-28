@@ -2,21 +2,28 @@ package eryaz.software.activegroup.ui.dashboard.movement.routeList.chooseStep.ve
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import eryaz.software.activegroup.R
+import eryaz.software.activegroup.data.enums.SoundEnum
+import eryaz.software.activegroup.data.models.dto.ProductDto
 import eryaz.software.activegroup.databinding.FragmentVehicleUpBinding
 import eryaz.software.activegroup.ui.base.BaseFragment
 import eryaz.software.activegroup.ui.dashboard.movement.routeList.chooseStep.vehicleUp.adapter.VehicleUpPackageAdapter
+import eryaz.software.activegroup.ui.dashboard.movement.routeList.chooseStep.vehicleUp.camera.CameraBarcodeFragment
+import eryaz.software.activegroup.ui.dashboard.recording.dialog.ProductListDialogFragment
 import eryaz.software.activegroup.util.adapter.movement.packageList.VehiclePackageAdapter
 import eryaz.software.activegroup.util.bindingAdapter.setOnSingleClickListener
 import eryaz.software.activegroup.util.extensions.hideSoftKeyboard
+import eryaz.software.activegroup.util.extensions.parcelable
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.getValue
@@ -46,7 +53,7 @@ class VehicleUpFragment : BaseFragment() {
         binding.searchEdt.setOnEditorActionListener { _, actionId, _ ->
             val isValidBarcode = viewModel.packageCode.value.trim().isNotEmpty()
             if ((actionId == EditorInfo.IME_ACTION_UNSPECIFIED || actionId == EditorInfo.IME_ACTION_DONE) && isValidBarcode) {
-                viewModel.readOrderPackage()
+                viewModel.readOrderPackage(viewModel.packageCode.value.trim())
             }
 
             hideSoftKeyboard()
@@ -80,6 +87,16 @@ class VehicleUpFragment : BaseFragment() {
             .observe(this) {
                 adapter.submitList(it)
             }
+
+        setFragmentResultListener(CameraBarcodeFragment.REQUEST_KEY) { _, bundle ->
+            bundle.getString(CameraBarcodeFragment.ARG_BARCODE)
+                .let {
+                    playSound(SoundEnum.Success)
+
+                    Log.d("TAG", "subscribeToObservables: $it")
+                    viewModel.readOrderPackage(it.orEmpty())
+                }
+        }
     }
 
     private val adapter by lazy {
@@ -125,6 +142,12 @@ class VehicleUpFragment : BaseFragment() {
 //            alertDialog.show()
 //
 //        }
+
+        binding.searchPackageBarcode.setEndIconOnClickListener {
+            findNavController().navigate(
+                VehicleUpFragmentDirections.actionVehicleUpFragmentToCameraBarcodeFragment()
+            )
+        }
     }
 
     override fun onStart() {

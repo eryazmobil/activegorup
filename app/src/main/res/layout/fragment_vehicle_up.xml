@@ -43,6 +43,7 @@
                 android:layout_marginTop="12dp"
                 android:elevation="10dp"
                 android:hint="@string/packageNo"
+                app:endIconDrawable="@drawable/ic_camera"
                 app:endIconTint="@null"
                 app:layout_constraintTop_toTopOf="parent">
 

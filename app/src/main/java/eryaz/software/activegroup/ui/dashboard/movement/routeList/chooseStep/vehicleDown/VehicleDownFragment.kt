@@ -2,17 +2,22 @@ package eryaz.software.activegroup.ui.dashboard.movement.routeList.chooseStep.ve
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import eryaz.software.activegroup.R
+import eryaz.software.activegroup.data.enums.SoundEnum
 import eryaz.software.activegroup.databinding.FragmentVehicleDownBinding
 import eryaz.software.activegroup.ui.base.BaseFragment
+import eryaz.software.activegroup.ui.dashboard.movement.routeList.chooseStep.vehicleUp.VehicleUpFragmentDirections
+import eryaz.software.activegroup.ui.dashboard.movement.routeList.chooseStep.vehicleUp.camera.CameraBarcodeFragment
 import eryaz.software.activegroup.util.adapter.movement.packageList.VehiclePackageAdapter
 import eryaz.software.activegroup.util.bindingAdapter.setOnSingleClickListener
 import eryaz.software.activegroup.util.extensions.hideSoftKeyboard
@@ -47,7 +52,7 @@ class VehicleDownFragment : BaseFragment() {
             val isValidBarcode = viewModel.packageCode.value.trim().isNotEmpty()
 
             if ((actionId == EditorInfo.IME_ACTION_UNSPECIFIED || actionId == EditorInfo.IME_ACTION_DONE) && isValidBarcode) {
-                viewModel.readOrderPackage()
+                viewModel.readOrderPackage(viewModel.packageCode.value.trim())
             }
 
             hideSoftKeyboard()
@@ -80,8 +85,16 @@ class VehicleDownFragment : BaseFragment() {
             }
 
         viewModel.packageList.observe(this) {
-                adapter.submitList(it)
-            }
+            adapter.submitList(it)
+        }
+
+        setFragmentResultListener(CameraBarcodeFragment.REQUEST_KEY) { _, bundle ->
+            bundle.getString(CameraBarcodeFragment.ARG_BARCODE)
+                .let {
+                    playSound(SoundEnum.Success)
+                    viewModel.readOrderPackage(it.orEmpty())
+                }
+        }
     }
 
     private val adapter by lazy {
@@ -126,6 +139,12 @@ class VehicleDownFragment : BaseFragment() {
 //            val alertDialog: AlertDialog = builder.create()
 //            alertDialog.show()
 //        }
+
+        binding.searchPackageBarcode.setEndIconOnClickListener {
+            findNavController().navigate(
+                VehicleDownFragmentDirections.actionVehicleDownFragmentToCameraBarcodeFragment()
+            )
+        }
     }
 
     override fun onStart() {

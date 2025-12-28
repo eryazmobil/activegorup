@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_vehicleDownFragment_to_orderDetailViewPagerFragment"
             app:destination="@id/orderDetailViewPagerFragment" />
+        <action
+            android:id="@+id/action_vehicleDownFragment_to_cameraBarcodeFragment"
+            app:destination="@id/cameraBarcodeFragment" />
 
     </fragment>
     <fragment
@@ -63,6 +66,9 @@
         <action
             android:id="@+id/action_vehicleUpFragment_to_orderDetailViewPagerFragment"
             app:destination="@id/orderDetailViewPagerFragment" />
+        <action
+            android:id="@+id/action_vehicleUpFragment_to_cameraBarcodeFragment"
+            app:destination="@id/cameraBarcodeFragment" />
     </fragment>
 
     <dialog
@@ -79,5 +85,11 @@
             android:name="orderHeaderId"
             app:argType="integer" />
     </dialog>
+
+    <dialog
+        android:id="@+id/cameraBarcodeFragment"
+        tools:layout="@layout/fragment_camera_barcode"
+        android:name="eryaz.software.activegroup.ui.dashboard.movement.routeList.chooseStep.vehicleUp.camera.CameraBarcodeFragment"
+        android:label="CameraBarcodeFragment" />
 
 </navigation>

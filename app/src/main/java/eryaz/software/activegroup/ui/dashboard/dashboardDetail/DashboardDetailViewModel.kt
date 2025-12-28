@@ -137,13 +137,7 @@ class DashboardDetailViewModel(
                         titleRes = R.string.menu_sub_movement_stock_correction,
                         type = DashboardDetailPermissionType.STOCKORRECTION,
                         hasPermission = ObservableField(true)
-                    ),
-                    DashboardDetailItemDto(
-                        iconRes = 0,
-                        titleRes = R.string.menu_sub_movement_route_list,
-                        type = DashboardDetailPermissionType.ROUTE,
-                        hasPermission = ObservableField(true)
-                    ),
+                    )
                 )
             }
 
@@ -214,6 +208,17 @@ class DashboardDetailViewModel(
                         iconRes = 0,
                         titleRes = R.string.menu_sub_query_shelf,
                         type = DashboardDetailPermissionType.SHELFQUERY,
+                        hasPermission = ObservableField(true)
+                    )
+                )
+            }
+
+            DashboardPermissionType.D2D -> {
+                listOf(
+                    DashboardDetailItemDto(
+                        iconRes = 0,
+                        titleRes = R.string.menu_sub_movement_route_list,
+                        type = DashboardDetailPermissionType.ROUTE,
                         hasPermission = ObservableField(true)
                     )
                 )

@@ -20,97 +20,37 @@ class DashboardViewModel(private val repo: UserRepo) : BaseViewModel() {
     private val _currentUserDto = MutableStateFlow<CurrentUserDto?>(null)
 
     init {
-        getCurrentLoginHasPermissionsForPDAMenu()
-        loadList()
         getCurrentLoginInformations()
-    }
-
-    private fun loadList() {
-        _dashboardItemList.value?.toMutableList()?.apply {
-            add(
-                DashboardItemDto(
-                    iconRes = R.drawable.inbound,
-                    titleRes = R.string.main_menu_item_1,
-                    type = DashboardPermissionType.INBOUND,
-                    hasPermission = ObservableField(false)
-                )
-            )
-            add(
-                DashboardItemDto(
-                    iconRes = R.drawable.outbound,
-                    titleRes = R.string.main_menu_item_2,
-                    type = DashboardPermissionType.OUTBOUND,
-                    hasPermission = ObservableField(false)
-                )
-            )
-            add(
-                DashboardItemDto(
-                    iconRes = R.drawable.delivery,
-                    titleRes = R.string.main_menu_item_3,
-                    type = DashboardPermissionType.MOVEMENT,
-                    hasPermission = ObservableField(false)
-                )
-            )
-            add(
-                DashboardItemDto(
-                    iconRes = R.drawable.recording,
-                    titleRes = R.string.main_menu_item_4,
-                    type = DashboardPermissionType.RECORDING,
-                    hasPermission = ObservableField(false)
-                )
-            )
-            add(
-                DashboardItemDto(
-                    iconRes = R.drawable.return_icon,
-                    titleRes = R.string.main_menu_item_5,
-                    type = DashboardPermissionType.RETURNING,
-                    hasPermission = ObservableField(false)
-                )
-            )
-            add(
-                DashboardItemDto(
-                    iconRes = R.drawable.counting,
-                    titleRes = R.string.main_menu_item_6,
-                    type = DashboardPermissionType.COUNTING,
-                    hasPermission = ObservableField(false)
-                )
-            )
-            add(
-                DashboardItemDto(
-                    iconRes = R.drawable.smart_factory,
-                    titleRes = R.string.main_menu_item_7,
-                    type = DashboardPermissionType.PRODUCTION,
-                    hasPermission = ObservableField(false)
-                )
-            )
-            add(
-                DashboardItemDto(
-                    iconRes = R.drawable.query,
-                    titleRes = R.string.main_menu_item_8,
-                    type = DashboardPermissionType.QUERY,
-                    hasPermission = ObservableField(false)
-                )
-            )
-//            add(
-//                DashboardItemDto(
-//                    iconRes = R.drawable.settings,
-//                    titleRes = R.string.main_menu_item_9,
-//                    type = DashboardPermissionType.SETTING,
-//                    hasPermission = ObservableField(false)
-//                )
-//            )
-
-            _dashboardItemList.value = this
-        }
+        getCurrentLoginHasPermissionsForPDAMenu()
     }
 
     private fun getCurrentLoginHasPermissionsForPDAMenu() =
         executeInBackground(_uiState) {
-            repo.getCurrentLoginHasPermissionsForPDAMenu().onSuccess { permissionList ->
-                _dashboardItemList.value?.forEach {
-                    it.hasPermission.set(permissionList.contains(it.type.permission) || it.type
-                            == DashboardPermissionType.SETTING)
+            repo.getCurrentLoginHasPermissionsForPDAMenu().onSuccess { originalList ->
+
+                val permissionList = originalList.toMutableList().apply {
+                    if (size == 2 && contains("Pages.PDA.Outbound.Delivery") && contains("Pages.PDA.Outbound")) {
+                        remove("Pages.PDA.Outbound")
+                    }
                 }
+
+                val menuPool = listOf(
+                    DashboardItemDto(R.drawable.inbound, R.string.main_menu_item_1, DashboardPermissionType.INBOUND, ObservableField(true)),
+                    DashboardItemDto(R.drawable.outbound, R.string.main_menu_item_2, DashboardPermissionType.OUTBOUND, ObservableField(true)),
+                    DashboardItemDto(R.drawable.delivery, R.string.main_menu_item_3, DashboardPermissionType.MOVEMENT, ObservableField(true)),
+                    DashboardItemDto(R.drawable.recording, R.string.main_menu_item_4, DashboardPermissionType.RECORDING, ObservableField(true)),
+                    DashboardItemDto(R.drawable.return_icon, R.string.main_menu_item_5, DashboardPermissionType.RETURNING, ObservableField(true)),
+                    DashboardItemDto(R.drawable.counting, R.string.main_menu_item_6, DashboardPermissionType.COUNTING, ObservableField(true)),
+                    DashboardItemDto(R.drawable.smart_factory, R.string.main_menu_item_7, DashboardPermissionType.PRODUCTION, ObservableField(true)),
+                    DashboardItemDto(R.drawable.query, R.string.main_menu_item_8, DashboardPermissionType.QUERY, ObservableField(true)),
+                    DashboardItemDto(R.drawable.delivery, R.string.main_menu_item_3, DashboardPermissionType.D2D, ObservableField(true))
+                )
+
+                val authorizedItems = menuPool.filter { item ->
+                    permissionList.contains(item.type.permission)
+                }
+
+                _dashboardItemList.value = authorizedItems
             }
         }
 
@@ -124,6 +64,4 @@ class DashboardViewModel(private val repo: UserRepo) : BaseViewModel() {
                 SessionManager.userId = it.userId
             }
         }
-
-
 }

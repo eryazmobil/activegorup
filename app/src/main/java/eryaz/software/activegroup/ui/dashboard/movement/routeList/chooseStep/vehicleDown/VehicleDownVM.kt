@@ -47,7 +47,7 @@ class VehicleDownVM(
         }
     }
 
-    fun readOrderPackage() {
+    fun readOrderPackage(code: String) {
 
         if (isRequestInProgress) {
             return
@@ -56,7 +56,7 @@ class VehicleDownVM(
         isRequestInProgress = true
         executeInBackground {
             repo.updateOrderHeaderRoute(
-                code = packageCode.value.trim(),
+                code = code,
                 shippingRouteId = driverId,
                 routeType = 1
             ).onSuccess {
