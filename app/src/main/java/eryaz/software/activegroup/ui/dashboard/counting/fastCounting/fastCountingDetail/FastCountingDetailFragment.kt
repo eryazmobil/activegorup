@@ -131,10 +131,12 @@ class FastCountingDetailFragment : BaseFragment() {
                             text = R.string.yes,
                             onClickListener = {
                                 viewModel.saveBtn()
+                                errorDialog.dismiss()
                             }
                         ),
                         negativeButton = ButtonDto(
-                            text = R.string.no
+                            text = R.string.no,
+                            onClickListener = { errorDialog.dismiss() }
                         )
                     )
                 )
@@ -147,6 +149,7 @@ class FastCountingDetailFragment : BaseFragment() {
                         positiveButton = ButtonDto(
                             text = R.string.yes,
                             onClickListener = {
+                                errorDialog.dismiss()
                                 errorDialog.show(
                                     context, ErrorDialogDto(
                                         titleRes = R.string.sure,
@@ -155,17 +158,20 @@ class FastCountingDetailFragment : BaseFragment() {
                                             text = R.string.yes,
                                             onClickListener = {
                                                 viewModel.saveBtn()
+                                                errorDialog.dismiss()
                                             }
                                         ),
                                         negativeButton = ButtonDto(
-                                            text = R.string.no
+                                            text = R.string.no,
+                                            onClickListener = { errorDialog.dismiss() }
                                         )
                                     )
                                 )
                             }
                         ),
                         negativeButton = ButtonDto(
-                            text = R.string.no
+                            text = R.string.no,
+                            onClickListener = { errorDialog.dismiss() }
                         )
                     )
                 )
@@ -250,7 +256,6 @@ class FastCountingDetailFragment : BaseFragment() {
             }
         }
     }
-
 }
 
 

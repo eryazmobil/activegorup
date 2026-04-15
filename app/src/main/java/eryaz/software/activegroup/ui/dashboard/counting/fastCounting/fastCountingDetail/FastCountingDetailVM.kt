@@ -67,6 +67,20 @@ class FastCountingDetailVM(
             ).onSuccess {
                 productID = it.product.id
 
+                val isProductInShelf = productShelfQuantityList.any { shelfItem ->
+                    shelfItem.product.id == productID
+                }
+
+                if (!isProductInShelf) {
+                    showError(
+                        ErrorDialogDto(
+                            titleRes = R.string.error,
+                            messageRes = R.string.msg_not_in_this_shelf
+                        )
+                    )
+                    return@onSuccess
+                }
+
                 willCountedProductList.find { listItem ->
                     listItem.productDto.id == productID
                 }?.let { dto ->
@@ -227,20 +241,31 @@ class FastCountingDetailVM(
 
     fun hasOtherValue(): Boolean {
         return willCountedProductList.any {
-            Log.d("TAG", "oldQuantity: ${it.oldQuantity.toIntOrZero()}")
-            Log.d("TAG", "newQuantity: ${it.newQuantity.get().toIntOrZero()}")
             it.oldQuantity.toIntOrZero() != it.newQuantity.get().toIntOrZero()
         }
     }
 
     fun addProductToList() {
         if (isValidFields()) {
-            willCountedProductList.find {
-                it.productDto.id == productID
-            }?.let {
-                val resulQuantity =
-                    quantityEdt.value.toIntOrZero() + it.newQuantity.get().toIntOrZero()
-                it.newQuantity.set(resulQuantity.toString())
+            willCountedProductList.find { it.productDto.id == productID }?.let { dto ->
+                val shelfQuantity = dto.oldQuantity.toIntOrZero()
+                val currentQuantity = dto.newQuantity.get().toIntOrZero()
+                val enteredQuantity = quantityEdt.value.toIntOrZero()
+                val resultQuantity = currentQuantity + enteredQuantity
+
+                if (resultQuantity > shelfQuantity) {
+                    val diff = resultQuantity - shelfQuantity
+                    val baseMessage = stringProvider.invoke(R.string.msg_attached_more_qty)
+                    showError(
+                        ErrorDialogDto(
+                            titleRes = R.string.error,
+                            message = "$baseMessage (+$diff)"
+                        )
+                    )
+                    return
+                }
+
+                dto.newQuantity.set(resultQuantity.toString())
             } ?: run {
 
                 _productDetail.value?.let {
@@ -297,6 +322,20 @@ class FastCountingDetailVM(
     }
 
     fun setEnteredProduct(dto: ProductDto) {
+        val isProductInShelf = productShelfQuantityList.any { shelfItem ->
+            shelfItem.product.id == dto.id
+        }
+
+        if (!isProductInShelf) {
+            showError(
+                ErrorDialogDto(
+                    titleRes = R.string.error,
+                    messageRes = R.string.msg_not_in_this_shelf
+                )
+            )
+            return
+        }
+
         productID = dto.id
         viewModelScope.launch {
             _productDetail.emit(dto)

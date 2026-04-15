@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
+import androidx.security.crypto.MasterKeys
 import eryaz.software.activegroup.data.enums.Language
 import eryaz.software.activegroup.data.enums.LanguageType
 
@@ -21,13 +21,20 @@ object SessionManager {
     private lateinit var sharedPref: SharedPreferences
 
     fun init(context: Context) {
-        sharedPref =
+        sharedPref = try {
+            val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
             EncryptedSharedPreferences.create(
-                context, "_secret_shared_pref_",
-                createMasterKey(context),
+                "_secret_shared_pref_",
+                masterKeyAlias,
+                context,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             )
+        } catch (e: Exception) {
+            // Some Android 12+ devices may fail to initialize encrypted prefs
+            // when keystore state is corrupted or restored from backup.
+            context.getSharedPreferences("_shared_pref_fallback_", Context.MODE_PRIVATE)
+        }
     }
 
     var companyId
@@ -82,9 +89,4 @@ object SessionManager {
     fun clearData() {
         sharedPref.edit().clear().apply()
     }
-
-    private fun createMasterKey(context: Context) =
-        MasterKey.Builder(context, MasterKey.DEFAULT_MASTER_KEY_ALIAS)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
 }

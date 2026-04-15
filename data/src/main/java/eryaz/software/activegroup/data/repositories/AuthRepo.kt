@@ -9,7 +9,6 @@ class AuthRepo(private val api: AuthApiService) : BaseRepo() {
 
     suspend fun login(request: LoginRequest) = callApi {
         val response = api.login(request)
-        //dto modeli 2ci responseda handle yap
         ResponseHandler.handleSuccess(response, response.result)
     }
 

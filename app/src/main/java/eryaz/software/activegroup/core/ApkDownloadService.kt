@@ -11,7 +11,6 @@ import android.os.Build
 import android.os.Environment
 import android.os.IBinder
 import android.provider.Settings
-import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import eryaz.software.activegroup.R
 import eryaz.software.activegroup.util.extensions.toast
@@ -25,6 +24,7 @@ class ApkDownloadService : Service() {
     private lateinit var apkZipFileName: String
     private lateinit var apkFileName: String
     private var downloadId: Long = -1
+    private var isReceiverRegistered: Boolean = false
 
     private val downloadReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -44,17 +44,19 @@ class ApkDownloadService : Service() {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
         super.onCreate()
-        registerReceiver(
-            downloadReceiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
-            RECEIVER_NOT_EXPORTED
-        )
+        val filter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(downloadReceiver, filter, RECEIVER_NOT_EXPORTED)
+        } else {
+            @Suppress("DEPRECATION")
+            registerReceiver(downloadReceiver, filter)
+        }
+        isReceiverRegistered = true
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         apkZipUrl = intent?.getStringExtra("apkZipUrl") ?: ""
         apkZipFileName = intent?.getStringExtra("apkZipFileName") ?: ""
@@ -63,7 +65,6 @@ class ApkDownloadService : Service() {
         return START_NOT_STICKY
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun downloadAPKZip() {
         val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val downloadUri = Uri.parse(apkZipUrl)
@@ -130,7 +131,10 @@ class ApkDownloadService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(downloadReceiver)
+        if (isReceiverRegistered) {
+            unregisterReceiver(downloadReceiver)
+            isReceiverRegistered = false
+        }
     }
 
 

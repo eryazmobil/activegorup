@@ -45,13 +45,13 @@ class FastWillCountedListFragment : BaseFragment() {
         }
 
         adapter.onItemClick = {
-            findNavController().navigate(
-                FastWillCountedListFragmentDirections.actionFastWillCountedListFragmentToEditedQuantityDialog(
-                    it.productDto.code,
-                    it.newQuantity.get().toIntOrZero(),
-                    it.productDto.id
-                )
-            )
+            //          findNavController().navigate(
+//                FastWillCountedListFragmentDirections.actionFastWillCountedListFragmentToEditedQuantityDialog(
+//                    it.productDto.code,
+//                    it.newQuantity.get().toIntOrZero(),
+//                    it.productDto.id
+//                )
+//            )
         }
     }
 

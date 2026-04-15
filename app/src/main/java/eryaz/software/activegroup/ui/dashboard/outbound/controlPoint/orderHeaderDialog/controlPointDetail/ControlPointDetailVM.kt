@@ -118,7 +118,7 @@ class ControlPointDetailVM(
 
                 if (serialCheckBox.value) {
                     quantity.emit("")
-                    addQuantityForControl(1)
+                    addQuantityForControl(it.quantity)
                 } else {
                     _showProductDetail.emit(true)
                     _productDetail.emit(it.product)
