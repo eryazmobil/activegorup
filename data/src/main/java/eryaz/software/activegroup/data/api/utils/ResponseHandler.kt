@@ -34,20 +34,42 @@ object ResponseHandler {
     }
 
     private fun handleErrorBody(body: ResponseBody?): Resource.Error {
-        try {
-            Gson().fromJson(JsonParser.parseString(body?.string()), ErrorResponse::class.java)
-                ?.let {
-                    return Resource.Error(
-                        message = it.error.message,
-                    )
-                }
+        val raw = try {
+            body?.string()
         } catch (e: Exception) {
-
+            null
         }
 
-        return Resource.Error(
-            message = "",
-        )
+        val abpMessage = raw?.let {
+            try {
+                Gson().fromJson(JsonParser.parseString(it), ErrorResponse::class.java)?.error?.message
+            } catch (e: Exception) {
+                null
+            }
+        }
+
+        if (!abpMessage.isNullOrBlank()) {
+            return Resource.Error(message = abpMessage)
+        }
+        val fallbackMessage = raw?.let { extractFallbackMessage(it) }
+
+        return Resource.Error(message = fallbackMessage.orEmpty())
+    }
+
+    private fun extractFallbackMessage(raw: String): String? {
+        if (raw.isBlank()) return null
+
+        return try {
+            val json = JsonParser.parseString(raw).asJsonObject
+
+            listOf("detail", "Detail", "message", "Message", "title", "Title").forEach { key ->
+                json.get(key)?.takeIf { !it.isJsonNull }?.asString?.let { return it }
+            }
+
+            raw
+        } catch (e: Exception) {
+            raw
+        }
     }
 
 

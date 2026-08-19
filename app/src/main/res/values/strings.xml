@@ -178,6 +178,7 @@
     <string name="app_check_update">KONTROL ET</string>
     <string name="app_get_update">GÜNCELLEMEYİ AL</string>
     <string name="change_password_">Şifre Değiştirme</string>
+    <string name="idempotency_test_">Idempotency Key Testi</string>
     <string name="app_lock_btn">Uygulama Kilitleme</string>
     <string name="signalR_info_title">Bildirim</string>
     <string name="okay">Tamam</string>

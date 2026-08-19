@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import eryaz.software.activegroup.data.api.interceptors.AuthorizationInterceptor
 import eryaz.software.activegroup.data.api.interceptors.HttpLoggingInterceptor
+import eryaz.software.activegroup.data.api.interceptors.IdempotencyKeyInterceptor
 import eryaz.software.activegroup.data.api.interceptors.UnAuthorizedInterceptor
 import eryaz.software.activegroup.data.api.services.*
 import eryaz.software.activegroup.data.api.utils.NetworkUtils.getIpAddressTypeOutOrIn
@@ -45,6 +46,10 @@ class ZeusClient {
             return getRetrofit(context).create(CountingService::class.java)
         }
 
+        fun provideClientApi(context: Context): ClientApiService {
+            return getRetrofit(context).create(ClientApiService::class.java)
+        }
+
         private fun getRetrofit(context: Context): Retrofit {
 
             println("You connect with ${getIpAddressTypeOutOrIn(context)}")
@@ -56,6 +61,7 @@ class ZeusClient {
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(UnAuthorizedInterceptor())
                 .addInterceptor(AuthorizationInterceptor())
+                .addInterceptor(IdempotencyKeyInterceptor())
                 .addNetworkInterceptor(HttpLoggingInterceptor.getInterceptor())
                 .build()
 

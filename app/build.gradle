@@ -15,8 +15,8 @@ android {
         applicationId "eryaz.software.activegroup"
         minSdk 23
         targetSdk 34
-        versionCode 17
-        versionName "1.0.17"
+        versionCode 19
+        versionName "1.0.19"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

@@ -44,6 +44,12 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:name=".ui.dashboard.settings.idempotencyTest.IdempotencyTestActivity"
+            android:exported="false"
+            android:label="Idempotency Key Test"
+            android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <service android:name=".core.ApkDownloadService"/>
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import eryaz.software.activegroup.R
+import eryaz.software.activegroup.data.api.utils.Resource
 import eryaz.software.activegroup.data.api.utils.onError
 import eryaz.software.activegroup.data.api.utils.onSuccess
 import eryaz.software.activegroup.data.models.dto.ButtonDto
@@ -110,7 +111,8 @@ class OrderPickingDetailVM(
             if (it.orderDetailList.isNotEmpty()) {
                 if (it.pickingSuggestionList.isNotEmpty()) {
                     orderPickingDto = it
-                    if (!forRefresh) showNext()
+                    if (forRefresh) alignUiToServerSuggestionsAfterRefresh()
+                    else showNext()
                 } else {
                     parentView.emit(true)
                 }
@@ -209,7 +211,7 @@ class OrderPickingDetailVM(
     fun updateOrderDetailCollectedAddQuantityForPda() {
         executeInBackground(showProgressDialog = true) {
             val quantity = enteredQuantity.value.toInt() * quantityMultiplier
-            orderRepo.updateOrderDetailCollectedAddQuantityForPda(
+            val updateRes = orderRepo.updateOrderDetailCollectedAddQuantityForPda(
                 workActionId = TemporaryCashManager.getInstance().workAction?.workActionId.orZero(),
                 productId = productId,
                 shelfId = shelfId,
@@ -217,17 +219,45 @@ class OrderPickingDetailVM(
                 quantity = quantity,
                 orderDetailId = selectedOrderDetailProduct?.id.orZero(),
                 fifoCode = fifoCode.value
-            ).onSuccess {
-                updateOrderQuantity()
-                checkPickingFromOrder()
+            )
+            if (updateRes is Resource.Error) return@executeInBackground updateRes
 
-                selectedOrderDetailProduct = null
-                enteredQuantity.value = ""
-                shelfAddress.value = ""
-                _showProductDetail.emit(false)
-                productRequestFocus.emit(true)
-                _pickProductSuccess.emit(true)
+            val listRes = orderRepo.getOrderDetailPickingList(
+                workActivityId = TemporaryCashManager.getInstance().workActivity?.workActivityId.orZero(),
+                userId = SessionManager.userId
+            )
+            if (listRes is Resource.Success) {
+                val picking = listRes.data
+                when {
+                    picking.orderDetailList.isEmpty() -> {
+                        showError(
+                            ErrorDialogDto(
+                                titleRes = R.string.error,
+                                messageRes = R.string.work_activity_error_2
+                            )
+                        )
+                    }
+
+                    picking.pickingSuggestionList.isEmpty() -> {
+                        viewModelScope.launch { parentView.emit(true) }
+                    }
+
+                    else -> {
+                        orderPickingDto = picking
+                        selectedOrderDetailProduct = null
+                        enteredQuantity.value = ""
+                        shelfAddress.value = ""
+                        alignUiToServerSuggestionsAfterRefresh()
+                        checkPickingFromOrder()
+                        viewModelScope.launch {
+                            _showProductDetail.emit(false)
+                            productRequestFocus.emit(true)
+                            _pickProductSuccess.emit(true)
+                        }
+                    }
+                }
             }
+            listRes
         }
     }
 
@@ -310,65 +340,38 @@ class OrderPickingDetailVM(
         }
     }
 
-    private fun updateOrderQuantity() {
-        var quantity = enteredQuantity.value.toInt()
-
-        selectedOrderDetailProduct?.let {
-            if (quantity > 0) {
-                var collected = it.quantityCollected.toInt()
-                collected += quantity
-            }
+    /**
+     * Server picks up partial quantities per shelf; after reload, focus the next shelf line
+     * for the same product (remaining qty) or the first line if the product is done.
+     */
+    private fun alignUiToServerSuggestionsAfterRefresh() {
+        val list = orderPickingDto?.pickingSuggestionList ?: return
+        if (list.isEmpty()) {
+            viewModelScope.launch { parentView.emit(true) }
+            return
         }
-
-        if (quantity > 0) {
-            if (selectedSuggestion.value?.quantityWillBePicked?.minus(selectedSuggestion.value?.quantityPicked.orZero())
-                    .orZero() >= quantity
-            ) {
-                selectedSuggestion.value?.let {
-                    it.quantityPicked += quantity
-                }
-                quantity = 0
-            } else {
-                val otherQuantity =
-                    selectedSuggestion.value?.quantityWillBePicked?.minus(selectedSuggestion.value?.quantityPicked.orZero())
-                selectedSuggestion.value?.let {
-                    it.quantityPicked += otherQuantity.orZero()
-                }
-
-                quantity -= otherQuantity.orZero()
-            }
+        val currentProductId = productId
+        val idxWithRemaining = list.indexOfFirst { suggestion ->
+            suggestion.product.id == currentProductId &&
+                suggestion.quantityPicked < suggestion.quantityWillBePicked
         }
-
-        selectedSuggestion.value?.let { dto ->
-            if (dto.quantityWillBePicked.orZero() == dto.quantityPicked.orZero()) {
-                orderPickingDto?.pickingSuggestionList?.toMutableList()?.apply {
-                    indexOfFirst {
-                        it.quantityWillBePicked.orZero() == it.quantityPicked.orZero()
-                    }.let { index ->
-                        if (index != -1) {
-                            removeAt(index)
-
-                            orderPickingDto?.pickingSuggestionList = this
-                            selectedSuggestionIndex = index - 1
-
-                            showNext()
-                        }
-                    }
-
-                    if (isEmpty()) {
-                        viewModelScope.launch {
-                            parentView.emit(true)
-                        }
-                    }
-                }
+        val idx = when {
+            idxWithRemaining >= 0 -> idxWithRemaining
+            currentProductId > 0 -> {
+                val stillForProduct = list.indexOfFirst { it.product.id == currentProductId }
+                if (stillForProduct >= 0) stillForProduct else 0
             }
+            else -> 0
         }
-
+        val suggestion = list[idx]
+        selectedSuggestionIndex = idx
         viewModelScope.launch {
+            _selectedSuggestion.emit(suggestion)
+            productId = suggestion.product.id
             _orderQuantityTxt.emit(
-                "${orderPickingDto?.pickingSuggestionList?.getOrNull(selectedSuggestionIndex)?.quantityPicked} / " +
-                        "${orderPickingDto?.pickingSuggestionList?.getOrNull(selectedSuggestionIndex)?.quantityWillBePicked}"
+                "${suggestion.quantityPicked} / ${suggestion.quantityWillBePicked}"
             )
+            _pageNum.emit("${idx + 1} / ${list.size}")
         }
     }
 

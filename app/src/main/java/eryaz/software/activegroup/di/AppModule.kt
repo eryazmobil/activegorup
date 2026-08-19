@@ -65,6 +65,7 @@ import eryaz.software.activegroup.ui.dashboard.recording.recordBarcode.RecordBar
 import eryaz.software.activegroup.ui.dashboard.settings.SettingsViewModel
 import eryaz.software.activegroup.ui.dashboard.settings.appLock.AppLockVM
 import eryaz.software.activegroup.ui.dashboard.settings.changeLanguage.LanguageVM
+import eryaz.software.activegroup.ui.dashboard.settings.idempotencyTest.IdempotencyTestVM
 import eryaz.software.activegroup.ui.dashboard.settings.changePassword.ChangePasswordVM
 import eryaz.software.activegroup.ui.dashboard.settings.companies.CompanyListVM
 import eryaz.software.activegroup.ui.dashboard.settings.warehouses.WarehouseListVM
@@ -326,4 +327,7 @@ val appModule = module {
     }
 
     viewModel { AppLockVM() }
+
+    //IdempotencyTest (debug QA screen)
+    viewModel { IdempotencyTestVM(repo = get()) }
 }

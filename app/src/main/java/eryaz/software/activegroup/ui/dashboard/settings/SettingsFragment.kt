@@ -1,17 +1,20 @@
 package eryaz.software.activegroup.ui.dashboard.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
+import eryaz.software.activegroup.BuildConfig
 import eryaz.software.activegroup.core.ApkDownloadService
 import eryaz.software.activegroup.data.models.dto.CompanyDto
 import eryaz.software.activegroup.data.models.dto.WarehouseDto
 import eryaz.software.activegroup.databinding.FragmentSettingsBinding
 import eryaz.software.activegroup.ui.base.BaseFragment
 import eryaz.software.activegroup.ui.dashboard.settings.changeLanguage.LanguageFragment
+import eryaz.software.activegroup.ui.dashboard.settings.idempotencyTest.IdempotencyTestActivity
 import eryaz.software.activegroup.ui.dashboard.settings.companies.CompanyListDialog
 import eryaz.software.activegroup.ui.dashboard.settings.warehouses.WarehouseListDialog
 import eryaz.software.activegroup.util.bindingAdapter.setOnSingleClickListener
@@ -96,6 +99,13 @@ class SettingsFragment : BaseFragment() {
             findNavController().navigate(
                 SettingsFragmentDirections.actionSettingsFragmentToAppLockFragment()
             )
+        }
+
+        if (BuildConfig.DEBUG) {
+            binding.idempotencyTestItem.visibility = View.VISIBLE
+            binding.idempotencyTestItem.setOnSingleClickListener {
+                startActivity(Intent(requireContext(), IdempotencyTestActivity::class.java))
+            }
         }
     }
 

@@ -2,6 +2,7 @@ package eryaz.software.activegroup.data.di
 
 import eryaz.software.activegroup.data.repositories.AuthRepo
 import eryaz.software.activegroup.data.repositories.BarcodeRepo
+import eryaz.software.activegroup.data.repositories.ClientRepo
 import eryaz.software.activegroup.data.repositories.CountingRepo
 import eryaz.software.activegroup.data.repositories.OrderRepo
 import eryaz.software.activegroup.data.repositories.PlacementRepo
@@ -24,5 +25,7 @@ val appModuleRepos = module {
     factory { OrderRepo(get()) }
 
     factory { CountingRepo(get()) }
+
+    factory { ClientRepo(get()) }
 
 }

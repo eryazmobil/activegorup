@@ -19,4 +19,6 @@ val appModuleApis = module {
     single { ZeusClient.provideOrderApi(androidContext()) }
 
     single { ZeusClient.provideCountingApi(androidContext()) }
+
+    single { ZeusClient.provideClientApi(androidContext()) }
 }
